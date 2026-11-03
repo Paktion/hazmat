@@ -1,0 +1,34 @@
+# Local agent instructions (kept in the private repo)
+CLAUDE.md
+.claude/
+
+# Secrets
+.env
+.env.*
+!.env.example
+*.key
+
+# Never commit analysis inputs
+samples/
+quarantine/
+*.exe
+*.dll
+*.bin
+*.sample
+
+# Analysis output
+reports/
+ghidra_projects/
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+*.egg-info/
+dist/
+build/
+
+# OS / editors
+.DS_Store
+.idea/
+.vscode/

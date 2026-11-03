@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "hazmat"
+version = "0.1.0"
+description = "Local-first AI analysis for security teams, built on Meta's open-weight models"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+dependencies = [
+  "openai>=1.40",
+  "python-dotenv>=1.0",
+]
+
+[project.optional-dependencies]
+analysis = [
+  "yara-python>=4.5",
+  "flare-capa>=7.0",
+]
+modal = ["modal>=0.64"]
+
+[project.scripts]
+hazmat = "hazmat.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["hazmat*"]
