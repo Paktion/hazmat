@@ -33,6 +33,8 @@ hazmat check                  # tests each provider without printing keys
 | `FIREWORKS_API_KEY` | [app.fireworks.ai](https://app.fireworks.ai) → Settings → API Keys |
 | Modal | `modal setup` |
 
+Spending caps: Hazmat prices every model call and refuses calls once a provider reaches its `HAZMAT_BUDGET_*` cap (defaults: the hackathon credits). See `.env.example`.
+
 `.env` is gitignored. Never commit keys.
 
 ## Commands
@@ -41,6 +43,7 @@ hazmat check                  # tests each provider without printing keys
 hazmat check            # providers, routing, local tools
 hazmat check --dry      # same, without calling any provider
 hazmat sandbox FILE     # run local tooling on FILE inside an isolated Modal sandbox
+hazmat spend            # spend so far against each provider's cap
 ```
 
 ## Status

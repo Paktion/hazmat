@@ -3,6 +3,7 @@
     hazmat check            verify each configured provider with a tiny request
     hazmat check --dry      show what's configured without calling anything
     hazmat sandbox FILE     run file/strings/capa (+ YARA) on FILE in a Modal Sandbox
+    hazmat spend            spend so far against each provider's cap
 """
 
 from __future__ import annotations
@@ -11,6 +12,7 @@ import argparse
 import shutil
 import sys
 
+from . import budget
 from .config import providers, raw_provider, summary_provider
 
 
@@ -39,7 +41,7 @@ def cmd_check(dry: bool) -> int:
             try:
                 from .llm import chat
 
-                reply = chat(p, [{"role": "user", "content": "Reply with the single word: ready"}], max_tokens=200)
+                reply = chat(p, [{"role": "user", "content": "Reply with the single word: ready"}], max_tokens=1024)
                 line += f"  -> OK ({reply.strip()[:20]!r})"
             except Exception as e:  # noqa: BLE001 - report any provider failure
                 ok = False
@@ -54,6 +56,9 @@ def cmd_check(dry: bool) -> int:
         except ValueError as e:
             ok = False
             print(f"  {label:<20} -> ERROR: {e}")
+
+    print()
+    cmd_spend(reset=False)
 
     print("\nModal (sandboxes)")
     print(f"  token in ~/.modal.toml     {'found' if _modal_token() else 'missing (run: modal setup)'}")
@@ -75,6 +80,18 @@ def _modal_token() -> bool:
     return cfg.exists() and "token_id" in cfg.read_text(errors="ignore")
 
 
+def cmd_spend(reset: bool) -> int:
+    if reset:
+        budget.reset()
+        print(f"Cleared {budget.LEDGER}")
+        return 0
+    print("Spend (Hazmat's own ledger; caps from HAZMAT_BUDGET_*)")
+    for name in providers():
+        cap = budget.budget(name)
+        print(f"  {name:<10} ${budget.spent(name):>8.4f} of {f'${cap:.2f}' if cap else 'no cap'}")
+    return 0
+
+
 def cmd_sandbox(sample: str, rules: str | None) -> int:
     from .sandbox import analyze
 
@@ -93,9 +110,13 @@ def main(argv: list[str] | None = None) -> int:
     s = sub.add_parser("sandbox", help="run static tools on a sample in a Modal Sandbox")
     s.add_argument("sample", help="path to the sample file")
     s.add_argument("--rules", help="optional YARA rules file")
+    sp = sub.add_parser("spend", help="show spend against each provider's cap")
+    sp.add_argument("--reset", action="store_true", help="clear the spend ledger")
     args = parser.parse_args(argv)
     if args.cmd == "check":
         return cmd_check(args.dry)
+    if args.cmd == "spend":
+        return cmd_spend(args.reset)
     if args.cmd == "sandbox":
         return cmd_sandbox(args.sample, args.rules)
     return 2

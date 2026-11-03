@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from openai import OpenAI
 
+from . import budget
 from .config import Provider, raw_provider, summary_provider
 
 
@@ -14,7 +15,10 @@ def client_for(p: Provider) -> OpenAI:
 
 
 def chat(p: Provider, messages: list[dict], **kwargs) -> str:
+    budget.check(p.name)
     resp = client_for(p).chat.completions.create(model=p.model, messages=messages, **kwargs)
+    if resp.usage:
+        budget.record(p.name, resp.usage.prompt_tokens or 0, resp.usage.completion_tokens or 0)
     return resp.choices[0].message.content or ""
 
 

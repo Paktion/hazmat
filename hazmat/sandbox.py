@@ -16,6 +16,7 @@ from pathlib import Path
 
 APP_NAME = "hazmat"
 REMOTE_PATH = "/work/sample.bin"
+CAPA_RULES = "/opt/capa-rules"
 
 
 @dataclass
@@ -40,8 +41,13 @@ def _image():
 
     return (
         modal.Image.debian_slim(python_version="3.12")
-        .apt_install("binutils", "file", "yara")
+        .apt_install("binutils", "file", "yara", "git")
         .pip_install("flare-capa")
+        # The pip build of capa ships without rules; fetch the set matching its version.
+        .run_commands(
+            'git clone --depth 1 --branch "v$(python -c \'import capa.version as v; print(v.__version__)\')" '
+            f"https://github.com/mandiant/capa-rules {CAPA_RULES}"
+        )
     )
 
 
@@ -49,7 +55,7 @@ def _image():
 DEFAULT_TOOLS: list[tuple[str, list[str]]] = [
     ("file", ["file", "-b", REMOTE_PATH]),
     ("strings", ["strings", "-n", "6", REMOTE_PATH]),
-    ("capa", ["capa", "-q", "-j", REMOTE_PATH]),
+    ("capa", ["capa", "-q", "-j", "-r", CAPA_RULES, REMOTE_PATH]),
 ]
 
 
@@ -71,14 +77,11 @@ def analyze(
     sb = modal.Sandbox.create(app=app, image=_image(), timeout=timeout, block_network=True)
     report = SandboxReport(sample=sample.name)
     try:
-        sb.exec("mkdir", "-p", "/work").wait()
-        with sb.open(REMOTE_PATH, "wb") as f:
-            f.write(data)
+        sb.filesystem.make_directory("/work")
+        sb.filesystem.write_bytes(data, REMOTE_PATH)
 
         if yara_rules:
-            rules = Path(yara_rules).read_text()
-            with sb.open("/work/rules.yar", "w") as f:
-                f.write(rules)
+            sb.filesystem.write_text(Path(yara_rules).read_text(), "/work/rules.yar")
             tools.append(("yara", ["yara", "-s", "-w", "/work/rules.yar", REMOTE_PATH]))
 
         for name, argv in tools:
