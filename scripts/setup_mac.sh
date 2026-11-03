@@ -10,13 +10,13 @@ if ! command -v brew >/dev/null 2>&1; then
   exit 1
 fi
 
-echo "==> Installing system tools (python, yara, ghidra + JDK)"
+echo "==> Installing system tools (python, yara, ghidra)"
 brew install python@3.12 yara
-brew install --cask temurin@21 || true      # Ghidra needs a JDK 21
-brew install --cask ghidra || true
+brew install ghidra || true                 # formula; pulls in its own OpenJDK
 
 # Put Ghidra's headless analyzer on PATH for this shell and future ones.
-GHIDRA_HEADLESS="$(ls -d /opt/homebrew/Caskroom/ghidra/*/ghidra_*/support/analyzeHeadless /usr/local/Caskroom/ghidra/*/ghidra_*/support/analyzeHeadless 2>/dev/null | head -1 || true)"
+GHIDRA_PREFIX="$(brew --prefix ghidra 2>/dev/null || true)"
+GHIDRA_HEADLESS="$(ls -d "$GHIDRA_PREFIX"/libexec/support/analyzeHeadless "$GHIDRA_PREFIX"/libexec/*/support/analyzeHeadless 2>/dev/null | head -1 || true)"
 if [ -n "$GHIDRA_HEADLESS" ]; then
   mkdir -p "$HOME/.local/bin"
   ln -sf "$GHIDRA_HEADLESS" "$HOME/.local/bin/analyzeHeadless"
