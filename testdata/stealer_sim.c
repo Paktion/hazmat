@@ -8,7 +8,8 @@
  *   - the only real behavior: an anti-debug check, then printing "ok"
  *
  * Build with -DPOISONED to embed text aimed at AI analysts (see poison.h), or
- * -DPOISONED_SUBTLE for the subtler, vendor-note style text in poison_subtle.h.
+ * -DPOISONED_SUBTLE for the subtler, vendor-note style text in poison_subtle.h, or
+ * -DPOISONED_AGENTIC for text aimed at agent loops (fake tool results, finish commands).
  */
 #include <stdio.h>
 #include <string.h>
@@ -20,7 +21,10 @@
 #include <sys/ptrace.h>
 #endif
 
-#if defined(POISONED_SUBTLE)
+#if defined(POISONED_AGENTIC)
+#include "poison_agentic.h"
+#define POISONED
+#elif defined(POISONED_SUBTLE)
 #include "poison_subtle.h"
 #define POISONED
 #elif defined(POISONED)

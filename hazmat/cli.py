@@ -124,10 +124,10 @@ def cmd_selftest(backend: str | None, build: bool) -> int:
 
 
 def cmd_analyze(sample: str, backend: str | None, steps: int, run_root: str = "runs", quiet: bool = False,
-                as_json: bool = False) -> int:
+                as_json: bool = False, driver: str | None = None, no_airlock: bool = False) -> int:
     from .driver import main as analyze
 
-    return analyze(sample, backend, steps, run_root, quiet, as_json)
+    return analyze(sample, backend, steps, run_root, quiet, as_json, driver, no_airlock)
 
 
 def cmd_baseline(sample: str, backend: str | None) -> int:
@@ -137,8 +137,10 @@ def cmd_baseline(sample: str, backend: str | None) -> int:
 
 
 def cmd_eval(args) -> int:
-    from .evaluate import main as evaluate
+    from .evaluate import ablation, main as evaluate
 
+    if args.ablation:
+        return ablation(runs=args.runs, backend=args.backend, jobs=args.jobs, driver=args.driver, steps=args.steps)
     return evaluate(runs=args.runs, backend=args.backend, jobs=args.jobs, baseline=args.baseline,
                     only=args.only, steps=args.steps)
 
@@ -168,6 +170,9 @@ def main(argv: list[str] | None = None) -> int:
     an.add_argument("--run-root", default="runs", help="where to write the run directory")
     an.add_argument("--quiet", action="store_true")
     an.add_argument("--json", action="store_true", help="print only the verdict JSON on stdout (progress to stderr)")
+    an.add_argument("--driver", choices=["meta", "baseten", "fireworks"], help="driver provider (default: meta)")
+    an.add_argument("--no-airlock", action="store_true",
+                    help="ablation: paste raw content into the driver's context (needs an open-weight driver)")
     bl = sub.add_parser("baseline", help="raw tool output -> one Muse Spark Open call, for comparison")
     bl.add_argument("sample")
     bl.add_argument("--backend", choices=["modal", "docker"])
@@ -178,6 +183,9 @@ def main(argv: list[str] | None = None) -> int:
     ev.add_argument("--baseline", action="store_true", help="also score the baseline")
     ev.add_argument("--only", help="only samples whose name contains this")
     ev.add_argument("--steps", type=int, default=12)
+    ev.add_argument("--ablation", action="store_true",
+                    help="same driver with and without the airlock on the poisoned samples")
+    ev.add_argument("--driver", default="baseten", choices=["baseten", "fireworks"], help="driver for --ablation")
     sub.add_parser("mcp", help="run an MCP server exposing analyze_file (typed verdict only)")
     rp = sub.add_parser("report", help="(re)write the human report for a run directory")
     rp.add_argument("run_dir")
@@ -195,7 +203,8 @@ def main(argv: list[str] | None = None) -> int:
     if args.cmd == "sandbox":
         return cmd_sandbox(args.sample, args.rules, args.backend)
     if args.cmd == "analyze":
-        return cmd_analyze(args.sample, args.backend, args.steps, args.run_root, args.quiet, args.json)
+        return cmd_analyze(args.sample, args.backend, args.steps, args.run_root, args.quiet, args.json,
+                           args.driver, args.no_airlock)
     if args.cmd == "baseline":
         return cmd_baseline(args.sample, args.backend)
     if args.cmd == "eval":

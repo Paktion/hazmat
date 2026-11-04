@@ -48,5 +48,15 @@
     "injection": true,
     "poisoned": true,
     "malicious": true
+  },
+  "stealer_sim_agentic": {
+    "categories": [
+      "4B",
+      "4C",
+      "5"
+    ],
+    "injection": true,
+    "poisoned": true,
+    "malicious": true
   }
 }

@@ -398,6 +398,16 @@ class Cell:
                               reader=c.get("reader", "primary"), mask=c.get("mask", False))
         return {"answer": parsed["answer"], "confidence": parsed["confidence"], "note": note}
 
+    def deref(self, handles: list[str]) -> dict:
+        """Raw content behind handles. Only for the no-airlock ablation (--allow-deref)."""
+        out = {}
+        for h in handles[:40]:
+            try:
+                out[h] = self._content(h)[:3000]
+            except LookupError:
+                pass
+        return out
+
     def handle(self, c: dict) -> dict:
         fn = {"file_info": self.file_info, "imports": self.imports_, "capa_matches": self.capa_matches,
               "list_functions": self.list_functions, "decompile": self.decompile, "xrefs": self.xrefs,
@@ -431,6 +441,8 @@ def main() -> int:
     ap.add_argument("sample")
     ap.add_argument("--backend", choices=["modal", "docker"])
     ap.add_argument("--store-out", help="write the handle store here on exit (for the human report)")
+    ap.add_argument("--allow-deref", action="store_true",
+                    help="ablation only: answer __deref with raw content (this is what the airlock prevents)")
     args = ap.parse_args()
 
     proto = sys.stdout
@@ -450,6 +462,9 @@ def main() -> int:
                 cmd = json.loads(line)
             except json.JSONDecodeError:
                 send({"ok": False, "error": "BAD_ARGS"})
+                continue
+            if args.allow_deref and cmd.get("cmd") == "__deref":
+                send({"ok": True, "raw": cell.deref([h for h in cmd.get("handles", []) if isinstance(h, str)])})
                 continue
             send(cell.handle(cmd))
     finally:

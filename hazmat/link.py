@@ -27,7 +27,7 @@ class CellDied(RuntimeError):
 
 class Link:
     def __init__(self, sample: str | Path, run_dir: str | Path, backend: str | None = None,
-                 start_timeout: float = 900, reply_timeout: float = 600):
+                 start_timeout: float = 900, reply_timeout: float = 600, allow_deref: bool = False):
         self.run_dir = Path(run_dir)
         self.run_dir.mkdir(parents=True, exist_ok=True)
         self.airlock = Airlock(self.run_dir / "airlock.jsonl")
@@ -36,6 +36,9 @@ class Link:
         argv = [sys.executable, "-m", "hazmat.cell", str(sample), "--store-out", str(self.run_dir / "store.json")]
         if backend:
             argv += ["--backend", backend]
+        self.allow_deref = allow_deref
+        if allow_deref:
+            argv.append("--allow-deref")
         self.proc = subprocess.Popen(argv, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
                                      stderr=self._stderr, text=True, bufsize=1)
         line = self._readline(start_timeout)
@@ -66,6 +69,15 @@ class Link:
             self.proc.kill()
             raise CellDied("reader cell did not reply in time; stopped it") from None
         return self.airlock.check_result(checked, raw.rstrip("\n"))
+
+    def deref(self, handles: list[str]) -> dict[str, str]:
+        """Ablation only: fetch raw content, bypassing the airlock entirely."""
+        if not self.allow_deref:
+            raise PermissionError("deref is only available in the no-airlock ablation")
+        self.proc.stdin.write(json.dumps({"cmd": "__deref", "handles": handles}) + "\n")
+        self.proc.stdin.flush()
+        reply = json.loads(self._readline(self.reply_timeout))
+        return reply.get("raw", {})
 
     def close(self) -> None:
         if self.proc.poll() is None:
