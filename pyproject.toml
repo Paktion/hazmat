@@ -31,4 +31,4 @@ hazmat = "hazmat.cli:main"
 include = ["hazmat*"]
 
 [tool.setuptools.package-data]
-hazmat = ["vocab/*.txt"]
+hazmat = ["vocab/*.txt", "skills/*.md"]

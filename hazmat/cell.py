@@ -81,6 +81,26 @@ print(json.dumps(out[:50]))
 """
 
 
+# Compiler and C-runtime code (MinGW, MSVC, glibc). A name alone never hides a function: anything with
+# suspicious content is treated as the author's code whatever it is called.
+RUNTIME_NAME = re.compile(
+    r"^_{0,3}(mingw|gdtoa|dtoa|pformat|pei386|scrt|acrt|security_|GSHandler|tmainCRT|report_error|write_memory"
+    r"|do_global|getmainargs|set_app_type|C_specific|chkstk|alloca|cxa|libc_|gmon|register_tm|deregister_tm"
+    r"|frame_dummy|dyn_tls|DllMainCRT|WinMainCRTStartup|mainCRTStartup|pre_c_init|pre_cpp_init|atexit|onexit"
+    r"|register_frame|deregister_frame|init$|fini$|start$|tls_callback|my_lconv_init|setargv|matherr|fpreset"
+    r"|initterm|amsg_exit|lock|unlock|i2b|b2d|d2b|hi0bits|lo0bits|lshift|rshift|cmp$|diff$|mult$|multadd"
+    r"|pow5mult|quorem|Balloc|Bfree|strtod|freedtoa|rv_alloc|nrv_alloc|mbrtowc|wcrtomb|ValidateImageBase"
+    r"|FindPESection|IsNonwritableInCurrentImage|GetPEImageBase|TlsCallback|sbrk|stack_chk|fpclassify)",
+    re.I)
+SUSPICIOUS_APIS = {"IsDebuggerPresent", "CheckRemoteDebuggerPresent", "ptrace", "VirtualAllocEx", "WriteProcessMemory",
+                   "CreateRemoteThread", "RegSetValueExA", "RegSetValueExW", "RegCreateKeyExA", "RegCreateKeyExW",
+                   "InternetOpenA", "InternetOpenW", "InternetConnectA", "HttpSendRequestA", "HttpSendRequestW",
+                   "URLDownloadToFileA", "URLDownloadToFileW", "WinExec", "ShellExecuteA", "ShellExecuteW",
+                   "CreateProcessA", "CreateProcessW", "CryptDecrypt", "CryptUnprotectData", "connect", "send",
+                   "socket", "WSAStartup", "snprintf", "SetWindowsHookExA", "SetWindowsHookExW", "GetAsyncKeyState",
+                   "OpenProcess", "NtQueryInformationProcess", "LoadLibraryA", "GetProcAddress"}
+
+
 def _entropy(s: str | bytes) -> float:
     if not s:
         return 0.0
@@ -209,6 +229,7 @@ class Cell:
         for h, f in self.funcs.items():
             for c in f["callees"]:
                 self.funcs[c]["callers"].append(h)
+        self._scored = False
 
         # String pools: (source, value, address-or-None)
         self.strings: list[tuple[str, str, str | None]] = []
@@ -291,18 +312,40 @@ class Cell:
             out.append({"rule": name, "attack": attack[:10], "hits": len(r.get("matches", []) or [])})
         return {"matches": out}
 
+    def _score(self) -> None:
+        """Suspicion and library flags, computed once from the raw code (never from what it says)."""
+        if self._scored:
+            return
+        # Addresses of strings with a suspicious feature (URLs, run keys, credential stores, ...).
+        sus_addrs = {addr.lower().lstrip("0") for src, value, addr in self.strings
+                     if addr and set(string_features(value, src)) - {"prose", "file_path"}}
+        for h, f in self.funcs.items():
+            code = f["code"] or ""
+            idents = set(re.findall(r"\b([A-Za-z_][A-Za-z0-9_]{2,63})\s*\(", code))
+            apis = (set(f["api_calls"]) | idents) & SUSPICIOUS_APIS
+            xors = len(re.findall(r"\^", code))
+            refs = sum(1 for m in re.findall(r"_([0-9a-fA-F]{6,16})\b", code) if m.lower().lstrip("0") in sus_addrs)
+            f["suspicion"] = 3 * len(apis) + min(xors, 5) + 2 * refs
+            f["library"] = bool(RUNTIME_NAME.search(f["text"])) and f["suspicion"] == 0
+        self._scored = True
+
     def _row(self, h: str) -> dict:
+        self._score()
         f = self.funcs[h]
         return {"func": h, "address": f["entry"].lower().removeprefix("0x"), "size": f["size"],
                 "callees": len(f["callees"]) + len(f["api_calls"]) + f["unknown_calls"],
-                "callers": len(f["callers"]), "api_calls": f["api_calls"][:30]}
+                "callers": len(f["callers"]), "api_calls": f["api_calls"][:30],
+                "library": f["library"], "suspicion": min(f["suspicion"], 10_000_000)}
 
     def list_functions(self, c: dict) -> dict:
-        key = {"size": lambda h: -self.funcs[h]["size"],
+        self._score()
+        key = {"suspicion": lambda h: (-self.funcs[h]["suspicion"], -self.funcs[h]["size"]),
+               "size": lambda h: -self.funcs[h]["size"],
                "callees": lambda h: -(len(self.funcs[h]["callees"]) + len(self.funcs[h]["api_calls"])),
                "callers": lambda h: -len(self.funcs[h]["callers"]),
                "address": lambda h: int(self.funcs[h]["entry"], 16)}[c["sort"]]
-        order = sorted(self.funcs, key=key)
+        pool = [h for h in self.funcs if c.get("include_library") or not self.funcs[h]["library"]]
+        order = sorted(pool, key=key)
         return {"total": len(order), "functions": [self._row(h) for h in order[: c["limit"]]]}
 
     def _string_refs(self, code: str) -> list[str]:

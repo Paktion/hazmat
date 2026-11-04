@@ -101,8 +101,9 @@ class CapaMatches(_Strict):
 
 class ListFunctions(_Strict):
     cmd: Literal["list_functions"]
-    sort: Literal["size", "callees", "callers", "address"] = "size"
+    sort: Literal["suspicion", "size", "callees", "callers", "address"] = "suspicion"
     limit: Annotated[StrictInt, Field(ge=1, le=MAX_LIST)] = 20
+    include_library: StrictBool = False  # compiler/runtime code is hidden unless asked for
 
 class Decompile(_Strict):
     cmd: Literal["decompile"]
@@ -189,6 +190,8 @@ class FunctionRow(_Strict):
     callees: Count
     callers: Count
     api_calls: Annotated[list[ApiName], Field(max_length=30)]
+    library: StrictBool = False   # looks like compiler/runtime code and has nothing suspicious
+    suspicion: Count = 0          # computed by code: suspicious APIs, XOR, suspicious string refs
 
 class ListFunctionsResult(_Strict):
     total: Count
