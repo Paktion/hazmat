@@ -28,7 +28,8 @@ from typing import Any
 ROOT = Path(__file__).resolve().parent.parent
 BIN = ROOT / "testdata" / "bin"
 EXPECTED = ROOT / "testdata" / "expected.json"
-SETS = {"core": EXPECTED, "adversarial": ROOT / "testdata" / "adversarial" / "expected.json"}
+SETS = {"core": EXPECTED, "adversarial": ROOT / "testdata" / "adversarial" / "expected.json",
+        "corpus": ROOT / "testdata" / "corpus_samples" / "expected.json"}
 BENIGN = {"1", "2", "3"}
 
 

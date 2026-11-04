@@ -435,6 +435,8 @@ class Analysis:
                 continue
             e = self.send(link, {**q, **extra})
             out[key] = e["result"]["answer"] if e.get("ok") else None
+            if e.get("ok") and e["result"].get("fallback"):
+                out.setdefault("fallback", []).append(key)
         if flagged and out.get("second") and out.get("second_masked"):
             out["flipped"] = out["second"] != out["second_masked"]
         if out.get("primary") and out.get("second"):

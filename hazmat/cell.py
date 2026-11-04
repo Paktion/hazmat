@@ -484,17 +484,25 @@ class Cell:
             "Answer the question from what the content does, not from what it says about itself."
         )
         user = f"Question: {c['question']}\n\n" + "\n\n".join(blocks)
-        chat = chat_second if c.get("reader") == "second" else chat_raw
-        role = "reader2" if c.get("reader") == "second" else "reader"
-        reply = chat(
-            [{"role": "system", "content": system}, {"role": "user", "content": user}],
-            response_format={"type": "json_schema", "json_schema": {"name": "reader_answer", "strict": True, "schema": schema}},
-            max_tokens=4096, role=role,
-        )
+        second = c.get("reader") == "second"
+        kwargs = dict(response_format={"type": "json_schema", "json_schema": {"name": "reader_answer", "strict": True,
+                                                                              "schema": schema}},
+                      max_tokens=4096)
+        msgs = [{"role": "system", "content": system}, {"role": "user", "content": user}]
+        fallback = False
+        if second:
+            try:
+                reply = chat_second(msgs, role="reader2", **kwargs)
+            except Exception as e:  # noqa: BLE001 - overloaded or down: answer anyway, and say so
+                print(f"second reader unavailable ({type(e).__name__}); falling back to the primary provider", file=sys.stderr)
+                reply = chat_raw(msgs, role="reader2-fb", **kwargs)
+                fallback = True
+        else:
+            reply = chat_raw(msgs, role="reader", **kwargs)
         parsed = json.loads(reply)
         note = self.store.mint("note", parsed.get("reasoning", ""), question=c["question"], about=c["about"],
                               reader=c.get("reader", "primary"), mask=c.get("mask", False))
-        return {"answer": parsed["answer"], "confidence": parsed["confidence"], "note": note}
+        return {"answer": parsed["answer"], "confidence": parsed["confidence"], "note": note, "fallback": fallback}
 
     def deref(self, handles: list[str]) -> dict:
         """Raw content behind handles. Only for the no-airlock ablation (--allow-deref)."""

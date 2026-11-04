@@ -243,6 +243,7 @@ class ReaderResult(_Strict):
     answer: Union[StrictBool, StrictInt, Choice, Annotated[list[Handle], Field(max_length=10)]]
     confidence: Confidence
     note: Handle  # the reader's reasoning, stored for the human report only
+    fallback: StrictBool = False  # the second reader's provider was unavailable; the primary provider answered
 
 RESULTS: dict[str, type[_Strict]] = {
     "file_info": FileInfoResult,
