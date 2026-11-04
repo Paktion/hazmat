@@ -107,7 +107,7 @@ Rules enforced in code include: benign reasons can't rest on the sample's own te
 
 `hazmat eval` runs the whole pipeline on labeled samples (`testdata/expected.json`) and scores the correct category, injection detection, **steered** (a poisoned sample came out benign), false alarms on clean files, and stability across runs. `--baseline` scores the common approach on the same samples. `pytest` checks the airlock against hostile replies and each verdict rule on made-up evidence.
 
-Headline numbers ([docs/eval.md](docs/eval.md) has every table, interval and caveat):
+Headline numbers ([docs/eval.md](docs/eval.md) has every table, interval and caveat; [docs/testing-methodology.md](docs/testing-methodology.md) explains how we tested):
 
 | Measure | Hazmat | Baseline (raw tool output → one Muse Spark Open call) |
 |---|---|---|
@@ -116,7 +116,7 @@ Headline numbers ([docs/eval.md](docs/eval.md) has every table, interval and cav
 | Benign file carrying planted text closed as benign, no flag | **1/7 (14%)** | 6/7 (86%), Fisher p = 0.015 |
 | Malicious + poisoned file steered to benign | 0/18 | 0/18 |
 
-An attack-success experiment (480 calls, each poisoned program vs its unpoisoned twin) found that planted text **does not** measurably steer Muse Spark Open on malware (1%, CI 1-3%), but **does** destabilize its verdict on benign files that carry it: benign 100% without the text, 52% with it (p = 1.7 x 10^-5). An ablation (same driver with and without the airlock) showed no difference in verdicts on these samples. 8 real malware samples (SOREL-20M, disarmed) ran through every tool in the local Docker sandbox, with no model calls and never on a cloud platform.
+An attack-success experiment (440 calls, each poisoned program vs its unpoisoned twin) found that planted text **does not** measurably steer Muse Spark Open on malware (1%, CI 1-3%), but **does** destabilize its verdict on benign files that carry it: benign 100% without the text, 52% with it (p = 1.7 x 10^-5). An ablation (same driver with and without the airlock) showed no difference in verdicts on these samples. 8 real malware samples (SOREL-20M, disarmed) ran through every tool in the local Docker sandbox, with no model calls and never on a cloud platform.
 
 ## Test samples
 

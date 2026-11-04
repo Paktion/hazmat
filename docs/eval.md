@@ -22,7 +22,7 @@ Baseline runs where no marker matched the prompt: adv_clean_xor_override, adv_sp
 
 ### 2. Does planted text change a Meta model's verdict? (attack success rate)
 
-`hazmat asr`: the baseline prompt (raw tool output) for each poisoned program and its unpoisoned twin (same source), 20 calls each to Muse Spark Open on Baseten, 480 calls, 0 failures.
+`hazmat asr`: the baseline prompt (raw tool output) for each poisoned program and its unpoisoned twin (same source), 20 calls each to Muse Spark Open on Baseten, 440 calls (20 poisoned programs + 2 twins, 20 each), 0 failures.
 
 | Poisoned sample | Twin | Benign (poisoned) | Not malicious (poisoned) | Not malicious (twin) | Shift | p | Mentions the planted text |
 |---|---|---|---|---|---|---|---|
@@ -229,6 +229,25 @@ Hazmat scored 7/8 correct. The miss was a bug, now fixed: the driver's final pro
 | `bc5e7eaa18efc4c4` | 1,789,440 | 639 | 218 | 21 | T1016, T1027, T1059, T1496 | yes |
 
 Every tool ran cleanly on every sample. The two samples with a single Ghidra function and few capa matches look packed, which is exactly where an analyst would go next (unpacking is not in scope today). Reproduce with `python scripts/real_tools_only.py`.
+
+## Detectors on real public data
+
+### Stage 1: deterministic detectors on real data (no models)
+
+| Test | Result [95% CI] |
+|---|---|
+| Pattern scanner recall, all real injection prompts (deepset, English + German) | 3/263 = 1.1% [0.4-3.3%] |
+| Pattern scanner recall, English-only injection prompts | 3/169 = 1.8% [0.6-5.1%] |
+| False alarms on real benign prompts | 0/399 = 0.0% [0.0-1.0%] |
+| Real benign programs/libraries (Ubuntu 24.04 image) with any flagged string | 1/570 = 0.2% [0.0-1.0%] |
+| Flagged strings among all their strings | 1 of 605,393 |
+| Real malware (SOREL-20M) with any flagged string | 0/8 = 0.0% [0.0-32.4%] |
+
+The pattern scanner is built for precision: it only fires on explicit instructions to an analyst or agent, so it misses generic injections ("tell me a joke instead") by design; the reader-consensus check (stage 2) and the masked cross-check cover the rest.
+
+Flagged strings in benign binaries (for review): `previously wiped area modified  -- ignore previous results`
+
+The false-alarm rate on real Ubuntu programs was 8/570 before two patterns were tightened against help text such as "do not report progress" (commit ca5da1a); 1/570 after, on the same files, so it's in-sample.
 
 ## How we test safely, and what's next
 
