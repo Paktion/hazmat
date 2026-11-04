@@ -322,6 +322,6 @@ class Analysis:
         self.say(f"\n  {v['run']['evidence_items']} evidence items, {v['run']['seconds']}s. Files in {self.run_dir}")
 
 
-def main(sample: str, backend: str | None, steps: int) -> int:
-    v = Analysis(sample, backend=backend, steps=steps).run()
+def main(sample: str, backend: str | None, steps: int, run_root: str = "runs", quiet: bool = False) -> int:
+    v = Analysis(sample, backend=backend, steps=steps, run_root=run_root, echo=not quiet).run()
     return 0 if v["category"] != "0" else 1

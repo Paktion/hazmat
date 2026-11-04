@@ -5,6 +5,8 @@
     hazmat sandbox FILE     run the analysis tools on FILE in an isolated sandbox
     hazmat selftest         check every tool on every test sample, in the sandbox
     hazmat analyze FILE     full analysis: driver (Muse Spark) + airlock + reader cell -> verdict
+    hazmat baseline FILE    the common approach for comparison: raw tool output -> one model call
+    hazmat eval             score Hazmat (and the baseline) on the labeled test samples
     hazmat probe FILE       walk FILE through the airlock with a scripted driver
     hazmat spend            spend so far against each provider's cap (and Modal)
 """
@@ -116,10 +118,23 @@ def cmd_selftest(backend: str | None, build: bool) -> int:
     return selftest(backend=backend, build=build)
 
 
-def cmd_analyze(sample: str, backend: str | None, steps: int) -> int:
+def cmd_analyze(sample: str, backend: str | None, steps: int, run_root: str = "runs", quiet: bool = False) -> int:
     from .driver import main as analyze
 
-    return analyze(sample, backend, steps)
+    return analyze(sample, backend, steps, run_root, quiet)
+
+
+def cmd_baseline(sample: str, backend: str | None) -> int:
+    from .baseline import main as baseline
+
+    return baseline(sample, backend)
+
+
+def cmd_eval(args) -> int:
+    from .evaluate import main as evaluate
+
+    return evaluate(runs=args.runs, backend=args.backend, jobs=args.jobs, baseline=args.baseline,
+                    only=args.only, steps=args.steps)
 
 
 def cmd_probe(sample: str, backend: str | None, reader: bool) -> int:
@@ -144,6 +159,18 @@ def main(argv: list[str] | None = None) -> int:
     an.add_argument("sample")
     an.add_argument("--backend", choices=["modal", "docker"], help="default: $HAZMAT_SANDBOX or modal")
     an.add_argument("--steps", type=int, default=12, help="max driver steps (default 12)")
+    an.add_argument("--run-root", default="runs", help="where to write the run directory")
+    an.add_argument("--quiet", action="store_true")
+    bl = sub.add_parser("baseline", help="raw tool output -> one Muse Spark Open call, for comparison")
+    bl.add_argument("sample")
+    bl.add_argument("--backend", choices=["modal", "docker"])
+    ev = sub.add_parser("eval", help="score Hazmat on the labeled test samples")
+    ev.add_argument("--runs", type=int, default=2, help="runs per sample (default 2)")
+    ev.add_argument("--backend", choices=["modal", "docker"])
+    ev.add_argument("--jobs", type=int, default=4, help="parallel runs (default 4)")
+    ev.add_argument("--baseline", action="store_true", help="also score the baseline")
+    ev.add_argument("--only", help="only samples whose name contains this")
+    ev.add_argument("--steps", type=int, default=12)
     pr = sub.add_parser("probe", help="walk a sample through the airlock with a scripted driver")
     pr.add_argument("sample")
     pr.add_argument("--backend", choices=["modal", "docker"], help="default: $HAZMAT_SANDBOX or modal")
@@ -158,7 +185,11 @@ def main(argv: list[str] | None = None) -> int:
     if args.cmd == "sandbox":
         return cmd_sandbox(args.sample, args.rules, args.backend)
     if args.cmd == "analyze":
-        return cmd_analyze(args.sample, args.backend, args.steps)
+        return cmd_analyze(args.sample, args.backend, args.steps, args.run_root, args.quiet)
+    if args.cmd == "baseline":
+        return cmd_baseline(args.sample, args.backend)
+    if args.cmd == "eval":
+        return cmd_eval(args)
     if args.cmd == "probe":
         return cmd_probe(args.sample, args.backend, not args.no_reader)
     if args.cmd == "selftest":
