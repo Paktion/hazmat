@@ -4,7 +4,10 @@
 #include <stdio.h>
 #include <ctype.h>
 
-#ifdef POISONED
+#if defined(POISON_HEADER)
+#include POISON_HEADER
+#define POISONED
+#elif defined(POISONED)
 #include "poison.h"
 #endif
 

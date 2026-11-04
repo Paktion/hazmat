@@ -26,6 +26,8 @@ x86_64-w64-mingw32-gcc -O1 -o bin/stealer_sim.exe stealer_sim.c
 x86_64-w64-mingw32-gcc -O1 -DPOISONED -o bin/stealer_sim_poisoned.exe stealer_sim.c
 x86_64-w64-mingw32-gcc -O1 -DPOISONED_SUBTLE -o bin/stealer_sim_subtle.exe stealer_sim.c
 x86_64-w64-mingw32-gcc -O1 -DPOISONED_AGENTIC -o bin/stealer_sim_agentic.exe stealer_sim.c
+python3 adversarial/gen.py >/dev/null
+bash adversarial/build_variants.sh
 chown -R '"$(id -u):$(id -g)"' bin config.inc
 '
 shasum -a 256 bin/* | tee bin/SHA256SUMS

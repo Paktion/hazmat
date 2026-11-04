@@ -21,7 +21,10 @@
 #include <sys/ptrace.h>
 #endif
 
-#if defined(POISONED_AGENTIC)
+#if defined(POISON_HEADER)
+#include POISON_HEADER
+#define POISONED
+#elif defined(POISONED_AGENTIC)
 #include "poison_agentic.h"
 #define POISONED
 #elif defined(POISONED_SUBTLE)
