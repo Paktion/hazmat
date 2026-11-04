@@ -93,3 +93,11 @@ def test_bad_proposals_rejected():
         p("1", "remote", "certain", ("BEN-NO-CAPABILITY", ["E1"]))    # bad confidence
     with pytest.raises(Exception):
         p("1", "remote", "high", ("BENIGN-TRUST-ME", ["E1"]))         # unknown reason code
+
+
+def test_org_allowlist_supports_benign_but_planted_text_still_goes_to_review():
+    ev = EV + [{"id": "E7", "cmd": "lookup_hash", "grade": "A"}]
+    v = decide(p("2", "remote", "high", ("BEN-ORG-ALLOWLISTED", ["E7", "E2"])), ev)
+    assert v["category"] == "2" and v["auto_close_eligible"] is True
+    v = decide(p("2", "remote", "high", ("BEN-ORG-ALLOWLISTED", ["E7", "E2"])), ev, injection=INJ)
+    assert v["category"] == "4A"
