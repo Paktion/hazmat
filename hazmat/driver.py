@@ -29,7 +29,7 @@ from typing import Any
 
 from pydantic import ValidationError
 
-from .airlock import Rejected
+from .airlock import Rejected, vocab
 from .link import Link
 from .verdict import REASON_CODES, Proposal, decide
 
@@ -205,8 +205,12 @@ class Analysis:
                              + f"\n\nYou have {self.steps} steps. Choose the next command."}]
                 proposal = None
                 driver_log = (self.run_dir / "driver.jsonl").open("w")
-                for step in range(1, self.steps + 1):
-                    last = step == self.steps
+                step, repairs = 0, 0
+                while step < self.steps or (proposal is None and repairs < 2 and step >= self.steps):
+                    if step >= self.steps:
+                        repairs += 1  # extra turns only to fix an invalid finish
+                    step += 1
+                    last = step >= self.steps
                     if last:
                         messages.append({"role": "user", "content": "Last step: you must finish now."})
                     raw = chat_summary(messages, role="driver", max_tokens=4096, response_format={
@@ -227,6 +231,11 @@ class Analysis:
                     driver_log.write(json.dumps({"step": step, **move}) + "\n")
                     self.say(f"  [driver] step {step}: {move['action']}  — {move['thinking'][:140]}")
                     if move["action"] == "finish":
+                        # Drop ATT&CK IDs outside the vocabulary rather than lose the whole verdict.
+                        if isinstance(args.get("attack"), list):
+                            args["attack"] = [t for t in args["attack"] if t in vocab("attack")][:12]
+                        if isinstance(args.get("summary"), str):
+                            args["summary"] = args["summary"][:700]
                         try:
                             proposal = Proposal.model_validate(args)
                             break

@@ -18,10 +18,12 @@ gcc -O1 -o bin/clean.elf clean.c
 gcc -O1 -DPOISONED -o bin/clean_poisoned.elf clean.c
 gcc -O1 -o bin/stealer_sim.elf stealer_sim.c
 gcc -O1 -DPOISONED -o bin/stealer_sim_poisoned.elf stealer_sim.c
+gcc -O1 -DPOISONED_SUBTLE -o bin/stealer_sim_subtle.elf stealer_sim.c
 x86_64-w64-mingw32-gcc -O1 -o bin/clean.exe clean.c
 x86_64-w64-mingw32-gcc -O1 -DPOISONED -o bin/clean_poisoned.exe clean.c
 x86_64-w64-mingw32-gcc -O1 -o bin/stealer_sim.exe stealer_sim.c
 x86_64-w64-mingw32-gcc -O1 -DPOISONED -o bin/stealer_sim_poisoned.exe stealer_sim.c
+x86_64-w64-mingw32-gcc -O1 -DPOISONED_SUBTLE -o bin/stealer_sim_subtle.exe stealer_sim.c
 chown -R '"$(id -u):$(id -g)"' bin config.inc
 '
 shasum -a 256 bin/* | tee bin/SHA256SUMS

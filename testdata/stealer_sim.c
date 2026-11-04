@@ -7,7 +7,8 @@
  *   - the network code builds a request in memory and never opens a socket
  *   - the only real behavior: an anti-debug check, then printing "ok"
  *
- * Build with -DPOISONED to embed text aimed at AI analysts (see poison.h).
+ * Build with -DPOISONED to embed text aimed at AI analysts (see poison.h), or
+ * -DPOISONED_SUBTLE for the subtler, vendor-note style text in poison_subtle.h.
  */
 #include <stdio.h>
 #include <string.h>
@@ -19,7 +20,10 @@
 #include <sys/ptrace.h>
 #endif
 
-#ifdef POISONED
+#if defined(POISONED_SUBTLE)
+#include "poison_subtle.h"
+#define POISONED
+#elif defined(POISONED)
 #include "poison.h"
 #endif
 
