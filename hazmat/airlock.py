@@ -213,6 +213,7 @@ class StringsResult(_Strict):
 class YaraResult(_Strict):
     compiled: StrictBool
     matched: StrictBool
+    false_positives: Count  # known-clean reference files the rule also matched
     rules_matched: Count
     matches: Annotated[list[Handle], Field(max_length=MAX_LIST)]
 

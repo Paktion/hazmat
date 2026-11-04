@@ -30,6 +30,7 @@ from .airlock import vocab
 from .sandbox import DEFAULT_TOOLS, REMOTE_PATH, SandboxReport, Session
 
 MAX_STRING = 4096
+REFERENCE_DIR = Path(__file__).resolve().parent.parent / "testdata" / "bin"
 READER_CHARS = 12_000
 
 SECTIONS_SCRIPT = r"""
@@ -117,6 +118,12 @@ class Cell:
         self.store = Store()
         self.sb = Session(backend)
         self.sb.put(self.data, REMOTE_PATH)
+        # Known-clean reference files, so yara_test can report false positives.
+        self.refs = []
+        for i, ref in enumerate(sorted(REFERENCE_DIR.glob("clean.*")) if REFERENCE_DIR.exists() else []):
+            path = f"/work/ref_{i}.bin"
+            self.sb.put(ref.read_bytes(), path)
+            self.refs.append(path)
         tools = DEFAULT_TOOLS + [("sections", ["python3", "-c", SECTIONS_SCRIPT, REMOTE_PATH])]
         self.report = self.sb.run_tools(SandboxReport(sample=sample.name, backend=self.sb.backend), tools)
         self._index()
@@ -288,11 +295,16 @@ class Cell:
         self.sb.put(c["rule"].encode(), "/work/test.yar")
         r = self.sb.exec(["yara", "-s", "-w", "/work/test.yar", REMOTE_PATH], "yara")
         if r.returncode != 0:
-            return {"compiled": False, "matched": False, "rules_matched": 0, "matches": []}
+            return {"compiled": False, "matched": False, "false_positives": 0, "rules_matched": 0, "matches": []}
+        fps = 0
+        for ref in self.refs:
+            fr = self.sb.exec(["yara", "-w", "/work/test.yar", ref], "yara")
+            fps += bool(fr.returncode == 0 and fr.stdout.strip())
         rules = [l for l in r.stdout.splitlines() if l and not l.startswith("0x")]
         hits = [l for l in r.stdout.splitlines() if l.startswith("0x")]
         matches = [self.store.mint("match", l[:MAX_STRING]) for l in hits[:50]]
-        return {"compiled": True, "matched": bool(rules), "rules_matched": len(rules), "matches": matches}
+        return {"compiled": True, "matched": bool(rules), "false_positives": fps, "rules_matched": len(rules),
+                "matches": matches}
 
     def injection_scan(self, _: dict) -> dict:
         flagged, targets = [], set()

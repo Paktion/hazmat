@@ -7,6 +7,7 @@
     hazmat analyze FILE     full analysis: driver (Muse Spark) + airlock + reader cell -> verdict
     hazmat baseline FILE    the common approach for comparison: raw tool output -> one model call
     hazmat eval             score Hazmat (and the baseline) on the labeled test samples
+    hazmat report RUN_DIR   (re)write the human report for a run
     hazmat probe FILE       walk FILE through the airlock with a scripted driver
     hazmat spend            spend so far against each provider's cap (and Modal)
 """
@@ -171,6 +172,8 @@ def main(argv: list[str] | None = None) -> int:
     ev.add_argument("--baseline", action="store_true", help="also score the baseline")
     ev.add_argument("--only", help="only samples whose name contains this")
     ev.add_argument("--steps", type=int, default=12)
+    rp = sub.add_parser("report", help="(re)write the human report for a run directory")
+    rp.add_argument("run_dir")
     pr = sub.add_parser("probe", help="walk a sample through the airlock with a scripted driver")
     pr.add_argument("sample")
     pr.add_argument("--backend", choices=["modal", "docker"], help="default: $HAZMAT_SANDBOX or modal")
@@ -190,6 +193,10 @@ def main(argv: list[str] | None = None) -> int:
         return cmd_baseline(args.sample, args.backend)
     if args.cmd == "eval":
         return cmd_eval(args)
+    if args.cmd == "report":
+        from .report import main as report
+
+        return report(args.run_dir)
     if args.cmd == "probe":
         return cmd_probe(args.sample, args.backend, not args.no_reader)
     if args.cmd == "selftest":

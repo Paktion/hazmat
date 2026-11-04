@@ -44,7 +44,8 @@ Commands (args as a JSON object):
 - xrefs {"target": "$func_N or $str_N"}          callers and callees
 - search_strings {"pattern": "<regex>", "source": "static|decoded|all", "limit": 1-50}
 - decoded_strings {"limit": 1-50}                strings FLOSS decoded by emulation
-- yara_test {"rule": "<a YARA rule you write>"}  does it compile, does it match
+- yara_test {"rule": "<a YARA rule you write>"}  does it compile, does it match this file, and how many known-clean
+      reference files it also matches (false_positives; a good rule has 0). Write rules on what is specific to this file.
 - ask_reader {"question": "...", "about": ["$handle", ...], "answer": {"type": "bool"}}
       answer types: {"type":"bool"} | {"type":"int","min":0,"max":100}
                     | {"type":"choice","choices":["a","b",...]} (2-12 choices, [A-Za-z0-9_-]) | {"type":"handles"}
@@ -259,6 +260,9 @@ class Analysis:
             (self.run_dir / "evidence.json").write_text(json.dumps(self.evidence, indent=1))
 
         (self.run_dir / "verdict.json").write_text(json.dumps(verdict, indent=2))
+        from .report import build
+
+        build(self.run_dir)
         self.print_verdict(verdict)
         return verdict
 
@@ -319,7 +323,7 @@ class Analysis:
             self.say(f"  rule         {rule}")
         if v["summary"]:
             self.say(f"  summary      {v['summary']}")
-        self.say(f"\n  {v['run']['evidence_items']} evidence items, {v['run']['seconds']}s. Files in {self.run_dir}")
+        self.say(f"\n  {v['run']['evidence_items']} evidence items, {v['run']['seconds']}s. Report: {self.run_dir / 'report.md'}")
 
 
 def main(sample: str, backend: str | None, steps: int, run_root: str = "runs", quiet: bool = False) -> int:
