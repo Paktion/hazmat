@@ -37,9 +37,11 @@ REASON_CODES = {
     "MAL-CREDENTIAL-ACCESS": "targets credential stores (browser logins, wallets, keys)",
     "MAL-EXFIL": "builds or sends data to a remote endpoint",
     "MAL-TTP-SEQUENCE": "several techniques chained in one code path",
+    "MAL-KNOWN-BAD": "the organization's blocklist or intel feed knows this hash as malicious",
     # benign
     "BEN-NO-CAPABILITY": "no suspicious capability found by any tool",
     "BEN-RUNTIME-ONLY": "suspicious-looking findings are compiler or runtime code only",
+    "BEN-ORG-ALLOWLISTED": "the organization's allowlist (a system of record) knows this hash as good",
     # incomplete
     "INC-TOOL-FAILURE": "a core analysis tool failed",
     "INC-INSUFFICIENT-EVIDENCE": "not enough evidence to decide",

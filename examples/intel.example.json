@@ -1,0 +1,5 @@
+{
+  "_doc": "Example HAZMAT_INTEL_FILE: your organization's known-good and known-bad SHA-256 hashes (allowlist, blocklist, intel feed export). Hashes below are the harmless test samples built by testdata/build.sh.",
+  "known_good": [],
+  "known_bad": []
+}

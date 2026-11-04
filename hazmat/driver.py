@@ -57,6 +57,8 @@ Commands (args as a JSON object):
       answer types: {"type":"bool"} | {"type":"int","min":0,"max":100}
                     | {"type":"choice","choices":["a","b",...]} (2-12 choices, [A-Za-z0-9_-]) | {"type":"handles"}
       The reader is another model that reads the raw content behind handles. Its answers are grade C.
+- lookup_hash {}                                 trusted lookup of this file's sha256 in your organization's data
+      (allowlist, blocklist, intel feed export; HAZMAT_INTEL_FILE). Grade A: a system of record, not the sample.
 - finish {"category": ..., "likelihood": ..., "confidence": ..., "reasons": [{"code": ..., "evidence": ["E3", ...]}],
           "attack": ["T1027", ...], "summary": "two or three sentences for the human analyst"}
 """
@@ -106,7 +108,7 @@ SYSTEM_NO_AIRLOCK = SYSTEM.replace(
     "Tools run in an isolated sandbox. Results include handles ($func_N, $str_N, $code_N, ...) and the raw content\n"
     "behind them (decompiled code, strings), as a typical tool-using analysis agent would see it.")
 
-ACTIONS = ["file_info", "imports", "capa_matches", "injection_scan", "list_functions", "decompile", "xrefs",
+ACTIONS = ["lookup_hash", "file_info", "imports", "capa_matches", "injection_scan", "list_functions", "decompile", "xrefs",
            "search_strings", "decoded_strings", "yara_test", "ask_reader", "finish"]
 RESPONSE_SCHEMA = {
     "type": "object",
@@ -202,7 +204,26 @@ class Analysis:
                 self.say("  " + line.rstrip())
 
     # -- evidence -------------------------------------------------------------------------
+    def lookup_hash(self, cmd: dict) -> dict:
+        """Trusted-side lookup in the organization's own data. Never touches the sample or the cell."""
+        sha = next((e["result"]["sha256"] for e in self.evidence if e["cmd"] == "file_info" and e["ok"]), None)
+        intel = {}
+        path = os.environ.get("HAZMAT_INTEL_FILE")
+        if path and Path(path).is_file():
+            intel = json.loads(Path(path).read_text())
+        good, bad = set(intel.get("known_good", [])), set(intel.get("known_bad", []))
+        verdict = "known_bad" if sha in bad else "known_good" if sha in good else "unknown"
+        source = {"known_bad": "org_blocklist", "known_good": "org_allowlist"}.get(verdict, "none")
+        e = {"id": f"E{len(self.evidence) + 1}", "cmd": "lookup_hash", "args": cmd, "ok": sha is not None, "grade": "A",
+             "result": {"verdict": verdict, "source": source, "configured": bool(path)} if sha else None,
+             "error": None if sha else "NOT_FOUND"}
+        self.evidence.append(e)
+        self.say(f"  [trusted] {e['id']} lookup_hash     grade A  {json.dumps(e['result'])}")
+        return e
+
     def send(self, link: Link, cmd: dict) -> dict:
+        if cmd.get("cmd") == "lookup_hash":
+            return self.lookup_hash(cmd)
         if self.cell_dead:
             return {"rejected": "the reader cell has stopped"}
         try:
