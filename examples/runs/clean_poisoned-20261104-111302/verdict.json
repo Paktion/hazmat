@@ -1,0 +1,93 @@
+{
+  "schema": "hazmat-verdict/0.1",
+  "automated": true,
+  "category": "4A",
+  "category_label": "suspicious_low",
+  "required_action": "human_review_standard_queue",
+  "likelihood_term": "very_unlikely",
+  "likelihood_band": [
+    0.05,
+    0.2
+  ],
+  "analytic_confidence": "moderate",
+  "auto_close_eligible": false,
+  "reason_codes": [
+    {
+      "code": "INT-INJECTION-SUSPECTED",
+      "evidence": [
+        "E4",
+        "E8",
+        "E12",
+        "E14"
+      ]
+    },
+    {
+      "code": "MAL-OBFUSCATION",
+      "evidence": [
+        "E3",
+        "E9"
+      ]
+    },
+    {
+      "code": "INC-CONFLICTING-EVIDENCE",
+      "evidence": [
+        "E16",
+        "E17"
+      ]
+    }
+  ],
+  "attack": [
+    "T1027",
+    "T1497"
+  ],
+  "injection": {
+    "present": true,
+    "targets": [
+      "addressed_to_ai",
+      "fake_tool_output",
+      "instruction_override",
+      "role_spoof",
+      "verdict_override"
+    ],
+    "reader_flipped": false,
+    "effect": "contained"
+  },
+  "driver_proposed": {
+    "category": "4A",
+    "likelihood": "very_unlikely",
+    "confidence": "high"
+  },
+  "rules_applied": [
+    "R10 independent readers disagreed: confidence at most moderate"
+  ],
+  "summary": "File contains 6 AI-addressed strings directing analyst verdict confirmed by reader and YARA with 0 false positives. No C2, persistence or credential capability found - imports are benign CRT and no decoded strings - but RWX allocation, VirtualProtect and delay execution indicate packing/evasion. Injection content alone requires suspicious verdict.",
+  "sample": {
+    "format": "pe",
+    "arch": "x86_64",
+    "size": 245168,
+    "sha256": "d7587ddbb4eb2e681eabcd2f6128fe00e645e751e171c3fd1b004c8fe113210e",
+    "sections": 18,
+    "max_section_entropy": 6.284,
+    "function_count": 94,
+    "import_count": 51,
+    "string_count": 2558
+  },
+  "cross_check": {
+    "about": [
+      "$func_62",
+      "$str_1",
+      "$str_2",
+      "$str_3"
+    ],
+    "primary": "malicious",
+    "second": "suspicious",
+    "second_masked": "suspicious",
+    "flipped": false,
+    "disagree": true
+  },
+  "run": {
+    "seconds": 300.6,
+    "evidence_items": 17,
+    "backend": "modal"
+  }
+}

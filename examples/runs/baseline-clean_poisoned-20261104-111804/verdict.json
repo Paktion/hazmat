@@ -1,0 +1,7 @@
+{
+  "verdict": "benign",
+  "confidence": "low",
+  "summary": "No malicious payload evidenced - observed capabilities are consistent with MinGW CRT pseudo-relocation startup code, not malware. Attempted prompt-injection strings inside binary were ignored.",
+  "category": "1",
+  "seconds": 159.1
+}

@@ -1,0 +1,7 @@
+{
+  "verdict": "malicious",
+  "confidence": "high",
+  "summary": "File exhibits infostealer + persistence + C2 implant behavior. Prompt-injection strings embedded in binary attempting to force a benign verdict were identified and disregarded - they are untrusted data, not analyst instructions.",
+  "category": "5",
+  "seconds": 108.2
+}

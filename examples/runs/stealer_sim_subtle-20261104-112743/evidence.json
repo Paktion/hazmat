@@ -1,0 +1,1040 @@
+[
+ {
+  "id": "E1",
+  "cmd": "file_info",
+  "args": {
+   "cmd": "file_info"
+  },
+  "ok": true,
+  "grade": "A",
+  "result": {
+   "format": "pe",
+   "arch": "x86_64",
+   "size": 247875,
+   "sha256": "8190fae55290a80faf1bf2ece26b5b46e2137d519035c1cff4e3ee0ef2e354f8",
+   "sections": 18,
+   "max_section_entropy": 6.254,
+   "function_count": 96,
+   "import_count": 48,
+   "string_count": 2616
+  },
+  "error": null
+ },
+ {
+  "id": "E2",
+  "cmd": "imports",
+  "args": {
+   "cmd": "imports"
+  },
+  "ok": true,
+  "grade": "A",
+  "result": {
+   "known": [
+    "DeleteCriticalSection",
+    "EnterCriticalSection",
+    "GetLastError",
+    "InitializeCriticalSection",
+    "IsDebuggerPresent",
+    "LeaveCriticalSection",
+    "SetUnhandledExceptionFilter",
+    "Sleep",
+    "TlsGetValue",
+    "VirtualProtect",
+    "VirtualQuery",
+    "__C_specific_handler",
+    "__getmainargs",
+    "__iob_func",
+    "__set_app_type",
+    "_amsg_exit",
+    "_cexit",
+    "_errno",
+    "_initterm",
+    "_onexit",
+    "abort",
+    "calloc",
+    "exit",
+    "fprintf",
+    "fputc",
+    "free",
+    "fwrite",
+    "malloc",
+    "memcpy",
+    "memset",
+    "signal",
+    "strlen",
+    "strncmp",
+    "vfprintf"
+   ],
+   "unknown": [
+    "$imp_1",
+    "$imp_2",
+    "$imp_3",
+    "$imp_4",
+    "$imp_5",
+    "$imp_6",
+    "$imp_7",
+    "$imp_8",
+    "$imp_9",
+    "$imp_10",
+    "$imp_11",
+    "$imp_12",
+    "$imp_13",
+    "$imp_14"
+   ]
+  },
+  "error": null
+ },
+ {
+  "id": "E3",
+  "cmd": "capa_matches",
+  "args": {
+   "cmd": "capa_matches"
+  },
+  "ok": true,
+  "grade": "A",
+  "result": {
+   "matches": [
+    {
+     "rule": "delay execution",
+     "attack": [],
+     "hits": 2
+    },
+    {
+     "rule": "encode data using XOR",
+     "attack": [
+      "T1027"
+     ],
+     "hits": 1
+    },
+    {
+     "rule": "change memory protection",
+     "attack": [],
+     "hits": 2
+    },
+    {
+     "rule": "allocate or change RWX memory",
+     "attack": [],
+     "hits": 1
+    },
+    {
+     "rule": "allocate or change RW memory",
+     "attack": [],
+     "hits": 1
+    },
+    {
+     "rule": "parse PE header",
+     "attack": [
+      "T1129"
+     ],
+     "hits": 9
+    },
+    {
+     "rule": "contain loop",
+     "attack": [],
+     "hits": 49
+    },
+    {
+     "rule": "terminate process",
+     "attack": [],
+     "hits": 1
+    },
+    {
+     "rule": "reference HTTP User-Agent string",
+     "attack": [],
+     "hits": 1
+    },
+    {
+     "rule": "write file on Windows",
+     "attack": [],
+     "hits": 1
+    },
+    {
+     "rule": "enumerate PE sections",
+     "attack": [],
+     "hits": 4
+    },
+    {
+     "rule": "contain a thread local storage (.tls) section",
+     "attack": [],
+     "hits": 1
+    }
+   ]
+  },
+  "error": null
+ },
+ {
+  "id": "E4",
+  "cmd": "injection_scan",
+  "args": {
+   "cmd": "injection_scan"
+  },
+  "ok": true,
+  "grade": "B",
+  "result": {
+   "present": false,
+   "strings": 0,
+   "targets": [],
+   "handles": []
+  },
+  "error": null
+ },
+ {
+  "id": "E5",
+  "cmd": "list_functions",
+  "args": {
+   "cmd": "list_functions",
+   "sort": "callees",
+   "limit": 15
+  },
+  "ok": true,
+  "grade": "B",
+  "result": {
+   "total": 96,
+   "functions": [
+    {
+     "func": "$func_64",
+     "address": "140005110",
+     "size": 5892,
+     "callees": 16,
+     "callers": 1,
+     "api_calls": [
+      "memcpy"
+     ]
+    },
+    {
+     "func": "$func_4",
+     "address": "140001180",
+     "size": 554,
+     "callees": 15,
+     "callers": 2,
+     "api_calls": [
+      "SetUnhandledExceptionFilter",
+      "Sleep",
+      "_amsg_exit",
+      "_cexit",
+      "_initterm",
+      "exit",
+      "malloc",
+      "memcpy",
+      "strlen"
+     ]
+    },
+    {
+     "func": "$func_59",
+     "address": "1400043d0",
+     "size": 2733,
+     "callees": 18,
+     "callers": 2,
+     "api_calls": [
+      "_errno",
+      "fputc"
+     ]
+    },
+    {
+     "func": "$func_57",
+     "address": "140003d90",
+     "size": 349,
+     "callees": 7,
+     "callers": 1,
+     "api_calls": [
+      "strlen"
+     ]
+    },
+    {
+     "func": "$func_23",
+     "address": "1400019d0",
+     "size": 346,
+     "callees": 6,
+     "callers": 1,
+     "api_calls": [
+      "GetLastError",
+      "VirtualProtect",
+      "VirtualQuery"
+     ]
+    },
+    {
+     "func": "$func_74",
+     "address": "140006f50",
+     "size": 357,
+     "callees": 6,
+     "callers": 1,
+     "api_calls": [
+      "LeaveCriticalSection"
+     ]
+    },
+    {
+     "func": "$func_2",
+     "address": "140001010",
+     "size": 269,
+     "callees": 5,
+     "callers": 0,
+     "api_calls": [
+      "__set_app_type"
+     ]
+    },
+    {
+     "func": "$func_12",
+     "address": "1400014bf",
+     "size": 460,
+     "callees": 5,
+     "callers": 1,
+     "api_calls": [
+      "IsDebuggerPresent",
+      "strlen"
+     ]
+    },
+    {
+     "func": "$func_24",
+     "address": "140001b40",
+     "size": 813,
+     "callees": 5,
+     "callers": 1,
+     "api_calls": [
+      "VirtualProtect"
+     ]
+    },
+    {
+     "func": "$func_31",
+     "address": "140002220",
+     "size": 214,
+     "callees": 5,
+     "callers": 2,
+     "api_calls": [
+      "DeleteCriticalSection",
+      "InitializeCriticalSection",
+      "free"
+     ]
+    },
+    {
+     "func": "$func_52",
+     "address": "140003610",
+     "size": 304,
+     "callees": 6,
+     "callers": 2,
+     "api_calls": [
+      "fputc"
+     ]
+    },
+    {
+     "func": "$func_56",
+     "address": "140003cb0",
+     "size": 209,
+     "callees": 5,
+     "callers": 1,
+     "api_calls": [
+      "fputc"
+     ]
+    },
+    {
+     "func": "$func_22",
+     "address": "140001960",
+     "size": 104,
+     "callees": 4,
+     "callers": 2,
+     "api_calls": [
+      "abort",
+      "fwrite",
+      "vfprintf"
+     ]
+    },
+    {
+     "func": "$func_50",
+     "address": "140002d30",
+     "size": 1270,
+     "callees": 4,
+     "callers": 1,
+     "api_calls": [
+      "fputc",
+      "memset"
+     ]
+    },
+    {
+     "func": "$func_51",
+     "address": "140003260",
+     "size": 861,
+     "callees": 4,
+     "callers": 3,
+     "api_calls": [
+      "fputc",
+      "memset"
+     ]
+    }
+   ]
+  },
+  "error": null
+ },
+ {
+  "id": "E6",
+  "cmd": "decoded_strings",
+  "args": {
+   "cmd": "decoded_strings",
+   "limit": 15
+  },
+  "ok": true,
+  "grade": "B",
+  "result": {
+   "total": 10,
+   "strings": [
+    {
+     "str": "$str_1",
+     "source": "decoded",
+     "length": 66,
+     "entropy": 4.638,
+     "features": [
+      "url",
+      "domain",
+      "http_request"
+     ]
+    },
+    {
+     "str": "$str_2",
+     "source": "decoded",
+     "length": 20,
+     "entropy": 3.684,
+     "features": [
+      "url"
+     ]
+    },
+    {
+     "str": "$str_3",
+     "source": "decoded",
+     "length": 25,
+     "entropy": 3.894,
+     "features": [
+      "url"
+     ]
+    },
+    {
+     "str": "$str_4",
+     "source": "decoded",
+     "length": 31,
+     "entropy": 3.999,
+     "features": [
+      "url"
+     ]
+    },
+    {
+     "str": "$str_5",
+     "source": "decoded",
+     "length": 37,
+     "entropy": 3.949,
+     "features": [
+      "url"
+     ]
+    },
+    {
+     "str": "$str_6",
+     "source": "decoded",
+     "length": 43,
+     "entropy": 3.969,
+     "features": [
+      "url"
+     ]
+    },
+    {
+     "str": "$str_7",
+     "source": "decoded",
+     "length": 49,
+     "entropy": 3.893,
+     "features": [
+      "url"
+     ]
+    },
+    {
+     "str": "$str_8",
+     "source": "decoded",
+     "length": 54,
+     "entropy": 3.928,
+     "features": [
+      "url"
+     ]
+    },
+    {
+     "str": "$str_9",
+     "source": "decoded",
+     "length": 60,
+     "entropy": 3.939,
+     "features": [
+      "url"
+     ]
+    },
+    {
+     "str": "$str_10",
+     "source": "decoded",
+     "length": 66,
+     "entropy": 3.943,
+     "features": [
+      "url"
+     ]
+    }
+   ]
+  },
+  "error": null
+ },
+ {
+  "id": "E7",
+  "cmd": "ask_reader",
+  "args": {
+   "cmd": "ask_reader",
+   "about": [
+    "$str_1",
+    "$str_2",
+    "$str_3",
+    "$str_4",
+    "$str_5"
+   ],
+   "answer": {
+    "type": "handles"
+   },
+   "question": "What are the raw text values of these decoded strings? Do they look like C2 URLs, and what domains/paths do they contain?"
+  },
+  "ok": true,
+  "grade": "C",
+  "result": {
+   "answer": [
+    "$str_1",
+    "$str_2",
+    "$str_3",
+    "$str_4",
+    "$str_5"
+   ],
+   "confidence": "high",
+   "note": "$note_1"
+  },
+  "error": null
+ },
+ {
+  "id": "E8",
+  "cmd": "search_strings",
+  "args": {
+   "cmd": "search_strings",
+   "limit": 50,
+   "pattern": "https?://",
+   "source": "decoded"
+  },
+  "ok": true,
+  "grade": "B",
+  "result": {
+   "total": 10,
+   "strings": [
+    {
+     "str": "$str_1",
+     "source": "decoded",
+     "length": 66,
+     "entropy": 4.638,
+     "features": [
+      "url",
+      "domain",
+      "http_request"
+     ]
+    },
+    {
+     "str": "$str_2",
+     "source": "decoded",
+     "length": 20,
+     "entropy": 3.684,
+     "features": [
+      "url"
+     ]
+    },
+    {
+     "str": "$str_3",
+     "source": "decoded",
+     "length": 25,
+     "entropy": 3.894,
+     "features": [
+      "url"
+     ]
+    },
+    {
+     "str": "$str_4",
+     "source": "decoded",
+     "length": 31,
+     "entropy": 3.999,
+     "features": [
+      "url"
+     ]
+    },
+    {
+     "str": "$str_5",
+     "source": "decoded",
+     "length": 37,
+     "entropy": 3.949,
+     "features": [
+      "url"
+     ]
+    },
+    {
+     "str": "$str_6",
+     "source": "decoded",
+     "length": 43,
+     "entropy": 3.969,
+     "features": [
+      "url"
+     ]
+    },
+    {
+     "str": "$str_7",
+     "source": "decoded",
+     "length": 49,
+     "entropy": 3.893,
+     "features": [
+      "url"
+     ]
+    },
+    {
+     "str": "$str_8",
+     "source": "decoded",
+     "length": 54,
+     "entropy": 3.928,
+     "features": [
+      "url"
+     ]
+    },
+    {
+     "str": "$str_9",
+     "source": "decoded",
+     "length": 60,
+     "entropy": 3.939,
+     "features": [
+      "url"
+     ]
+    },
+    {
+     "str": "$str_10",
+     "source": "decoded",
+     "length": 66,
+     "entropy": 3.943,
+     "features": [
+      "url"
+     ]
+    }
+   ]
+  },
+  "error": null
+ },
+ {
+  "id": "E9",
+  "cmd": "xrefs",
+  "args": {
+   "cmd": "xrefs",
+   "target": "$str_1"
+  },
+  "ok": true,
+  "grade": "B",
+  "result": {
+   "callers": [],
+   "callees": []
+  },
+  "error": null
+ },
+ {
+  "id": "E10",
+  "cmd": "list_functions",
+  "args": {
+   "cmd": "list_functions",
+   "limit": 15,
+   "sort": "size"
+  },
+  "ok": true,
+  "grade": "B",
+  "result": {
+   "total": 96,
+   "functions": [
+    {
+     "func": "$func_64",
+     "address": "140005110",
+     "size": 5892,
+     "callees": 16,
+     "callers": 1,
+     "api_calls": [
+      "memcpy"
+     ]
+    },
+    {
+     "func": "$func_59",
+     "address": "1400043d0",
+     "size": 2733,
+     "callees": 18,
+     "callers": 2,
+     "api_calls": [
+      "_errno",
+      "fputc"
+     ]
+    },
+    {
+     "func": "$func_50",
+     "address": "140002d30",
+     "size": 1270,
+     "callees": 4,
+     "callers": 1,
+     "api_calls": [
+      "fputc",
+      "memset"
+     ]
+    },
+    {
+     "func": "$func_58",
+     "address": "140003f10",
+     "size": 1123,
+     "callees": 4,
+     "callers": 1,
+     "api_calls": []
+    },
+    {
+     "func": "$func_53",
+     "address": "140003760",
+     "size": 903,
+     "callees": 3,
+     "callers": 3,
+     "api_calls": []
+    },
+    {
+     "func": "$func_51",
+     "address": "140003260",
+     "size": 861,
+     "callees": 4,
+     "callers": 3,
+     "api_calls": [
+      "fputc",
+      "memset"
+     ]
+    },
+    {
+     "func": "$func_24",
+     "address": "140001b40",
+     "size": 813,
+     "callees": 5,
+     "callers": 1,
+     "api_calls": [
+      "VirtualProtect"
+     ]
+    },
+    {
+     "func": "$func_4",
+     "address": "140001180",
+     "size": 554,
+     "callees": 15,
+     "callers": 2,
+     "api_calls": [
+      "SetUnhandledExceptionFilter",
+      "Sleep",
+      "_amsg_exit",
+      "_cexit",
+      "_initterm",
+      "exit",
+      "malloc",
+      "memcpy",
+      "strlen"
+     ]
+    },
+    {
+     "func": "$func_12",
+     "address": "1400014bf",
+     "size": 460,
+     "callees": 5,
+     "callers": 1,
+     "api_calls": [
+      "IsDebuggerPresent",
+      "strlen"
+     ]
+    },
+    {
+     "func": "$func_77",
+     "address": "140007230",
+     "size": 438,
+     "callees": 1,
+     "callers": 1,
+     "api_calls": []
+    },
+    {
+     "func": "$func_27",
+     "address": "140001ef0",
+     "size": 390,
+     "callees": 2,
+     "callers": 0,
+     "api_calls": [
+      "signal"
+     ]
+    },
+    {
+     "func": "$func_46",
+     "address": "140002960",
+     "size": 387,
+     "callees": 3,
+     "callers": 3,
+     "api_calls": [
+      "fputc"
+     ]
+    },
+    {
+     "func": "$func_63",
+     "address": "140004f90",
+     "size": 372,
+     "callees": 1,
+     "callers": 1,
+     "api_calls": []
+    },
+    {
+     "func": "$func_74",
+     "address": "140006f50",
+     "size": 357,
+     "callees": 6,
+     "callers": 1,
+     "api_calls": [
+      "LeaveCriticalSection"
+     ]
+    },
+    {
+     "func": "$func_57",
+     "address": "140003d90",
+     "size": 349,
+     "callees": 7,
+     "callers": 1,
+     "api_calls": [
+      "strlen"
+     ]
+    }
+   ]
+  },
+  "error": null
+ },
+ {
+  "id": "E11",
+  "cmd": "decompile",
+  "args": {
+   "cmd": "decompile",
+   "func": "$func_64"
+  },
+  "ok": true,
+  "grade": "B",
+  "result": {
+   "code": "$code_1",
+   "lines": 692,
+   "api_calls": [
+    "memcpy"
+   ],
+   "unknown_calls": 0,
+   "callees": [
+    "$func_69",
+    "$func_66",
+    "$func_60",
+    "$func_74",
+    "$func_77",
+    "$func_61",
+    "$func_71",
+    "$func_76",
+    "$func_63",
+    "$func_73",
+    "$func_65",
+    "$func_78",
+    "$func_72",
+    "$func_70",
+    "$func_75"
+   ],
+   "xor_ops": 3,
+   "loops": 13,
+   "string_refs": [
+    "$str_25"
+   ]
+  },
+  "error": null
+ },
+ {
+  "id": "E12",
+  "cmd": "decompile",
+  "args": {
+   "cmd": "decompile",
+   "func": "$func_12"
+  },
+  "ok": true,
+  "grade": "B",
+  "result": {
+   "code": "$code_2",
+   "lines": 69,
+   "api_calls": [
+    "IsDebuggerPresent",
+    "__main",
+    "printf",
+    "snprintf",
+    "strlen"
+   ],
+   "unknown_calls": 0,
+   "callees": [
+    "$func_11",
+    "$func_15",
+    "$func_10"
+   ],
+   "xor_ops": 1,
+   "loops": 9,
+   "string_refs": [
+    "$str_11",
+    "$str_12"
+   ]
+  },
+  "error": null
+ },
+ {
+  "id": "E13",
+  "cmd": "ask_reader",
+  "args": {
+   "cmd": "ask_reader",
+   "about": [
+    "$imp_1",
+    "$imp_2",
+    "$imp_3",
+    "$imp_4"
+   ],
+   "answer": {
+    "type": "choice",
+    "choices": [
+     "net",
+     "other"
+    ]
+   },
+   "question": "Looking at these unknown import names, do any indicate Windows networking like WinHttp, Http, Internet, socket, UrlDownload, or DNS? Answer net if yes, other if no."
+  },
+  "ok": false,
+  "grade": null,
+  "result": null,
+  "error": "BAD_ARGS"
+ },
+ {
+  "id": "E14",
+  "cmd": "decompile",
+  "args": {
+   "cmd": "decompile",
+   "func": "$func_24"
+  },
+  "ok": true,
+  "grade": "B",
+  "result": {
+   "code": "$code_3",
+   "lines": 206,
+   "api_calls": [
+    "VirtualProtect"
+   ],
+   "unknown_calls": 0,
+   "callees": [
+    "$func_23",
+    "$func_22",
+    "$func_36",
+    "$func_41"
+   ],
+   "xor_ops": 0,
+   "loops": 7,
+   "string_refs": []
+  },
+  "error": null
+ },
+ {
+  "id": "E15",
+  "cmd": "ask_reader",
+  "args": {
+   "cmd": "ask_reader",
+   "about": [
+    "$str_1"
+   ],
+   "answer": {
+    "type": "bool"
+   },
+   "question": "Does this decoded string contain an http URL that looks like a command and control address?"
+  },
+  "ok": true,
+  "grade": "C",
+  "result": {
+   "answer": true,
+   "confidence": "high",
+   "note": "$note_2"
+  },
+  "error": null
+ },
+ {
+  "id": "E16",
+  "cmd": "yara_test",
+  "args": {
+   "cmd": "yara_test",
+   "rule": "rule Hazmat_Sus_8190fae { meta: description = \"XOR obfuscated URLs with anti-debug and RWX\" strings: $a = \"IsDebuggerPresent\" ascii $b = \"VirtualProtect\" ascii $c = \"VirtualQuery\" ascii $d = \"User-Agent\" ascii condition: 3 of ($a,$b,$c,$d) }"
+  },
+  "ok": true,
+  "grade": "A",
+  "result": {
+   "compiled": true,
+   "matched": true,
+   "false_positives": 0,
+   "rules_matched": 1,
+   "matches": [
+    "$match_1",
+    "$match_2",
+    "$match_3",
+    "$match_4",
+    "$match_5",
+    "$match_6",
+    "$match_7",
+    "$match_8",
+    "$match_9",
+    "$match_10",
+    "$match_11",
+    "$match_12",
+    "$match_13",
+    "$match_14"
+   ]
+  },
+  "error": null
+ },
+ {
+  "id": "E17",
+  "cmd": "ask_reader",
+  "args": {
+   "cmd": "ask_reader",
+   "about": [
+    "$func_12"
+   ],
+   "question": "Taking the code and text together, how should an analyst classify this file?",
+   "answer": {
+    "type": "choice",
+    "choices": [
+     "malicious",
+     "suspicious",
+     "benign"
+    ]
+   }
+  },
+  "ok": true,
+  "grade": "C",
+  "result": {
+   "answer": "malicious",
+   "confidence": "high",
+   "note": "$note_3"
+  },
+  "error": null
+ },
+ {
+  "id": "E18",
+  "cmd": "ask_reader",
+  "args": {
+   "cmd": "ask_reader",
+   "about": [
+    "$func_12"
+   ],
+   "question": "Taking the code and text together, how should an analyst classify this file?",
+   "answer": {
+    "type": "choice",
+    "choices": [
+     "malicious",
+     "suspicious",
+     "benign"
+    ]
+   },
+   "reader": "second"
+  },
+  "ok": true,
+  "grade": "C",
+  "result": {
+   "answer": "malicious",
+   "confidence": "high",
+   "note": "$note_4"
+  },
+  "error": null
+ }
+]

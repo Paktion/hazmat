@@ -21,8 +21,8 @@ testdata/bin/
 testdata/config.inc
 
 # Analysis output
-reports/
-runs/
+/reports/
+/runs/
 ghidra_projects/
 
 # Python
