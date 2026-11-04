@@ -354,10 +354,11 @@ class Cell:
         )
         user = f"Question: {c['question']}\n\n" + "\n\n".join(blocks)
         chat = chat_second if c.get("reader") == "second" else chat_raw
+        role = "reader2" if c.get("reader") == "second" else "reader"
         reply = chat(
             [{"role": "system", "content": system}, {"role": "user", "content": user}],
             response_format={"type": "json_schema", "json_schema": {"name": "reader_answer", "strict": True, "schema": schema}},
-            max_tokens=4096,
+            max_tokens=4096, role=role,
         )
         parsed = json.loads(reply)
         note = self.store.mint("note", parsed.get("reasoning", ""), question=c["question"], about=c["about"],
