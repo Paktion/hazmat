@@ -22,6 +22,7 @@ from __future__ import annotations
 
 import json
 import os
+import sys
 import threading
 import time
 from pathlib import Path
@@ -144,6 +145,7 @@ class Analysis:
         self.sample = Path(sample)
         self.steps = steps
         self.echo = echo
+        self.out = sys.stdout
         self.run_dir = Path(run_root) / f"{self.sample.stem}-{time.strftime('%Y%m%d-%H%M%S')}"
         self.run_dir.mkdir(parents=True, exist_ok=True)
         self.backend = backend
@@ -156,7 +158,7 @@ class Analysis:
     # -- terminal ---------------------------------------------------------------------
     def say(self, line: str) -> None:
         if self.echo:
-            print(line, flush=True)
+            print(line, file=self.out, flush=True)
 
     def _tail_calls(self, stop: threading.Event) -> None:
         with self.calls_log.open() as f:
@@ -353,6 +355,12 @@ class Analysis:
         self.say(f"\n  {v['run']['evidence_items']} evidence items, {v['run']['seconds']}s. Report: {self.run_dir / 'report.md'}")
 
 
-def main(sample: str, backend: str | None, steps: int, run_root: str = "runs", quiet: bool = False) -> int:
-    v = Analysis(sample, backend=backend, steps=steps, run_root=run_root, echo=not quiet).run()
+def main(sample: str, backend: str | None, steps: int, run_root: str = "runs", quiet: bool = False,
+         as_json: bool = False) -> int:
+    a = Analysis(sample, backend=backend, steps=steps, run_root=run_root, echo=not quiet)
+    if as_json:
+        a.out = sys.stderr  # progress to stderr; stdout carries only the verdict
+    v = a.run()
+    if as_json:
+        print(json.dumps(v, indent=2))
     return 0 if v["category"] != "0" else 1

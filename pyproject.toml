@@ -22,6 +22,7 @@ analysis = [
 ]
 modal = ["modal>=0.64"]
 dev = ["pytest>=8"]
+mcp = ["mcp>=2.0"]
 
 [project.scripts]
 hazmat = "hazmat.cli:main"

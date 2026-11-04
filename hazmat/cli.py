@@ -8,6 +8,7 @@
     hazmat baseline FILE    the common approach for comparison: raw tool output -> one model call
     hazmat eval             score Hazmat (and the baseline) on the labeled test samples
     hazmat report RUN_DIR   (re)write the human report for a run
+    hazmat mcp              MCP server with one typed tool, analyze_file (for other agents)
     hazmat probe FILE       walk FILE through the airlock with a scripted driver
     hazmat spend            spend so far against each provider's cap (and Modal)
 """
@@ -122,10 +123,11 @@ def cmd_selftest(backend: str | None, build: bool) -> int:
     return selftest(backend=backend, build=build)
 
 
-def cmd_analyze(sample: str, backend: str | None, steps: int, run_root: str = "runs", quiet: bool = False) -> int:
+def cmd_analyze(sample: str, backend: str | None, steps: int, run_root: str = "runs", quiet: bool = False,
+                as_json: bool = False) -> int:
     from .driver import main as analyze
 
-    return analyze(sample, backend, steps, run_root, quiet)
+    return analyze(sample, backend, steps, run_root, quiet, as_json)
 
 
 def cmd_baseline(sample: str, backend: str | None) -> int:
@@ -165,6 +167,7 @@ def main(argv: list[str] | None = None) -> int:
     an.add_argument("--steps", type=int, default=12, help="max driver steps (default 12)")
     an.add_argument("--run-root", default="runs", help="where to write the run directory")
     an.add_argument("--quiet", action="store_true")
+    an.add_argument("--json", action="store_true", help="print only the verdict JSON on stdout (progress to stderr)")
     bl = sub.add_parser("baseline", help="raw tool output -> one Muse Spark Open call, for comparison")
     bl.add_argument("sample")
     bl.add_argument("--backend", choices=["modal", "docker"])
@@ -175,6 +178,7 @@ def main(argv: list[str] | None = None) -> int:
     ev.add_argument("--baseline", action="store_true", help="also score the baseline")
     ev.add_argument("--only", help="only samples whose name contains this")
     ev.add_argument("--steps", type=int, default=12)
+    sub.add_parser("mcp", help="run an MCP server exposing analyze_file (typed verdict only)")
     rp = sub.add_parser("report", help="(re)write the human report for a run directory")
     rp.add_argument("run_dir")
     pr = sub.add_parser("probe", help="walk a sample through the airlock with a scripted driver")
@@ -191,11 +195,15 @@ def main(argv: list[str] | None = None) -> int:
     if args.cmd == "sandbox":
         return cmd_sandbox(args.sample, args.rules, args.backend)
     if args.cmd == "analyze":
-        return cmd_analyze(args.sample, args.backend, args.steps, args.run_root, args.quiet)
+        return cmd_analyze(args.sample, args.backend, args.steps, args.run_root, args.quiet, args.json)
     if args.cmd == "baseline":
         return cmd_baseline(args.sample, args.backend)
     if args.cmd == "eval":
         return cmd_eval(args)
+    if args.cmd == "mcp":
+        from .mcp_server import main as mcp_main
+
+        return mcp_main()
     if args.cmd == "report":
         from .report import main as report
 
