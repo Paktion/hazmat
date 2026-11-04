@@ -78,7 +78,7 @@ def build(run_dir: str | Path) -> Path:
     if cc and "skipped" not in cc:
         out += [f"- Cross-check question asked of two independent readers: Baseten primary **{cc.get('primary')}**, "
                 f"Fireworks **{cc.get('second')}**, Fireworks with flagged text masked **{cc.get('second_masked', 'n/a')}**", ""]
-    flagged = next((e["result"]["handles"] for e in evidence.values() if e["cmd"] == "injection_scan" and e["ok"]), [])
+    flagged = next((e["result"]["handles"] for e in reversed(list(evidence.values())) if e["cmd"] == "injection_scan" and e["ok"]), [])
     for h in flagged[:6]:
         if h in store:
             out += [f"`{h}`:", "```", _quote(store[h]["text"], 400), "```"]

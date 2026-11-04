@@ -148,3 +148,12 @@ def test_string_features_are_a_closed_list_and_decoded_search_is_grade_b(lock):
     assert ok["grade"] == "B"
     cmd = lock.check_command({"cmd": "search_strings", "pattern": "http", "source": "static"})
     assert lock.check_result(cmd, reply({"total": 0, "strings": []}))["grade"] == "D"
+
+
+def test_reader_flagged_injection_is_grade_c_and_feature_filter_is_closed(lock):
+    cmd = lock.check_command({"cmd": "injection_scan", "also": ["$str_1"]})
+    out = lock.check_result(cmd, reply({"present": True, "strings": 1, "targets": ["reader_flagged"], "handles": ["$str_1"]}))
+    assert out["grade"] == "C"
+    with pytest.raises(Rejected):
+        lock.check_command({"cmd": "search_strings", "pattern": ".", "feature": "anything_goes"})
+    assert lock.check_command({"cmd": "search_strings", "pattern": ".", "feature": "prose"})["feature"] == "prose"

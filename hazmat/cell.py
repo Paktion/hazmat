@@ -97,8 +97,16 @@ STRING_FEATURES: dict[str, re.Pattern] = {
 }
 
 
+def _is_prose(text: str) -> bool:
+    words = re.findall(r"[A-Za-z][a-z']+", text)
+    letters = sum(ch.isalpha() or ch.isspace() for ch in text)
+    return len(words) >= 8 and letters >= 0.75 * len(text)
+
+
 def string_features(text: str) -> list[str]:
     feats = [name for name, rx in STRING_FEATURES.items() if rx.search(text)]
+    if _is_prose(text):
+        feats.append("prose")
     if injection_hits(text):
         feats.append("ai_targeted")
     return feats
@@ -307,7 +315,10 @@ class Cell:
     def search_strings(self, c: dict) -> dict:
         rx = re.compile(c["pattern"], re.I)
         pool = [s for s in self.strings if c["source"] == "all" or (s[0] == "static") == (c["source"] == "static")]
-        return self._strings_result([s for s in pool if rx.search(s[1])], c["limit"])
+        rows = [s for s in pool if rx.search(s[1])]
+        if c.get("feature"):
+            rows = [s for s in rows if c["feature"] in string_features(s[1])]
+        return self._strings_result(rows, c["limit"])
 
     def decoded_strings(self, c: dict) -> dict:
         return self._strings_result([s for s in self.strings if s[0] != "static"], c["limit"])
@@ -327,16 +338,20 @@ class Cell:
         return {"compiled": True, "matched": bool(rules), "false_positives": fps, "rules_matched": len(rules),
                 "matches": matches}
 
-    def injection_scan(self, _: dict) -> dict:
+    def injection_scan(self, c: dict) -> dict:
         flagged, targets = [], set()
         for src, value, addr in self.strings:
             hits = injection_hits(value)
             if hits and (len(hits) >= 2 or STRONG & set(hits)):
                 flagged.append(self._str_handle(src, value, addr))
                 targets.update(hits)
+        for h in c.get("also", []):
+            if self.store.get(h)["kind"] == "str" and h not in flagged:
+                flagged.append(h)
+                targets.add("reader_flagged")
         self.flagged_text = [self.store.get(h)["text"] for h in flagged]
         return {"present": bool(flagged), "strings": len(flagged),
-                "targets": sorted(targets)[:5], "handles": flagged[:20]}
+                "targets": sorted(targets)[:6], "handles": flagged[:20]}
 
     # -- the reader model -------------------------------------------------------------
     def _content(self, h: str, mask: bool = False) -> str:

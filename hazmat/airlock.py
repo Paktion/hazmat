@@ -77,6 +77,10 @@ Grade = Literal["A", "B", "C", "D"]
 StringSource = Literal["static", "decoded", "stack", "tight"]
 
 
+StringFeature = Literal["url", "ip", "domain", "registry_run_key", "file_path", "credential_store",
+                        "user_agent", "shell_command", "base64", "http_request", "ai_targeted", "prose"]
+
+
 class _Strict(BaseModel):
     model_config = ConfigDict(extra="forbid", strict=True, frozen=True)
 
@@ -112,6 +116,7 @@ class SearchStrings(_Strict):
     pattern: Annotated[str, StringConstraints(min_length=1, max_length=200)]
     source: Literal["static", "decoded", "all"] = "all"
     limit: Annotated[StrictInt, Field(ge=1, le=MAX_LIST)] = 20
+    feature: StringFeature | None = None  # only strings with this code-computed feature
 
 class DecodedStrings(_Strict):
     cmd: Literal["decoded_strings"]
@@ -140,6 +145,8 @@ class AskReader(_Strict):
 
 class InjectionScan(_Strict):
     cmd: Literal["injection_scan"]
+    # Set by the orchestrator: strings both independent readers judged to be aimed at analysts.
+    also: Annotated[list[Handle], Field(max_length=20)] = []
 
 Command = Annotated[
     Union[FileInfo, Imports, CapaMatches, ListFunctions, Decompile, Xrefs, SearchStrings,
@@ -200,8 +207,6 @@ class XrefsResult(_Strict):
     callers: Annotated[list[Handle], Field(max_length=MAX_LIST)]
     callees: Annotated[list[Handle], Field(max_length=MAX_LIST)]
 
-StringFeature = Literal["url", "ip", "domain", "registry_run_key", "file_path", "credential_store",
-                        "user_agent", "shell_command", "base64", "http_request", "ai_targeted"]
 
 class StringRow(_Strict):
     str: Handle
@@ -221,12 +226,13 @@ class YaraResult(_Strict):
     rules_matched: Count
     matches: Annotated[list[Handle], Field(max_length=MAX_LIST)]
 
-InjectionTarget = Literal["verdict_override", "instruction_override", "role_spoof", "fake_tool_output", "addressed_to_ai"]
+InjectionTarget = Literal["verdict_override", "instruction_override", "role_spoof", "fake_tool_output", "addressed_to_ai",
+                          "reader_flagged"]
 
 class InjectionResult(_Strict):
     present: StrictBool
     strings: Count
-    targets: Annotated[list[InjectionTarget], Field(max_length=5)]
+    targets: Annotated[list[InjectionTarget], Field(max_length=6)]
     handles: Annotated[list[Handle], Field(max_length=20)]
 
 class ReaderResult(_Strict):
@@ -307,6 +313,9 @@ class Airlock:
         # Strings the author hid (decoded by FLOSS's emulation) are B; plain strings stay D.
         if cmd["cmd"] == "search_strings" and cmd.get("source") == "decoded":
             return "B"
+        # An injection finding that rests partly on the readers' judgment is only as good as they are.
+        if cmd["cmd"] == "injection_scan" and cmd.get("also"):
+            return "C"
         return GRADES[cmd["cmd"]]
 
     def check_result(self, cmd: dict[str, Any], raw: str | bytes) -> dict[str, Any]:
