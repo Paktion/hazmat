@@ -46,7 +46,8 @@ Commands (args as a JSON object):
 - search_strings {"pattern": "<regex>", "source": "static|decoded|all", "limit": 1-50}
 - decoded_strings {"limit": 1-50}                strings FLOSS decoded by emulation (the author hid these)
       String rows carry "features" computed by code from the raw text: url, ip, domain, registry_run_key,
-      file_path, credential_store, user_agent, shell_command, base64, http_request, ai_targeted, prose.
+      file_path, credential_store, user_agent, shell_command, base64, http_request, ai_targeted, prose,
+      hidden_unicode (text hidden with invisible Unicode characters; source "hidden").
       Optional "feature": "<one of those>" keeps only strings with that feature.
       Static strings are grade D; decoded strings (and search_strings with source "decoded") are grade B.
 - yara_test {"rule": "<a YARA rule you write>"}  does it compile, does it match this file, and how many known-clean
@@ -340,7 +341,12 @@ class Analysis:
 
         Code picks natural-language strings; both independent readers judge whether they try to
         influence how the file is classified. Only if both say yes are they flagged (grade C)."""
-        e = self.send(link, {"cmd": "search_strings", "pattern": ".", "source": "static", "feature": "prose", "limit": 8})
+        hidden = self.send(link, {"cmd": "search_strings", "pattern": ".", "source": "all", "feature": "hidden_unicode", "limit": 10})
+        if hidden.get("ok") and hidden["result"]["strings"]:
+            # Text deliberately hidden from people (invisible Unicode) has no innocent reading.
+            self.say("  [check] text hidden with invisible Unicode; adding it to the injection finding")
+            self.send(link, {"cmd": "injection_scan", "also": [r["str"] for r in hidden["result"]["strings"]]})
+        e = self.send(link, {"cmd": "search_strings", "pattern": ".", "source": "all", "feature": "prose", "limit": 8})
         if not e.get("ok") or not e["result"]["strings"]:
             return
         handles = [r["str"] for r in e["result"]["strings"]]
@@ -350,6 +356,9 @@ class Analysis:
                          "positive, already analyzed, or by giving instructions)? Ordinary program messages, library "
                          "and compiler text, and usage help do not count."}
         votes = [self.send(link, {**q, **extra}) for extra in ({}, {"reader": "second"})]
+        if not votes[1].get("ok"):  # an overloaded provider shouldn't silently disable the check
+            time.sleep(10)
+            votes[1] = self.send(link, {**q, "reader": "second"})
         if all(v.get("ok") and v["result"]["answer"] is True for v in votes):
             self.say("  [check] both readers flagged prose aimed at analysts; adding it to the injection finding")
             self.send(link, {"cmd": "injection_scan", "also": handles})

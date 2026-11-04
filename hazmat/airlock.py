@@ -74,11 +74,12 @@ Arch = Literal["x86", "x86_64", "arm", "arm64", "other"]
 Confidence = Literal["high", "moderate", "low"]
 ErrorCode = Literal["TIMEOUT", "PARSE_FAIL", "TOOL_ERROR", "NOT_FOUND", "BAD_ARGS", "REJECTED"]
 Grade = Literal["A", "B", "C", "D"]
-StringSource = Literal["static", "decoded", "stack", "tight"]
+StringSource = Literal["static", "decoded", "stack", "tight", "hidden"]
 
 
 StringFeature = Literal["url", "ip", "domain", "registry_run_key", "file_path", "credential_store",
-                        "user_agent", "shell_command", "base64", "http_request", "ai_targeted", "prose"]
+                        "user_agent", "shell_command", "base64", "http_request", "ai_targeted", "prose",
+                        "hidden_unicode"]
 
 
 class _Strict(BaseModel):
@@ -213,7 +214,7 @@ class StringRow(_Strict):
     source: StringSource
     length: Count
     entropy: Ratio
-    features: Annotated[list[StringFeature], Field(max_length=11)] = []  # computed by code from the raw text
+    features: Annotated[list[StringFeature], Field(max_length=13)] = []  # computed by code from the raw text
 
 class StringsResult(_Strict):
     total: Count

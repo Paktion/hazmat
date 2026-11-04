@@ -1,0 +1,226 @@
+[
+  {
+    "sample": "sorel_9765f79099b1",
+    "sha256": "9765f79099b182fcb0c48a15e306ee19064d16cf3906a063d0cd8f9fbe91d0dc",
+    "size": 74126,
+    "file": "PE32 executable (Control Panel Item) Intel 80386, for MS Win",
+    "ghidra_functions": 1,
+    "imports": 32,
+    "capa_rules": 2,
+    "attack": [],
+    "tools_ok": {
+      "file": true,
+      "strings": true,
+      "capa": true,
+      "floss": true,
+      "ghidra": true
+    },
+    "seconds": {
+      "file": 0,
+      "strings": 0,
+      "capa": 10,
+      "floss": 3,
+      "ghidra": 34
+    }
+  },
+  {
+    "sample": "sorel_ca084c3e6d4b",
+    "sha256": "ca084c3e6d4be8eabf8ae5c8f76d85d79bed5f18778f6a7e19d63b7cf2de671c",
+    "size": 2110098,
+    "file": "PE32 executable (Control Panel Item) Intel 80386, for MS Win",
+    "ghidra_functions": 13,
+    "imports": 35,
+    "capa_rules": 14,
+    "attack": [
+      "T1012",
+      "T1057",
+      "T1059",
+      "T1518",
+      "T1543.003",
+      "T1569.002"
+    ],
+    "tools_ok": {
+      "file": true,
+      "strings": true,
+      "capa": true,
+      "floss": true,
+      "ghidra": true
+    },
+    "seconds": {
+      "file": 0,
+      "strings": 0,
+      "capa": 10,
+      "floss": 4,
+      "ghidra": 25
+    }
+  },
+  {
+    "sample": "sorel_c55cc8405fb9",
+    "sha256": "c55cc8405fb99b144c930d64d1f322c4f6beb83c7635d92ed466db980a98775f",
+    "size": 1053256,
+    "file": "PE32 executable (Control Panel Item) Intel 80386 (stripped t",
+    "ghidra_functions": 3538,
+    "imports": 446,
+    "capa_rules": 4,
+    "attack": [
+      "T1027"
+    ],
+    "tools_ok": {
+      "file": true,
+      "strings": true,
+      "capa": true,
+      "floss": true,
+      "ghidra": true
+    },
+    "seconds": {
+      "file": 0,
+      "strings": 0,
+      "capa": 411,
+      "floss": 410,
+      "ghidra": 88
+    }
+  },
+  {
+    "sample": "sorel_db2425f8a04e",
+    "sha256": "db2425f8a04ebfb4a49ee2536fb5fbc37560b0988bf18097a14f4932dc81b51e",
+    "size": 149949,
+    "file": "PE32 executable (DLL) (Control Panel Item) Intel 80386, for ",
+    "ghidra_functions": 157,
+    "imports": 55,
+    "capa_rules": 9,
+    "attack": [
+      "T1129"
+    ],
+    "tools_ok": {
+      "file": true,
+      "strings": true,
+      "capa": true,
+      "floss": true,
+      "ghidra": true
+    },
+    "seconds": {
+      "file": 0,
+      "strings": 0,
+      "capa": 16,
+      "floss": 11,
+      "ghidra": 36
+    }
+  },
+  {
+    "sample": "sorel_e82b8c87292b",
+    "sha256": "e82b8c87292b1d6bd48824c36a8caa9308e3f5d12152ecb24e59e77b5581c430",
+    "size": 164841,
+    "file": "PE32 executable (Control Panel Item) Intel 80386, for MS Win",
+    "ghidra_functions": 82,
+    "imports": 158,
+    "capa_rules": 49,
+    "attack": [
+      "T1010",
+      "T1012",
+      "T1027",
+      "T1059",
+      "T1082",
+      "T1083",
+      "T1112",
+      "T1115",
+      "T1125",
+      "T1129",
+      "T1222",
+      "T1529"
+    ],
+    "tools_ok": {
+      "file": true,
+      "strings": true,
+      "capa": true,
+      "floss": true,
+      "ghidra": true
+    },
+    "seconds": {
+      "file": 0,
+      "strings": 0,
+      "capa": 17,
+      "floss": 181,
+      "ghidra": 41
+    }
+  },
+  {
+    "sample": "sorel_af7d462390d5",
+    "sha256": "af7d462390d54849b95ab6619c8b9892f66341000257dd779f3875235b7ecc59",
+    "size": 180224,
+    "file": "PE32 executable (Control Panel Item) Intel 80386, for MS Win",
+    "ghidra_functions": 1,
+    "imports": 42,
+    "capa_rules": 2,
+    "attack": [],
+    "tools_ok": {
+      "file": true,
+      "strings": true,
+      "capa": true,
+      "floss": true,
+      "ghidra": true
+    },
+    "seconds": {
+      "file": 0,
+      "strings": 0,
+      "capa": 10,
+      "floss": 4,
+      "ghidra": 28
+    }
+  },
+  {
+    "sample": "sorel_37d7ab0db5de",
+    "sha256": "37d7ab0db5deaa240a548ab7453126dcce0803bf60d66b89d276e60691481798",
+    "size": 33334,
+    "file": "PE32 executable (Control Panel Item) Intel 80386, for MS Win",
+    "ghidra_functions": 24,
+    "imports": 41,
+    "capa_rules": 15,
+    "attack": [
+      "T1012",
+      "T1027"
+    ],
+    "tools_ok": {
+      "file": true,
+      "strings": true,
+      "capa": true,
+      "floss": true,
+      "ghidra": true
+    },
+    "seconds": {
+      "file": 0,
+      "strings": 0,
+      "capa": 11,
+      "floss": 6,
+      "ghidra": 29
+    }
+  },
+  {
+    "sample": "sorel_bc5e7eaa18ef",
+    "sha256": "bc5e7eaa18efc4c47fc10ae6b381e021698481cdd011844f4a565a707596c1ca",
+    "size": 1789440,
+    "file": "PE32 executable (DLL) (Control Panel Item) Intel 80386 (stri",
+    "ghidra_functions": 639,
+    "imports": 218,
+    "capa_rules": 21,
+    "attack": [
+      "T1016",
+      "T1027",
+      "T1059",
+      "T1496"
+    ],
+    "tools_ok": {
+      "file": true,
+      "strings": true,
+      "capa": true,
+      "floss": true,
+      "ghidra": true
+    },
+    "seconds": {
+      "file": 0,
+      "strings": 0,
+      "capa": 53,
+      "floss": 50,
+      "ghidra": 53
+    }
+  }
+]

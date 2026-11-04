@@ -58,6 +58,29 @@ print(json.dumps(out))
 """
 
 
+HIDDEN_SCRIPT = r"""
+import json, re, sys
+data = open(sys.argv[1], 'rb').read()
+out = []
+# Unicode tag characters (U+E0000-E007F) hide ASCII text from people but not from many models.
+for enc, rx in (('utf-8', rb'(?:\xf3\xa0[\x80\x81][\x80-\xbf]){4,}'), ('utf-16-le', rb'(?:\x40\xdb[\x00-\x7f]\xdc){4,}')):
+    for m in re.finditer(rx, data):
+        try:
+            txt = m.group(0).decode(enc)
+        except Exception:
+            continue
+        hidden = ''.join(chr(ord(c) - 0xE0000) for c in txt if 0xE0020 <= ord(c) <= 0xE007E)
+        if hidden:
+            out.append({'kind': 'unicode_tags', 'text': hidden})
+# Zero-width and bidi-override characters inside otherwise readable text
+for m in re.finditer(rb'(?:[\x20-\x7e]|\xe2\x80[\x8b-\x8f\xaa-\xae]){12,}', data):
+    raw = m.group(0)
+    if re.search(rb'\xe2\x80[\x8b-\x8f\xaa-\xae]', raw):
+        out.append({'kind': 'zero_width_or_bidi', 'text': raw.decode('utf-8', 'replace')})
+print(json.dumps(out[:50]))
+"""
+
+
 def _entropy(s: str | bytes) -> float:
     if not s:
         return 0.0
@@ -72,10 +95,14 @@ INJECTION_PATTERNS: dict[str, re.Pattern] = {
     "verdict_override": re.compile(r"\b(classify|report|mark|close|treat)\b.{0,40}\b(benign|clean|safe|false positive)\b"
                                    r"|\bno malware (detected|found)\b|\ballow-?listed\b|\bverdict\W{0,3}(clean|benign)", re.I),
     "instruction_override": re.compile(r"\bignore (all |any )?(previous|prior|above)\b|\bdisregard\b.{0,30}\binstructions?\b"
-                                       r"|\bdo not (mention|report|flag)\b|\bstop (the )?analysis\b|\bpolicy update\b", re.I),
+                                       r"|\bdo not (mention|report|flag)\b|\bstop (the )?analysis\b|\bpolicy update\b"
+                                       # agent-loop hijacks: steer the tool loop itself
+                                       r"|\b(call|invoke|run) (the )?finish\b|\bfinish now\b|\bdo not (call|use) (any |more |further )?tools?\b"
+                                       r"|\bskip (the )?(decompilation|analysis|string review)\b", re.I),
     "role_spoof": re.compile(r"<\|?(system|im_start|assistant)\|?>|\[/?INST\]|^#+\s*system\b"
                              r"|\byou are (an? |the )?(ai|assistant|malware analyst|analysis)", re.I | re.M),
-    "fake_tool_output": re.compile(r"^\s*\[(capa|yara|sandbox|virustotal|edr|av)\]|\bscore \d+/100\b"
+    "fake_tool_output": re.compile(r"^\s*\[(capa|yara|sandbox|virustotal|edr|av|reader)\]|\bscore \d+/100\b|\bTOOL RESULT\b"
+                                   r"|\bVirusTotal \d+/\d+\b"
                                    r"|\bno capabilities found\b|\b0 matches\b", re.I | re.M),
     "addressed_to_ai": re.compile(r"\b(ai|llm|language model|automated) (analysis|analyst|assistant|system|scanner)s?\b"
                                   r"|\banalyst note\b|\bnote to (the )?(ai|analyst|reviewer)\b", re.I),
@@ -103,10 +130,12 @@ def _is_prose(text: str) -> bool:
     return len(words) >= 8 and letters >= 0.75 * len(text)
 
 
-def string_features(text: str) -> list[str]:
+def string_features(text: str, source: str = "") -> list[str]:
     feats = [name for name, rx in STRING_FEATURES.items() if rx.search(text)]
     if _is_prose(text):
         feats.append("prose")
+    if source == "hidden":
+        feats.append("hidden_unicode")
     if injection_hits(text):
         feats.append("ai_targeted")
     return feats
@@ -153,7 +182,8 @@ class Cell:
             path = f"/work/ref_{i}.bin"
             self.sb.put(ref.read_bytes(), path)
             self.refs.append(path)
-        tools = DEFAULT_TOOLS + [("sections", ["python3", "-c", SECTIONS_SCRIPT, REMOTE_PATH])]
+        tools = DEFAULT_TOOLS + [("sections", ["python3", "-c", SECTIONS_SCRIPT, REMOTE_PATH]),
+                                 ("hidden", ["python3", "-c", HIDDEN_SCRIPT, REMOTE_PATH])]
         self.report = self.sb.run_tools(SandboxReport(sample=sample.name, backend=self.sb.backend), tools)
         self._index()
 
@@ -200,6 +230,14 @@ class Cell:
         for src, key in (("decoded", "decoded_strings"), ("stack", "stack_strings"), ("tight", "tight_strings")):
             for s in fs.get(key, []):
                 self.strings.append((src, s.get("string", "")[:MAX_STRING], None))
+
+        hd = self.report.get("hidden")
+        try:
+            self.hidden = json.loads(hd.stdout) if hd and hd.stdout.strip() else []
+        except json.JSONDecodeError:
+            self.hidden = []
+        for h in self.hidden:
+            self.strings.append(("hidden", h["text"][:MAX_STRING], None))
 
         cp = self.report.get("capa")
         try:
@@ -309,19 +347,20 @@ class Cell:
 
     def _strings_result(self, rows: list[tuple[str, str, str | None]], limit: int) -> dict:
         out = [{"str": self._str_handle(src, v, a), "source": src, "length": len(v), "entropy": _entropy(v),
-                "features": string_features(v)} for src, v, a in rows[:limit]]
+                "features": string_features(v, src)} for src, v, a in rows[:limit]]
         return {"total": len(rows), "strings": out}
 
     def search_strings(self, c: dict) -> dict:
         rx = re.compile(c["pattern"], re.I)
-        pool = [s for s in self.strings if c["source"] == "all" or (s[0] == "static") == (c["source"] == "static")]
+        static = ("static", "hidden")
+        pool = [s for s in self.strings if c["source"] == "all" or (s[0] in static) == (c["source"] == "static")]
         rows = [s for s in pool if rx.search(s[1])]
         if c.get("feature"):
-            rows = [s for s in rows if c["feature"] in string_features(s[1])]
+            rows = [s for s in rows if c["feature"] in string_features(s[1], s[0])]
         return self._strings_result(rows, c["limit"])
 
     def decoded_strings(self, c: dict) -> dict:
-        return self._strings_result([s for s in self.strings if s[0] != "static"], c["limit"])
+        return self._strings_result([s for s in self.strings if s[0] not in ("static", "hidden")], c["limit"])
 
     def yara_test(self, c: dict) -> dict:
         self.sb.put(c["rule"].encode(), "/work/test.yar")
