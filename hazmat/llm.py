@@ -25,7 +25,9 @@ META_MODEL_PREFIXES = ("muse-", "meta-models/muse-", "accounts/fireworks/models/
 def client_for(p: Provider) -> OpenAI:
     if not p.configured:
         raise RuntimeError(f"Provider {p.name!r} is not configured; check your .env")
-    return OpenAI(base_url=p.base_url, api_key=p.api_key)
+    # Bounded: a slow or overloaded provider fails fast and retries instead of stalling a run.
+    timeout = float(os.environ.get("HAZMAT_MODEL_TIMEOUT", "90"))
+    return OpenAI(base_url=p.base_url, api_key=p.api_key, timeout=timeout, max_retries=3)
 
 
 def _log_call(line: str) -> None:

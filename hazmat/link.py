@@ -27,7 +27,7 @@ class CellDied(RuntimeError):
 
 class Link:
     def __init__(self, sample: str | Path, run_dir: str | Path, backend: str | None = None,
-                 start_timeout: float = 900, reply_timeout: float = 300):
+                 start_timeout: float = 900, reply_timeout: float = 600):
         self.run_dir = Path(run_dir)
         self.run_dir.mkdir(parents=True, exist_ok=True)
         self.airlock = Airlock(self.run_dir / "airlock.jsonl")
@@ -61,7 +61,10 @@ class Link:
         try:
             raw = self._readline(self.reply_timeout)
         except TimeoutError:
-            return {"ok": False, "error": "TIMEOUT", "grade": None}
+            # The cell may still answer later; that reply would be read as the answer to the
+            # next command. Stop the cell rather than risk pairing replies wrongly.
+            self.proc.kill()
+            raise CellDied("reader cell did not reply in time; stopped it") from None
         return self.airlock.check_result(checked, raw.rstrip("\n"))
 
     def close(self) -> None:

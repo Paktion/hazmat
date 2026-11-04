@@ -30,7 +30,7 @@ from typing import Any
 from pydantic import ValidationError
 
 from .airlock import Rejected, vocab
-from .link import Link
+from .link import CellDied, Link
 from .verdict import REASON_CODES, Proposal, decide
 
 COMMANDS_DOC = """
@@ -148,6 +148,7 @@ class Analysis:
         self.run_dir.mkdir(parents=True, exist_ok=True)
         self.backend = backend
         self.evidence: list[dict[str, Any]] = []
+        self.cell_dead = False
         self.calls_log = self.run_dir / "calls.log"
         self.calls_log.touch()
         os.environ["HAZMAT_CALL_LOG"] = str(self.calls_log)  # inherited by the reader cell
@@ -170,11 +171,17 @@ class Analysis:
 
     # -- evidence -------------------------------------------------------------------------
     def send(self, link: Link, cmd: dict) -> dict:
+        if self.cell_dead:
+            return {"rejected": "the reader cell has stopped"}
         try:
             r = link.send(cmd)
         except Rejected as e:
             self.say(f"  [airlock] REJECTED {cmd.get('cmd')}: {e.reason}")
             return {"rejected": e.reason}
+        except CellDied as e:
+            self.cell_dead = True
+            self.say(f"  [airlock] reader cell stopped: {e}")
+            return {"rejected": "the reader cell has stopped"}
         e = {"id": f"E{len(self.evidence) + 1}", "cmd": cmd["cmd"], "args": cmd, "ok": r["ok"],
              "grade": r["grade"], "result": r.get("result"), "error": r.get("error")}
         self.evidence.append(e)
@@ -243,6 +250,9 @@ class Analysis:
                             locs = "; ".join(f"{'.'.join(map(str, x['loc']))}: {x['msg']}" for x in err.errors()[:4])
                             messages.append({"role": "user", "content": f"Invalid finish ({locs}). Fix it and finish again."})
                             continue
+                    if self.cell_dead:
+                        messages.append({"role": "user", "content": "The analysis cell has stopped. Finish now with the evidence you have."})
+                        continue
                     e = self.send(link, {"cmd": move["action"], **args})
                     if "rejected" in e:
                         reply = f"The airlock rejected that command: {e['rejected']}"
@@ -301,6 +311,8 @@ class Analysis:
 
     def cross_check(self, link: Link) -> dict[str, Any]:
         """One fixed question, two independent readers, with and without the flagged text."""
+        if self.cell_dead:
+            return {"skipped": "reader cell stopped"}
         func = self._key_function()
         inj = next((e for e in self.evidence if e["cmd"] == "injection_scan" and e["ok"]), None)
         flagged = inj["result"]["handles"][:3] if inj else []
