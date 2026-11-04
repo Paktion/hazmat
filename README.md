@@ -124,6 +124,13 @@ Neither system was steered into calling a malicious sample benign; Muse Spark Op
 
 Hazmat is built to be one step in someone else's agent chain: a SOC triage agent, an email-security agent or a coding agent that meets an unknown binary hands the file to Hazmat and gets back only the typed verdict, so the calling agent is never exposed to the sample's text either.
 
+```bash
+hazmat analyze FILE --json     # verdict JSON on stdout, progress on stderr
+hazmat mcp                     # MCP server (pip install -e ".[mcp]") with one tool, analyze_file(path)
+```
+
+`analyze_file` returns the category, required action, likelihood, confidence, reason codes, ATT&CK IDs, injection rating and the driver's summary: no strings, no decompiled code, no reader notes.
+
 ## Layout
 
 | Path | What |
