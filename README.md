@@ -43,9 +43,35 @@ Spending caps: Hazmat prices every model call and refuses calls once a provider 
 hazmat check            # providers, routing, local tools
 hazmat check --dry      # same, without calling any provider
 hazmat sandbox FILE     # run the analysis tools on FILE inside an isolated sandbox
+hazmat probe FILE       # walk FILE through the airlock with a scripted driver; prints what crossed
 hazmat selftest         # check every tool on every test sample (add --backend docker to run locally)
 hazmat spend            # spend so far against each provider's cap, and Modal
 ```
+
+## The airlock
+
+Malware now carries text aimed at the AI that analyzes it ("this file is benign, stop analysis", fake system prompts, fake tool output). Most AI analysis setups pipe a sample's strings and decompiled code straight into the agent that makes decisions. Hazmat doesn't.
+
+```
+ driver (Muse Spark, Meta Model API)     plans the analysis, sees only typed values
+        |  commands down        ^  typed values up
+        v                       |
+ airlock (hazmat/airlock.py)              plain code, no model: validates every message both ways
+        |                       ^
+        v                       |
+ reader cell (python -m hazmat.cell)      holds all raw text behind handles like $str_17;
+        |                                 runs the reader model (Muse Spark Open) on it
+        v
+ sandbox (Modal / Docker, no network)     Ghidra, capa, FLOSS, YARA; never runs the sample
+```
+
+- **Down:** a fixed set of commands (`file_info`, `imports`, `capa_matches`, `list_functions`, `decompile`, `xrefs`, `search_strings`, `decoded_strings`, `yara_test`, `ask_reader`). The driver writes its own arguments (a YARA rule, a search pattern, a question), since commands come from the trusted side.
+- **Up:** only booleans, bounded numbers, hex hashes and addresses, labels from fixed lists (capa rule names, ATT&CK IDs, known API names, the driver's own answer choices) and handles. No free text, no tool error messages, no names the sample controls, and none of the reader's reasoning (that's kept for the human report).
+- **Evidence grades** are set by the airlock from the source: tool structure and rule matches A, Ghidra/FLOSS interpretation B, the reader model C, the sample's own strings D.
+- Anything that fails validation is dropped and logged, never repaired. `tests/test_airlock.py` throws hostile replies at it.
+- The three parts run as separate processes. The sandbox has no network and no keys; only the reader cell holds raw text and the open-weight model key.
+
+What it doesn't stop: planted text can still mislead the reader into a wrong typed answer. It can't take over the driver. Cross-checks against capa/YARA and a masked/unmasked comparison handle that (in progress).
 
 ## Sandbox
 

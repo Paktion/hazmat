@@ -4,6 +4,7 @@
     hazmat check --dry      show what's configured without calling anything
     hazmat sandbox FILE     run the analysis tools on FILE in an isolated sandbox
     hazmat selftest         check every tool on every test sample, in the sandbox
+    hazmat probe FILE       walk FILE through the airlock with a scripted driver
     hazmat spend            spend so far against each provider's cap (and Modal)
 """
 
@@ -114,6 +115,12 @@ def cmd_selftest(backend: str | None, build: bool) -> int:
     return selftest(backend=backend, build=build)
 
 
+def cmd_probe(sample: str, backend: str | None, reader: bool) -> int:
+    from .probe import main as probe
+
+    return probe(sample, backend, reader)
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="hazmat")
     sub = parser.add_subparsers(dest="cmd", required=True)
@@ -126,6 +133,10 @@ def main(argv: list[str] | None = None) -> int:
     st = sub.add_parser("selftest", help="run every tool on every test sample and check the results")
     st.add_argument("--backend", choices=["modal", "docker"], help="default: $HAZMAT_SANDBOX or modal")
     st.add_argument("--build", action="store_true", help="rebuild the local image and test samples first")
+    pr = sub.add_parser("probe", help="walk a sample through the airlock with a scripted driver")
+    pr.add_argument("sample")
+    pr.add_argument("--backend", choices=["modal", "docker"], help="default: $HAZMAT_SANDBOX or modal")
+    pr.add_argument("--no-reader", action="store_true", help="skip the reader model calls")
     sp = sub.add_parser("spend", help="show spend against each provider's cap")
     sp.add_argument("--reset", action="store_true", help="clear the spend ledger")
     args = parser.parse_args(argv)
@@ -135,6 +146,8 @@ def main(argv: list[str] | None = None) -> int:
         return cmd_spend(args.reset)
     if args.cmd == "sandbox":
         return cmd_sandbox(args.sample, args.rules, args.backend)
+    if args.cmd == "probe":
+        return cmd_probe(args.sample, args.backend, not args.no_reader)
     if args.cmd == "selftest":
         return cmd_selftest(args.backend, args.build)
     return 2
