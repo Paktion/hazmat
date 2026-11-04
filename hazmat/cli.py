@@ -29,11 +29,14 @@ def _mask(key: str) -> str:
 
 
 def _tools() -> list[tuple[str, bool]]:
+    import subprocess
+
+    docker = bool(shutil.which("docker"))
+    image = docker and subprocess.run(["docker", "image", "inspect", "hazmat-sandbox"],
+                                      capture_output=True).returncode == 0
     return [
-        ("analyzeHeadless (Ghidra)", bool(shutil.which("analyzeHeadless"))),
-        ("yara", bool(shutil.which("yara"))),
-        ("capa", bool(shutil.which("capa"))),
-        ("strings", bool(shutil.which("strings"))),
+        ("docker", docker),
+        ("hazmat-sandbox image (local backend)", bool(image)),
     ]
 
 
@@ -69,7 +72,7 @@ def cmd_check(dry: bool) -> int:
     print("\nModal (sandboxes)")
     print(f"  token in ~/.modal.toml     {'found' if _modal_token() else 'missing (run: modal setup)'}")
 
-    print("\nAnalysis tools on PATH")
+    print("\nLocal sandbox (the tools themselves live in the image)")
     for name, found in _tools():
         print(f"  {name:<26} {'found' if found else 'missing'}")
 
