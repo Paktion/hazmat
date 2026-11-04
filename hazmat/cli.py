@@ -9,6 +9,7 @@
     hazmat eval             score Hazmat (and the baseline) on the labeled test samples
     hazmat report RUN_DIR   (re)write the human report for a run
     hazmat mcp              MCP server with one typed tool, analyze_file (for other agents)
+    hazmat asr              attack success rate: does planted text shift a Meta model's verdict?
     hazmat probe FILE       walk FILE through the airlock with a scripted driver
     hazmat spend            spend so far against each provider's cap (and Modal)
 """
@@ -190,6 +191,11 @@ def main(argv: list[str] | None = None) -> int:
                     help="same driver with and without the airlock on the poisoned samples")
     ev.add_argument("--driver", default="baseten", choices=["baseten", "fireworks"], help="driver for --ablation")
     sub.add_parser("mcp", help="run an MCP server exposing analyze_file (typed verdict only)")
+    asr = sub.add_parser("asr", help="attack success rate of the planted text on Muse Spark Open")
+    asr.add_argument("--n", type=int, default=20, help="calls per sample (default 20)")
+    asr.add_argument("--backend", choices=["modal", "docker"])
+    asr.add_argument("--jobs", type=int, default=8)
+    asr.add_argument("--only")
     rp = sub.add_parser("report", help="(re)write the human report for a run directory")
     rp.add_argument("run_dir")
     pr = sub.add_parser("probe", help="walk a sample through the airlock with a scripted driver")
@@ -216,6 +222,10 @@ def main(argv: list[str] | None = None) -> int:
         from .mcp_server import main as mcp_main
 
         return mcp_main()
+    if args.cmd == "asr":
+        from .asr import main as asr_main
+
+        return asr_main(n=args.n, backend=args.backend, jobs=args.jobs, only=args.only)
     if args.cmd == "report":
         from .report import main as report
 
