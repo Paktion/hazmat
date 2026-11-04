@@ -5,7 +5,7 @@ from __future__ import annotations
 from openai import OpenAI
 
 from . import budget
-from .config import Provider, raw_provider, summary_provider
+from .config import Provider, raw_provider, second_provider, summary_provider
 
 
 def client_for(p: Provider) -> OpenAI:
@@ -25,6 +25,11 @@ def chat(p: Provider, messages: list[dict], **kwargs) -> str:
 def chat_raw(messages: list[dict], **kwargs) -> str:
     """Use for prompts with unsanitized content. Open-weights only."""
     return chat(raw_provider(), messages, **kwargs)
+
+
+def chat_second(messages: list[dict], **kwargs) -> str:
+    """Unsanitized content to the independent cross-check provider. Open-weights only."""
+    return chat(second_provider(), messages, **kwargs)
 
 
 def chat_summary(messages: list[dict], **kwargs) -> str:

@@ -93,3 +93,12 @@ def summary_provider() -> Provider:
     if p is None:
         raise ValueError(f"HAZMAT_SUMMARY_PROVIDER={name!r} is not a known provider")
     return p
+
+
+def second_provider() -> Provider:
+    """Independent open-weights provider for cross-checking the reader (default: fireworks)."""
+    name = _env("HAZMAT_SECOND_PROVIDER", "fireworks")
+    p = providers().get(name)
+    if p is None or not p.raw_ok:
+        raise ValueError(f"HAZMAT_SECOND_PROVIDER={name!r} must be an open-weights provider")
+    return p

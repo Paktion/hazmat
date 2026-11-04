@@ -134,10 +134,16 @@ class AskReader(_Strict):
     question: Annotated[str, StringConstraints(min_length=5, max_length=1000)]
     about: Annotated[list[Handle], Field(min_length=1, max_length=10)]
     answer: AnswerSpec
+    # Set by the orchestrator for cross-checks, not by the driver:
+    reader: Literal["primary", "second"] = "primary"   # second = an independent provider (Fireworks)
+    mask: StrictBool = False                           # hide text flagged by injection_scan
+
+class InjectionScan(_Strict):
+    cmd: Literal["injection_scan"]
 
 Command = Annotated[
     Union[FileInfo, Imports, CapaMatches, ListFunctions, Decompile, Xrefs, SearchStrings,
-          DecodedStrings, YaraTest, AskReader],
+          DecodedStrings, YaraTest, AskReader, InjectionScan],
     Field(discriminator="cmd"),
 ]
 COMMAND = TypeAdapter(Command)
@@ -210,6 +216,14 @@ class YaraResult(_Strict):
     rules_matched: Count
     matches: Annotated[list[Handle], Field(max_length=MAX_LIST)]
 
+InjectionTarget = Literal["verdict_override", "instruction_override", "role_spoof", "fake_tool_output", "addressed_to_ai"]
+
+class InjectionResult(_Strict):
+    present: StrictBool
+    strings: Count
+    targets: Annotated[list[InjectionTarget], Field(max_length=5)]
+    handles: Annotated[list[Handle], Field(max_length=20)]
+
 class ReaderResult(_Strict):
     answer: Union[StrictBool, StrictInt, Choice, Annotated[list[Handle], Field(max_length=10)]]
     confidence: Confidence
@@ -226,6 +240,7 @@ RESULTS: dict[str, type[_Strict]] = {
     "decoded_strings": StringsResult,
     "yara_test": YaraResult,
     "ask_reader": ReaderResult,
+    "injection_scan": InjectionResult,
 }
 
 # Evidence grade by source (Admiralty-style; see the verdict scheme). Assigned
@@ -241,6 +256,7 @@ GRADES: dict[str, Grade] = {
     "decoded_strings": "B",  # FLOSS's emulation
     "search_strings": "D",   # attacker-writable content (usable as artifact, never testimony)
     "ask_reader": "C",       # a model's typed reading of untrusted content
+    "injection_scan": "B",   # deterministic patterns over attacker-writable text
 }
 
 
