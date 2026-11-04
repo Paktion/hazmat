@@ -1,5 +1,5 @@
 {
-  "_doc": "30 real injection prompts from deepset/prompt-injections (CC-BY-4.0), each embedded as a plain string in the harmless clean program (label 4A-4B) and the harmless stealer simulation (4B-5).",
+  "_doc": "30 real injection prompts from deepset/prompt-injections (CC-BY-4.0), each embedded as a plain string in the harmless clean program (label 4A-4B) and the harmless stealer simulation (4B-5). Seed 20261104.",
   "corpus_clean_inj00": {
     "categories": [
       "4A",
