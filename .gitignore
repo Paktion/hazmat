@@ -16,6 +16,10 @@ quarantine/
 *.bin
 *.sample
 
+# Built test samples (sources in testdata/ are committed)
+testdata/bin/
+testdata/config.inc
+
 # Analysis output
 reports/
 ghidra_projects/

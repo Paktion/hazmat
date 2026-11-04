@@ -42,9 +42,23 @@ Spending caps: Hazmat prices every model call and refuses calls once a provider 
 ```bash
 hazmat check            # providers, routing, local tools
 hazmat check --dry      # same, without calling any provider
-hazmat sandbox FILE     # run local tooling on FILE inside an isolated Modal sandbox
-hazmat spend            # spend so far against each provider's cap
+hazmat sandbox FILE     # run the analysis tools on FILE inside an isolated sandbox
+hazmat selftest         # check every tool on every test sample (add --backend docker to run locally)
+hazmat spend            # spend so far against each provider's cap, and Modal
 ```
+
+## Sandbox
+
+Every tool runs inside one image (`sandbox/Dockerfile`, linux/amd64): Ghidra 12.2 headless with a JSON export script, capa 10 with its rules and signatures, FLOSS 3.2, YARA 4.5, binutils and `file`. Two backends run it:
+
+- **Modal** (default): a throwaway sandbox with the network blocked, 2 CPUs, 4 GB.
+- **Docker** (`--backend docker` or `HAZMAT_SANDBOX=docker`): the same container locally with `--network none`, no capabilities, and resource limits. Build it with `docker build --platform linux/amd64 -t hazmat-sandbox sandbox/`.
+
+Nothing in the image runs the sample.
+
+## Test samples
+
+`testdata/` holds small, harmless C programs that look like malware to static tools: an XOR-encoded config pointing at `.invalid` hosts, credential-store and persistence strings, an anti-debug check, and (in the `poisoned` build) text aimed at AI analysts. They never touch the network or any file. `testdata/build.sh` compiles them inside a container into `testdata/bin/` (ELF and PE).
 
 ## Status
 

@@ -2,8 +2,9 @@
 
     hazmat check            verify each configured provider with a tiny request
     hazmat check --dry      show what's configured without calling anything
-    hazmat sandbox FILE     run file/strings/capa (+ YARA) on FILE in a Modal Sandbox
-    hazmat spend            spend so far against each provider's cap
+    hazmat sandbox FILE     run the analysis tools on FILE in an isolated sandbox
+    hazmat selftest         check every tool on every test sample, in the sandbox
+    hazmat spend            spend so far against each provider's cap (and Modal)
 """
 
 from __future__ import annotations
@@ -86,20 +87,31 @@ def cmd_spend(reset: bool) -> int:
         print(f"Cleared {budget.LEDGER}")
         return 0
     print("Spend (Hazmat's own ledger; caps from HAZMAT_BUDGET_*)")
-    for name in providers():
+    for name in [*providers(), "modal"]:
         cap = budget.budget(name)
         print(f"  {name:<10} ${budget.spent(name):>8.4f} of {f'${cap:.2f}' if cap else 'no cap'}")
     return 0
 
 
-def cmd_sandbox(sample: str, rules: str | None) -> int:
-    from .sandbox import analyze
+def cmd_sandbox(sample: str, rules: str | None, backend: str | None) -> int:
+    from .sandbox import run
 
-    report = analyze(sample, yara_rules=rules)
+    report = run(sample, yara_rules=rules, backend=backend)
     for r in report.results:
-        print(f"== {r.tool} (exit {r.returncode}) ==")
+        print(f"== {r.tool} (exit {r.returncode}, {r.seconds:.1f}s) ==")
         print(r.stdout[:4000] or r.stderr[:2000])
+    if report.ghidra:
+        g = report.ghidra
+        print(f"== ghidra export: {len(g['functions'])}/{g['function_count']} functions, "
+              f"{len(g['imports'])} imports, {len(g['strings'])} strings ==")
+    print(f"\n{report.backend}: {report.seconds:.1f}s" + (f", ${report.cost_usd:.4f}" if report.cost_usd else ""))
     return 0
+
+
+def cmd_selftest(backend: str | None, build: bool) -> int:
+    from .selftest import main as selftest
+
+    return selftest(backend=backend, build=build)
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -110,6 +122,10 @@ def main(argv: list[str] | None = None) -> int:
     s = sub.add_parser("sandbox", help="run static tools on a sample in a Modal Sandbox")
     s.add_argument("sample", help="path to the sample file")
     s.add_argument("--rules", help="optional YARA rules file")
+    s.add_argument("--backend", choices=["modal", "docker"], help="default: $HAZMAT_SANDBOX or modal")
+    st = sub.add_parser("selftest", help="run every tool on every test sample and check the results")
+    st.add_argument("--backend", choices=["modal", "docker"], help="default: $HAZMAT_SANDBOX or modal")
+    st.add_argument("--build", action="store_true", help="rebuild the local image and test samples first")
     sp = sub.add_parser("spend", help="show spend against each provider's cap")
     sp.add_argument("--reset", action="store_true", help="clear the spend ledger")
     args = parser.parse_args(argv)
@@ -118,7 +134,9 @@ def main(argv: list[str] | None = None) -> int:
     if args.cmd == "spend":
         return cmd_spend(args.reset)
     if args.cmd == "sandbox":
-        return cmd_sandbox(args.sample, args.rules)
+        return cmd_sandbox(args.sample, args.rules, args.backend)
+    if args.cmd == "selftest":
+        return cmd_selftest(args.backend, args.build)
     return 2
 
 
