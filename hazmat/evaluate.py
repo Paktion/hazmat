@@ -103,20 +103,22 @@ def _table(system: str, results: dict[str, list[dict]]) -> list[str]:
 
 
 def main(runs: int = 2, backend: str | None = None, jobs: int = 4, baseline: bool = False,
-         only: str | None = None, steps: int = 12, ext: str = ".exe", test_set: str = "core") -> int:
+         only: str | None = None, steps: int = 12, ext: str = ".exe", test_set: str = "core",
+         baseline_only: bool = False) -> int:
     labels = {k: v for k, v in json.loads(SETS[test_set].read_text()).items() if not k.startswith("_")}
     samples = [(name, BIN / f"{name}{ext}") for name in labels if (not only or only in name)]
     missing = [str(p) for _, p in samples if not p.exists()]
     if missing:
         print(f"Missing samples (run testdata/build.sh): {missing}")
         return 1
-    out = ROOT / "runs" / f"eval-{test_set}-{time.strftime('%Y%m%d-%H%M%S')}"
+    out = ROOT / "runs" / f"eval-{test_set}{'-baseline' if baseline_only else ''}-{time.strftime('%Y%m%d-%H%M%S')}"
     out.mkdir(parents=True)
     tasks = []
     for name, path in samples:
         for i in range(runs):
-            tasks.append(("hazmat", name, path, out / f"hazmat-{name}-r{i + 1}"))
-            if baseline:
+            if not baseline_only:
+                tasks.append(("hazmat", name, path, out / f"hazmat-{name}-r{i + 1}"))
+            if baseline or baseline_only:
                 tasks.append(("baseline", name, path, out / f"baseline-{name}-r{i + 1}"))
     print(f"Eval: {len(samples)} samples x {runs} runs{' (+ baseline)' if baseline else ''}, "
           f"{len(tasks)} jobs, {jobs} at a time. Output: {out}")

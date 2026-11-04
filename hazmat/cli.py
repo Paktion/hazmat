@@ -144,7 +144,7 @@ def cmd_eval(args) -> int:
         return ablation(runs=args.runs, backend=args.backend, jobs=args.jobs, driver=args.driver, steps=args.steps,
                         test_set=args.test_set, only=args.only)
     return evaluate(runs=args.runs, backend=args.backend, jobs=args.jobs, baseline=args.baseline,
-                    only=args.only, steps=args.steps, test_set=args.test_set)
+                    only=args.only, steps=args.steps, test_set=args.test_set, baseline_only=args.baseline_only)
 
 
 def cmd_probe(sample: str, backend: str | None, reader: bool) -> int:
@@ -183,6 +183,7 @@ def main(argv: list[str] | None = None) -> int:
     ev.add_argument("--backend", choices=["modal", "docker"])
     ev.add_argument("--jobs", type=int, default=4, help="parallel runs (default 4)")
     ev.add_argument("--baseline", action="store_true", help="also score the baseline")
+    ev.add_argument("--baseline-only", action="store_true", help="score only the baseline")
     ev.add_argument("--only", help="only samples whose name contains this")
     ev.add_argument("--steps", type=int, default=12)
     ev.add_argument("--set", dest="test_set", default="core", choices=["core", "adversarial", "corpus"],
