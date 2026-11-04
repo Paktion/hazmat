@@ -116,7 +116,7 @@ Headline numbers ([docs/eval.md](docs/eval.md) has every table, interval and cav
 | Benign file carrying planted text closed as benign, no flag | **1/7 (14%)** | 6/7 (86%), Fisher p = 0.015 |
 | Malicious + poisoned file steered to benign | 0/18 | 0/18 |
 
-An attack-success experiment (440 calls, each poisoned program vs its unpoisoned twin) found that planted text **does not** measurably steer Muse Spark Open on malware (1%, CI 1-3%), but **does** destabilize its verdict on benign files that carry it: benign 100% without the text, 52% with it (p = 1.7 x 10^-5). An ablation (same driver with and without the airlock) showed no difference in verdicts on these samples. 8 real malware samples (SOREL-20M, disarmed) ran through every tool in the local Docker sandbox, with no model calls and never on a cloud platform.
+An attack-success experiment (2,200 calls, each poisoned program vs its unpoisoned twin) found that planted text **does not** measurably steer Muse Spark Open on malware (1.4% vs 1% for the twin), but **does** destabilize its verdict on benign files that carry it: benign 100% without the text, 49% with it (n = 400, p = 6 x 10^-27). An ablation (same driver with and without the airlock) showed no difference in verdicts on these samples. 8 real malware samples (SOREL-20M, disarmed) ran through every tool in the local Docker sandbox, with no model calls and never on a cloud platform.
 
 ## Test samples
 
