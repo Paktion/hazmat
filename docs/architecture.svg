@@ -1,0 +1,237 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1180" width="1600" height="1180" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="down" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#93c5fd"/>
+    </marker>
+    <marker id="up" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#fcd34d"/>
+    </marker>
+    <marker id="raw" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#f87171"/>
+    </marker>
+    <marker id="gray" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#94a3b8"/>
+    </marker>
+    <pattern id="hatch" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <rect width="10" height="10" fill="#2a1414"/>
+      <line x1="0" y1="0" x2="0" y2="10" stroke="#3b1a1a" stroke-width="4"/>
+    </pattern>
+  </defs>
+
+  <rect width="1600" height="1180" fill="#0b1020"/>
+
+  <!-- Title -->
+  <text x="40" y="54" fill="#f8fafc" font-size="30" font-weight="700">Hazmat: the airlock architecture</text>
+  <text x="40" y="84" fill="#94a3b8" font-size="16">The agent that decides steers the tools, but no text written by the sample can reach it. Every model is a Meta model.</text>
+
+  <!-- ============ LEFT: callers and human ============ -->
+  <g>
+    <rect x="40" y="120" width="290" height="250" rx="14" fill="#111827" stroke="#334155"/>
+    <text x="60" y="152" fill="#e2e8f0" font-size="17" font-weight="700">Who hands Hazmat a file</text>
+    <text x="60" y="182" fill="#cbd5e1" font-size="14">• an analyst at the terminal</text>
+    <text x="60" y="206" fill="#cbd5e1" font-size="14">• a SOC triage agent</text>
+    <text x="60" y="230" fill="#cbd5e1" font-size="14">• an email-security pipeline</text>
+    <text x="60" y="254" fill="#cbd5e1" font-size="14">• a CI / supply-chain check</text>
+    <text x="60" y="278" fill="#cbd5e1" font-size="14">• a coding agent that meets an</text>
+    <text x="72" y="298" fill="#cbd5e1" font-size="14">unknown binary</text>
+    <text x="60" y="334" fill="#93c5fd" font-size="13">gets back only the typed verdict,</text>
+    <text x="60" y="352" fill="#93c5fd" font-size="13">so the caller is never exposed either</text>
+  </g>
+  <path d="M330,245 L372,245" stroke="#93c5fd" stroke-width="2.5" marker-end="url(#down)"/>
+
+  <g>
+    <rect x="40" y="840" width="290" height="200" rx="14" fill="#111827" stroke="#334155"/>
+    <text x="60" y="872" fill="#e2e8f0" font-size="17" font-weight="700">The human analyst</text>
+    <text x="60" y="900" fill="#cbd5e1" font-size="14">report.md is the only place</text>
+    <text x="60" y="920" fill="#cbd5e1" font-size="14">raw content is shown: handles</text>
+    <text x="60" y="940" fill="#cbd5e1" font-size="14">resolved, IOCs defanged</text>
+    <text x="60" y="960" fill="#cbd5e1" font-size="14">(hxxp, [.]), reader notes,</text>
+    <text x="60" y="980" fill="#cbd5e1" font-size="14">airlock and model-call logs.</text>
+    <text x="60" y="1016" fill="#fca5a5" font-size="13">Nothing here flows back to the driver.</text>
+  </g>
+
+  <!-- ============ CENTER: driver ============ -->
+  <g>
+    <rect x="380" y="120" width="800" height="230" rx="16" fill="#0f1d3a" stroke="#3b82f6" stroke-width="2"/>
+    <text x="404" y="152" fill="#bfdbfe" font-size="13" font-weight="700" letter-spacing="1.5">TRUSTED ZONE · DRIVER HARNESS  (hazmat/driver.py)</text>
+
+    <rect x="404" y="170" width="330" height="160" rx="12" fill="#1e3a8a" stroke="#60a5fa"/>
+    <text x="424" y="200" fill="#ffffff" font-size="19" font-weight="700">Muse Spark</text>
+    <text x="424" y="222" fill="#bfdbfe" font-size="14">muse-spark-1.3 · Meta Model API</text>
+    <text x="424" y="252" fill="#e0e7ff" font-size="14">Plans the analysis, one command</text>
+    <text x="424" y="272" fill="#e0e7ff" font-size="14">at a time; writes YARA rules and</text>
+    <text x="424" y="292" fill="#e0e7ff" font-size="14">questions; proposes the verdict.</text>
+    <text x="424" y="318" fill="#93c5fd" font-size="13" font-weight="600">Sees typed values only. Never raw text.</text>
+
+    <rect x="752" y="170" width="200" height="160" rx="12" fill="#172554" stroke="#3b82f6"/>
+    <text x="770" y="198" fill="#ffffff" font-size="16" font-weight="700">Verdict rules</text>
+    <text x="770" y="218" fill="#bfdbfe" font-size="13">hazmat/verdict.py · code</text>
+    <text x="770" y="244" fill="#dbeafe" font-size="13">category 0–5 + action</text>
+    <text x="770" y="264" fill="#dbeafe" font-size="13">ICD 203 likelihood</text>
+    <text x="770" y="284" fill="#dbeafe" font-size="13">confidence · reason codes</text>
+    <text x="770" y="304" fill="#dbeafe" font-size="13">injection rating</text>
+    <text x="770" y="322" fill="#93c5fd" font-size="12">R1–R10 correct the proposal</text>
+
+    <rect x="970" y="170" width="190" height="160" rx="12" fill="#172554" stroke="#3b82f6"/>
+    <text x="988" y="198" fill="#ffffff" font-size="16" font-weight="700">Evidence log</text>
+    <text x="988" y="222" fill="#dbeafe" font-size="13">E1, E2, … each with</text>
+    <text x="988" y="242" fill="#dbeafe" font-size="13">a grade the airlock set:</text>
+    <text x="988" y="266" fill="#86efac" font-size="13" font-weight="600">A tool structure, rules</text>
+    <text x="988" y="284" fill="#a5f3fc" font-size="13" font-weight="600">B tool interpretation</text>
+    <text x="988" y="302" fill="#fde68a" font-size="13" font-weight="600">C reader model</text>
+    <text x="988" y="320" fill="#fca5a5" font-size="13" font-weight="600">D sample's own text</text>
+  </g>
+
+  <!-- arrows driver <-> airlock -->
+  <path d="M560,350 L560,392" stroke="#93c5fd" stroke-width="3" marker-end="url(#down)"/>
+  <text x="572" y="378" fill="#93c5fd" font-size="13" font-weight="600">commands ↓</text>
+  <path d="M1000,392 L1000,352" stroke="#fcd34d" stroke-width="3" marker-end="url(#up)"/>
+  <text x="1012" y="378" fill="#fcd34d" font-size="13" font-weight="600">typed values ↑</text>
+
+  <!-- ============ AIRLOCK ============ -->
+  <g>
+    <rect x="380" y="398" width="800" height="104" rx="16" fill="#3a2a05" stroke="#f59e0b" stroke-width="2.5"/>
+    <text x="404" y="428" fill="#fde68a" font-size="13" font-weight="700" letter-spacing="1.5">THE AIRLOCK  (hazmat/airlock.py) · PLAIN CODE, NO MODEL</text>
+    <text x="404" y="456" fill="#fef3c7" font-size="14"><tspan font-weight="700">Down:</tspan> fixed commands (decompile, xrefs, search_strings, yara_test, ask_reader, …); driver writes its own args</text>
+    <text x="404" y="480" fill="#fef3c7" font-size="14"><tspan font-weight="700">Up:</tspan> bool · bounded int · hex · fixed labels (capa rules, ATT&amp;CK, APIs) · $handles. <tspan fill="#fca5a5" font-weight="700">No free text, ever.</tspan></text>
+  </g>
+
+  <!-- arrows airlock <-> cell -->
+  <path d="M560,502 L560,544" stroke="#93c5fd" stroke-width="3" marker-end="url(#down)"/>
+  <path d="M1000,544 L1000,504" stroke="#fcd34d" stroke-width="3" marker-end="url(#up)"/>
+  <text x="572" y="530" fill="#94a3b8" font-size="12">JSON lines over a pipe</text>
+  <text x="1012" y="530" fill="#94a3b8" font-size="12">validated on arrival, logged</text>
+
+  <!-- ============ READER CELL ============ -->
+  <g>
+    <rect x="380" y="550" width="800" height="250" rx="16" fill="#2a1612" stroke="#fb923c" stroke-width="2"/>
+    <text x="404" y="580" fill="#fed7aa" font-size="13" font-weight="700" letter-spacing="1.5">UNTRUSTED ZONE · READER CELL  (separate process, hazmat/cell.py)</text>
+
+    <rect x="404" y="596" width="230" height="186" rx="12" fill="#3a1d14" stroke="#fb923c"/>
+    <text x="422" y="624" fill="#ffffff" font-size="16" font-weight="700">Handle store</text>
+    <text x="422" y="646" fill="#fed7aa" font-size="13">raw text lives only here:</text>
+    <text x="422" y="668" fill="#fde2cf" font-size="13">$func_7 → decompiled C</text>
+    <text x="422" y="688" fill="#fde2cf" font-size="13">$str_17 → "NOTE TO AI…"</text>
+    <text x="422" y="708" fill="#fde2cf" font-size="13">$note_2 → reader reasoning</text>
+    <text x="422" y="736" fill="#fed7aa" font-size="13">+ injection scan (patterns)</text>
+    <text x="422" y="756" fill="#fed7aa" font-size="13">+ string features (url, run</text>
+    <text x="422" y="774" fill="#fed7aa" font-size="13">   key, credential store …)</text>
+
+    <rect x="652" y="596" width="250" height="186" rx="12" fill="#14532d" stroke="#4ade80"/>
+    <text x="670" y="624" fill="#ffffff" font-size="17" font-weight="700">Muse Spark Open</text>
+    <text x="670" y="644" fill="#bbf7d0" font-size="13">open weights · <tspan font-weight="700">Baseten</tspan></text>
+    <text x="670" y="662" fill="#bbf7d0" font-size="12">meta-models/muse-spark-open-1026</text>
+    <text x="670" y="692" fill="#dcfce7" font-size="14" font-weight="600">The reader</text>
+    <text x="670" y="714" fill="#dcfce7" font-size="13">reads raw code and strings</text>
+    <text x="670" y="734" fill="#dcfce7" font-size="13">inside untrusted tags; answers</text>
+    <text x="670" y="754" fill="#dcfce7" font-size="13">only in the driver's type</text>
+    <text x="670" y="772" fill="#86efac" font-size="12">(schema-constrained output)</text>
+
+    <rect x="920" y="596" width="240" height="186" rx="12" fill="#14532d" stroke="#4ade80"/>
+    <text x="938" y="624" fill="#ffffff" font-size="17" font-weight="700">Muse Spark Open</text>
+    <text x="938" y="644" fill="#bbf7d0" font-size="13">open weights · <tspan font-weight="700">Fireworks</tspan></text>
+    <text x="938" y="662" fill="#bbf7d0" font-size="12">…/models/muse-spark-open</text>
+    <text x="938" y="692" fill="#dcfce7" font-size="14" font-weight="600">The second reader</text>
+    <text x="938" y="714" fill="#dcfce7" font-size="13">same question, flagged text</text>
+    <text x="938" y="734" fill="#dcfce7" font-size="13">shown vs masked: if the</text>
+    <text x="938" y="754" fill="#dcfce7" font-size="13">answer flips, the text is</text>
+    <text x="938" y="772" fill="#dcfce7" font-size="13">steering the model</text>
+  </g>
+
+  <!-- arrows cell <-> sandbox -->
+  <path d="M560,800 L560,842" stroke="#94a3b8" stroke-width="3" marker-end="url(#gray)"/>
+  <text x="572" y="828" fill="#94a3b8" font-size="12">copy sample in · run tools · yara_test</text>
+  <path d="M1000,842 L1000,802" stroke="#f87171" stroke-width="3" marker-end="url(#raw)"/>
+  <text x="1012" y="828" fill="#fca5a5" font-size="12">raw tool output (stays in the cell)</text>
+
+  <!-- ============ SANDBOX ============ -->
+  <g>
+    <rect x="380" y="848" width="800" height="192" rx="16" fill="url(#hatch)" stroke="#ef4444" stroke-width="2.5"/>
+    <text x="404" y="878" fill="#fecaca" font-size="13" font-weight="700" letter-spacing="1.5">HOT ZONE · SANDBOX  (Modal or Docker · no network · no keys · non-root)</text>
+    <g font-size="14" font-weight="700" fill="#ffffff">
+      <rect x="404" y="896" width="170" height="56" rx="10" fill="#450a0a" stroke="#f87171"/>
+      <text x="420" y="920">Ghidra 12.2</text>
+      <text x="420" y="940" font-size="12" font-weight="400" fill="#fecaca">headless + JSON export</text>
+      <rect x="590" y="896" width="140" height="56" rx="10" fill="#450a0a" stroke="#f87171"/>
+      <text x="606" y="920">capa 10</text>
+      <text x="606" y="940" font-size="12" font-weight="400" fill="#fecaca">663 rules → ATT&amp;CK</text>
+      <rect x="746" y="896" width="140" height="56" rx="10" fill="#450a0a" stroke="#f87171"/>
+      <text x="762" y="920">FLOSS 3.2</text>
+      <text x="762" y="940" font-size="12" font-weight="400" fill="#fecaca">decodes hidden text</text>
+      <rect x="902" y="896" width="120" height="56" rx="10" fill="#450a0a" stroke="#f87171"/>
+      <text x="918" y="920">YARA 4.5</text>
+      <text x="918" y="940" font-size="12" font-weight="400" fill="#fecaca">driver's rules</text>
+      <rect x="1038" y="896" width="122" height="56" rx="10" fill="#450a0a" stroke="#f87171"/>
+      <text x="1054" y="920">clean refs</text>
+      <text x="1054" y="940" font-size="12" font-weight="400" fill="#fecaca">YARA FP check</text>
+    </g>
+    <text x="404" y="984" fill="#fecaca" font-size="14">The parsers that chew hostile bytes get nothing to steal and nowhere to send it.</text>
+    <text x="404" y="1006" fill="#fecaca" font-size="14">Static analysis only: nothing in the image runs the sample.</text>
+    <text x="404" y="1028" fill="#fca5a5" font-size="12">Same image on both backends: sandbox/Dockerfile, linux/amd64</text>
+  </g>
+
+  <!-- ============ RIGHT: baseline ============ -->
+  <g>
+    <rect x="1230" y="120" width="330" height="390" rx="14" fill="#1a1a1a" stroke="#64748b" stroke-dasharray="8 6" stroke-width="2"/>
+    <text x="1250" y="152" fill="#e2e8f0" font-size="13" font-weight="700" letter-spacing="1.5">FOR COMPARISON · BASELINE</text>
+    <text x="1250" y="176" fill="#94a3b8" font-size="13">hazmat/baseline.py: how most AI</text>
+    <text x="1250" y="194" fill="#94a3b8" font-size="13">analysis setups work today</text>
+    <rect x="1250" y="214" width="290" height="58" rx="10" fill="#450a0a" stroke="#f87171"/>
+    <text x="1266" y="238" fill="#ffffff" font-size="14" font-weight="700">same sandbox, same tools</text>
+    <text x="1266" y="258" fill="#fecaca" font-size="12">strings · capa · imports · decompiled C</text>
+    <path d="M1395,272 L1395,316" stroke="#f87171" stroke-width="3" marker-end="url(#raw)"/>
+    <text x="1405" y="300" fill="#fca5a5" font-size="12" font-weight="600">raw text, pasted in</text>
+    <rect x="1250" y="322" width="290" height="70" rx="10" fill="#14532d" stroke="#4ade80"/>
+    <text x="1266" y="346" fill="#ffffff" font-size="15" font-weight="700">Muse Spark Open · Fireworks</text>
+    <text x="1266" y="368" fill="#dcfce7" font-size="13">one call: malicious / suspicious /</text>
+    <text x="1266" y="384" fill="#dcfce7" font-size="13">benign</text>
+    <text x="1250" y="420" fill="#fca5a5" font-size="13">The model that decides reads every</text>
+    <text x="1250" y="438" fill="#fca5a5" font-size="13">word the sample's author planted.</text>
+    <text x="1250" y="470" fill="#94a3b8" font-size="13">hazmat eval --baseline scores both</text>
+    <text x="1250" y="488" fill="#94a3b8" font-size="13">on the same labeled samples.</text>
+  </g>
+
+  <!-- ============ RIGHT: outputs ============ -->
+  <g>
+    <rect x="1230" y="550" width="330" height="490" rx="14" fill="#111827" stroke="#334155"/>
+    <text x="1250" y="582" fill="#e2e8f0" font-size="13" font-weight="700" letter-spacing="1.5">EVERY RUN WRITES  runs/&lt;sample&gt;/</text>
+    <g font-size="14">
+      <text x="1250" y="616" fill="#93c5fd" font-weight="700">verdict.json</text>
+      <text x="1250" y="636" fill="#cbd5e1" font-size="13">category, action, likelihood,</text>
+      <text x="1250" y="654" fill="#cbd5e1" font-size="13">confidence, reasons, injection</text>
+      <text x="1250" y="686" fill="#fde68a" font-weight="700">airlock.jsonl</text>
+      <text x="1250" y="706" fill="#cbd5e1" font-size="13">every crossing, both directions,</text>
+      <text x="1250" y="724" fill="#cbd5e1" font-size="13">every rejection (never its content)</text>
+      <text x="1250" y="756" fill="#86efac" font-weight="700">calls.log</text>
+      <text x="1250" y="776" fill="#cbd5e1" font-size="13">one line per live model call, model</text>
+      <text x="1250" y="794" fill="#cbd5e1" font-size="13">name as echoed by the API</text>
+      <text x="1250" y="826" fill="#fca5a5" font-weight="700">report.md · store.json</text>
+      <text x="1250" y="846" fill="#cbd5e1" font-size="13">for the human only</text>
+      <text x="1250" y="878" fill="#e2e8f0" font-weight="700">evidence.json · driver.jsonl</text>
+      <text x="1250" y="898" fill="#cbd5e1" font-size="13">what the driver saw and did</text>
+    </g>
+    <line x1="1250" y1="924" x2="1540" y2="924" stroke="#334155"/>
+    <text x="1250" y="952" fill="#e2e8f0" font-size="13" font-weight="700">Routing rule, enforced in code</text>
+    <text x="1250" y="974" fill="#cbd5e1" font-size="13">raw content → open-weight Muse</text>
+    <text x="1250" y="992" fill="#cbd5e1" font-size="13">Spark Open only; hosted API gets</text>
+    <text x="1250" y="1010" fill="#cbd5e1" font-size="13">typed values; non-Meta models and</text>
+    <text x="1250" y="1028" fill="#cbd5e1" font-size="13">-contributor IDs are refused</text>
+  </g>
+
+  <!-- Legend -->
+  <g font-size="13">
+    <rect x="40" y="1080" width="1520" height="70" rx="12" fill="#111827" stroke="#334155"/>
+    <line x1="64" y1="1115" x2="104" y2="1115" stroke="#93c5fd" stroke-width="3" marker-end="url(#down)"/>
+    <text x="122" y="1120" fill="#cbd5e1">commands (trusted, written by the driver)</text>
+    <line x1="420" y1="1115" x2="460" y2="1115" stroke="#fcd34d" stroke-width="3" marker-end="url(#up)"/>
+    <text x="478" y="1120" fill="#cbd5e1">typed values and handles only</text>
+    <line x1="720" y1="1115" x2="760" y2="1115" stroke="#f87171" stroke-width="3" marker-end="url(#raw)"/>
+    <text x="778" y="1120" fill="#cbd5e1">raw, attacker-written text</text>
+    <rect x="990" y="1104" width="22" height="22" rx="5" fill="#1e3a8a" stroke="#60a5fa"/>
+    <text x="1020" y="1120" fill="#cbd5e1">hosted Meta model</text>
+    <rect x="1170" y="1104" width="22" height="22" rx="5" fill="#14532d" stroke="#4ade80"/>
+    <text x="1200" y="1120" fill="#cbd5e1">open-weight Meta model</text>
+    <rect x="1380" y="1104" width="22" height="22" rx="5" fill="#450a0a" stroke="#f87171"/>
+    <text x="1410" y="1120" fill="#cbd5e1">analysis tool</text>
+  </g>
+</svg>

@@ -8,6 +8,8 @@ Built for the [Meta Global AI Developer Hackathon](https://cerebralvalley.ai/e/m
 
 ## How it works
 
+![Hazmat architecture: driver, airlock, reader cell, sandbox, and where each Meta model runs](docs/architecture.svg)
+
 ```
  DRIVER       Muse Spark (Meta Model API)            plans the analysis; sees only typed values
                  |  commands down          ^  typed values + handles up
