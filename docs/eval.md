@@ -71,6 +71,35 @@ Some runs in this ablation started after commit 820c3d9 (the reader-consensus pr
 
 Hazmat scored 7/8 correct. The miss was a bug, now fixed: the driver's final proposal cited an ATT&CK ID outside the vocabulary and was rejected on the last step, so the run fell back to Incomplete. The driver now drops unknown IDs and gets two repair turns. The baseline scored 6/8, closing `clean_poisoned` as benign 2/2.
 
+## Real malware, tools only (local Docker, no models)
+
+8 real Windows malware samples from [SOREL-20M](https://github.com/sophos/SOREL-20M) (Sophos and ReversingLabs), which publishes disarmed binaries for research. **How they were handled:**
+
+- Fetched by a download container straight into a Docker volume (`scripts/fetch_sorel.py`); they never touch the host filesystem and are not in this repository (hashes only, `testdata/real/expected.json`).
+- Analyzed only in the local Docker sandbox (no network, no capabilities). The cloud sandbox refuses these samples in code: Modal's terms prohibit processing malicious code, so real malware never goes there.
+- SOREL zeroes `FileHeader.Machine`; the sandbox restores it on an in-sandbox copy so Ghidra and capa can parse the file. Nothing executes the sample.
+- **No model was called.** Sending text from real malware to hosted model providers needs their written OK first, which we haven't sought for this hackathon.
+
+| Sample (sha256 prefix) | Size | Ghidra functions | Imports | capa rules | ATT&CK (from capa) | All tools OK |
+|---|---|---|---|---|---|---|
+| `9765f79099b182fc` | 74,126 | 1 | 32 | 2 | - | yes |
+| `ca084c3e6d4be8ea` | 2,110,098 | 13 | 35 | 14 | T1012, T1057, T1059, T1518, T1543.003, T1569.002 | yes |
+| `c55cc8405fb99b14` | 1,053,256 | 3538 | 446 | 4 | T1027 | yes |
+| `db2425f8a04ebfb4` | 149,949 | 157 | 55 | 9 | T1129 | yes |
+| `e82b8c87292b1d6b` | 164,841 | 82 | 158 | 49 | T1010, T1012, T1027, T1059, T1082, T1083 | yes |
+| `af7d462390d54849` | 180,224 | 1 | 42 | 2 | - | yes |
+| `37d7ab0db5deaa24` | 33,334 | 24 | 41 | 15 | T1012, T1027 | yes |
+| `bc5e7eaa18efc4c4` | 1,789,440 | 639 | 218 | 21 | T1016, T1027, T1059, T1496 | yes |
+
+Every tool ran cleanly on every sample. The two samples with a single Ghidra function and few capa matches look packed, which is exactly where an analyst would go next (unpacking is not in scope today). Reproduce with `python scripts/real_tools_only.py`.
+
+## How we test safely, and what's next
+
+- **Tier 0, on any platform:** harmless programs carrying aggressive text aimed at AI analysts (`testdata/`, `testdata/adversarial/`). No malicious code exists in this tier, so it can run at scale on Modal and against every model provider.
+- **Tier 1, derived artifacts:** real malware stays on owned infrastructure (local Docker today); only defanged, size-capped text derived from it would go to open-weight models, and only to providers that have approved security-research use. A self-hosted open-weight model (Muse Spark Open on your own GPU) removes the question entirely.
+- **Tier 2, binaries:** never leave owned infrastructure.
+- **Next:** benchmark on detonation reports instead of binaries, in the style of Meta and CrowdStrike's [CyberSOCEval](https://arxiv.org/abs/2509.20166) (CyberSecEval 4), and scale the adversarial set with payloads from public prompt-injection corpora.
+
 ## Reproduce
 
 ```bash
