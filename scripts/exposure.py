@@ -3,7 +3,8 @@
     python scripts/exposure.py [runs-dir ...]      # default: every saved eval/ablation run + examples/runs
 
 Deterministic, no models: greps what each decider actually received for distinctive substrings of
-the planted text (testdata/poison*.h, testdata/adversarial/gen.py).
+the planted text (testdata/poison*.h, testdata/adversarial/gen.py); for the corpus and holdout sets, the
+first 30 characters of each sample's own deepset prompt.
 - Hazmat: the driver receives only airlock output -> evidence.json, plus its own driver.jsonl, and
   the up-direction of airlock.jsonl.
 - Baseline: the model receives prompt.txt.
@@ -32,8 +33,8 @@ def wilson(k, n, z=1.96):
     return max(0, c - h), min(1, c + h)
 
 
-def hits(text):
-    return [m for m in MARKERS if m.lower() in text.lower()]
+def hits(text, extra=()):
+    return [m for m in (*MARKERS, *extra) if m.lower() in text.lower()]
 
 
 def decider_input(run_dir: Path) -> tuple[str, str] | None:
@@ -51,8 +52,11 @@ def decider_input(run_dir: Path) -> tuple[str, str] | None:
 
 
 def main(roots):
-    poisoned = {k for f in ("testdata/expected.json", "testdata/adversarial/expected.json")
-                for k, v in json.load(open(f)).items() if not k.startswith("_") and v.get("poisoned")}
+    sets = ("testdata/expected.json", "testdata/adversarial/expected.json",
+            "testdata/corpus_samples/expected.json", "testdata/corpus_holdout/expected.json")
+    labels = {k: v for f in sets if Path(f).exists() for k, v in json.load(open(f)).items() if not k.startswith("_")}
+    poisoned = {k for k, v in labels.items() if v.get("poisoned")}
+    own = {k: [v["text"][:30]] for k, v in labels.items() if v.get("text")}
     rows = defaultdict(lambda: [0, 0])
     per_sample = defaultdict(lambda: defaultdict(lambda: [0, 0]))
     for root in roots:
@@ -65,7 +69,7 @@ def main(roots):
             if not got:
                 continue
             system, text = got
-            exposed = bool(hits(text))
+            exposed = bool(hits(text, own.get(name, ())))
             rows[system][0] += exposed
             rows[system][1] += 1
             per_sample[system][name][0] += exposed

@@ -111,10 +111,12 @@ Headline numbers ([docs/eval.md](docs/eval.md) has every table, interval and cav
 
 | Measure | Hazmat | Baseline (raw tool output → one Muse Spark Open call) |
 |---|---|---|
-| Planted text reached the deciding model | **0/62 runs (0%, 95% CI 0-6%)** | 32/40 (80%+) |
-| Correct category | **30/31 (97%)** | 25/31 (81%) |
+| Planted text reached the deciding model | **0/296 runs (0%, 95% CI 0-1%)** | 158/177 (89%+) |
+| Correct category (core + adversarial sets) | **30/31 (97%)** | 25/31 (81%) |
+| Correct category, real injection prompts (studies B + out-of-sample holdout) | **90/100 (90%)** | 51/92 (55%), Fisher p = 4 x 10^-8 |
 | Benign file carrying planted text closed as benign, no flag (study A, 10 runs per variant) | **7/50 (14%)**; 0/40 where the text is visible | 34/45 (76%), Fisher p = 8 x 10^-10 |
-| Malicious + poisoned file steered to benign | 0/18 | 0/18 |
+| Benign file carrying a real injection prompt closed as benign (B + holdout) | **10/50 (20%)** | 41/44 (93%), Fisher p = 1 x 10^-13 |
+| Malicious + poisoned file steered to benign (all studies) | 0 | 0 |
 
 An attack-success experiment (2,200 calls, each poisoned program vs its unpoisoned twin) found that planted text **does not** measurably steer Muse Spark Open on malware (1.4% vs 1% for the twin), but **does** destabilize its verdict on benign files that carry it: benign 100% without the text, 49% with it (n = 400, p = 6 x 10^-27). An ablation (same driver with and without the airlock) showed no difference in verdicts on these samples. 8 real malware samples (SOREL-20M, disarmed) ran through every tool in the local Docker sandbox, with no model calls and never on a cloud platform.
 

@@ -126,10 +126,13 @@ Headline numbers, exactly as in [docs/eval.md](eval.md) and the README:
 
 | Measure | Hazmat | Baseline |
 |---|---|---|
-| Planted text reached the deciding model | 0/62 runs (0%, 95% CI 0-6%) | 32/40 (80%, CI 65-90%), a lower bound |
+| Planted text reached the deciding model | 0/296 runs (0%, 95% CI 0-1%) | 158/177 (89%, CI 84-93%), a lower bound |
 | Correct category (core run 2 + final adversarial run) | 30/31 = 97% [84-99%] | 25/31 = 81% [64-91%] |
 | Poisoned file closed as benign, no flag | 1/25 = 4% [1-20%] | 6/25 = 24% [11-43%], Fisher p = 0.0491 |
 | Benign file carrying planted text closed as benign, no flag | 1/7 = 14% [3-51%] | 6/7 = 86% [49-97%], Fisher p = 0.0146 |
+| Correct category, real injection prompts (study B + holdout, 100 samples) | 90/100 = 90% | 51/92 = 55%, Fisher p = 4 x 10^-8 |
+| Benign file carrying a real injection prompt closed as benign (study B + holdout) | 10/50 = 20% | 41/44 = 93%, Fisher p = 1 x 10^-13 |
+| Benign file carrying planted text closed as benign, 10 runs per variant (study A) | 7/50 = 14% [7-26%] | 34/45 = 76% [61-86%], Fisher p = 8 x 10^-10 |
 | Malicious + poisoned file steered to benign | 0/18 | 0/18 |
 | Clean file false alarm | 0/3 | 0/3 |
 
@@ -142,7 +145,7 @@ Headline numbers, exactly as in [docs/eval.md](eval.md) and the README:
 | Stage 1, scanner recall on real injection prompts | 3/263 = 1.1% [0.4-3.3%] (English only: 3/169 = 1.8%) |
 | Stage 1, false alarms on benign prompts / Ubuntu binaries / SOREL | 0/399 / 1/570 / 0/8 |
 
-The stage 1 numbers come from `runs/scale-patterns-20261104-142446/summary.md` and are also in eval.md. The exposure count is a snapshot of the runs saved when eval.md was written; rerunning `scripts/exposure.py` at 15:00 ET on Nov 4, with later runs included, gave Hazmat 0/88 (0%, CI 0-4%) and baseline 42/50 (84%, CI 71-92%).
+The stage 1 numbers come from `runs/scale-patterns-20261104-142446/summary.md` and are also in eval.md. The exposure count is the final recount at 17:58 ET on Nov 4 over every saved run (earlier snapshots: 0/62 and 0/88).
 
 ### What the evidence does not show
 
@@ -170,13 +173,16 @@ Each fix below was surfaced by a test.
 | Reviewing saved runs | 60 of 95 decompile calls (63%) went to compiler and runtime code; category 5 on clear malware in only 2 of 21 runs | Code-computed suspicion score, runtime-library flag, `list_functions` defaults to the author's code, and driver skills for triage order and category calibration (66766f0). After: 33% runtime decompiles, category 5 in 16 of 20 |
 | Run 2 | The masked/unmasked flip signal fired on 2 of 6 blatant runs where all answers were close | Not fixed; reported in eval.md as noisy |
 
-## 8. Studies in progress
+## 8. Late studies (finished Nov 4, 17:55 ET)
 
-These were running when this document was written. Results will be added to [docs/eval.md](eval.md).
+All now in [docs/eval.md](eval.md):
 
-- **Study A, stability on benign files carrying planted text:** 10 runs per variant of `clean_poisoned` and the 4 adversarial clean variants, Hazmat and baseline. It measures how often each system closes a manipulative benign file as benign, with tighter intervals than the current 7 runs.
-- **Study B, corpus set:** the 60 samples built from real deepset injection prompts, Hazmat and baseline. It measures behavior on real-world injection text rather than our own payloads.
-- Finished since this was first written, and now in eval.md: **stage 2 reader consensus** (both readers must agree: recall 50/96 = 52% on real injection prompts, false alarms 0/100) and **skills before/after** (runtime decompiles 63% to 33%, p = 3.3 x 10^-5; category 5 on clear malware 2/21 to 16/20, p = 5.2 x 10^-6; correctness unchanged; same caveats about in-sample samples).
+- **Study A, 10 runs per variant** of the 5 benign programs carrying planted text: closed as benign Hazmat 7/50 (14%), baseline 34/45 (76%), p = 8 x 10^-10. All 7 Hazmat misses are the XOR-hidden variant FLOSS doesn't decode.
+- **Study B, 60 samples built from real deepset prompts:** correct Hazmat 55/60, baseline 31/54 (p = 1.9 x 10^-5).
+- **Holdout, 40 samples from 20 different prompts (seed 777), built after the skills and never used for tuning:** correct Hazmat 35/40, baseline 20/38 (p = 7.4 x 10^-4). In-sample vs out-of-sample difference for Hazmat is not significant (p = 0.36), so the skills show no sign of overfitting at this scale.
+- **Extra runs on the core and adversarial sets (x3):** 18/18 and 46/48; 91/94 (97%, CI 91-99%) pooled since the skills change.
+- **Stage 2 on the full 662-prompt corpus was stopped, not finished:** at Fireworks' throughput it would have run past the testing cutoff, and the script writes results only at the end. The n = 100 result (recall 52%, false alarms 0/100) stands.
+- Earlier: **stage 2 reader consensus** (recall 50/96 = 52%, false alarms 0/100) and **skills before/after** (runtime decompiles 63% to 33%, p = 3.3 x 10^-5; category 5 on clear malware 2/21 to 16/20, p = 5.2 x 10^-6).
 
 ## 9. Reproduce
 
