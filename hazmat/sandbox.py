@@ -146,13 +146,53 @@ def build_local_image() -> None:
     subprocess.run(["docker", "build", "--platform", "linux/amd64", "-t", IMAGE_TAG, str(IMAGE_DIR)], check=True)
 
 
-def _open(backend: str, timeout: int):
-    if backend == "docker":
-        return _Docker(timeout)
-    if backend == "modal":
-        budget.check("modal")
-        return _Modal(timeout)
-    raise ValueError(f"unknown sandbox backend {backend!r} (modal | docker)")
+class Session:
+    """One open sandbox: copy a sample in, run tools, run more commands later, close."""
+
+    def __init__(self, backend: str | None = None, timeout: int = 1800):
+        self.backend = backend or default_backend()
+        if self.backend == "modal":
+            budget.check("modal")
+            self._sb = _Modal(timeout)
+        elif self.backend == "docker":
+            self._sb = _Docker(timeout)
+        else:
+            raise ValueError(f"unknown sandbox backend {self.backend!r} (modal | docker)")
+        self._start = time.monotonic()
+        self.cost_usd = 0.0
+
+    def put(self, data: bytes, path: str) -> None:
+        self._sb.put(data, path)
+
+    def get(self, path: str) -> bytes | None:
+        return self._sb.get(path)
+
+    def exec(self, argv: list[str], name: str = "", max_output: int = 2_000_000) -> ToolResult:
+        t = time.monotonic()
+        code, out, err = self._sb.exec(argv)
+        return ToolResult(name or argv[0], code, out[:max_output], err[-5_000:], time.monotonic() - t)
+
+    def run_tools(self, report: SandboxReport, tools: list[tuple[str, list[str]]]) -> SandboxReport:
+        for name, argv in tools:
+            report.results.append(self.exec(argv, name))
+        raw = self.get(GHIDRA_JSON) if any(n == "ghidra" for n, _ in tools) else None
+        if raw:
+            report.ghidra = json.loads(raw)
+        return report
+
+    def close(self) -> float:
+        """Tear the sandbox down; returns its run time in seconds (and records Modal cost)."""
+        self._sb.close()
+        seconds = time.monotonic() - self._start
+        if self.backend == "modal":
+            self.cost_usd = budget.record_sandbox("modal", seconds, CPUS, MEMORY_MB / 1024)
+        return seconds
+
+    def __enter__(self) -> "Session":
+        return self
+
+    def __exit__(self, *exc) -> None:
+        self.close()
 
 
 def run(
@@ -161,35 +201,21 @@ def run(
     yara_rules: str | Path | None = None,
     backend: str | None = None,
     timeout: int = 900,
-    max_output: int = 2_000_000,
 ) -> SandboxReport:
     """Copy `sample` into a fresh sandbox, run `tools` on it, and tear the sandbox down."""
-    backend = backend or default_backend()
     tools = list(tools if tools is not None else DEFAULT_TOOLS)
-    report = SandboxReport(sample=Path(sample).name if sample else "-", backend=backend)
-
-    start = time.monotonic()
-    sb = _open(backend, timeout)
+    sb = Session(backend, timeout)
+    report = SandboxReport(sample=Path(sample).name if sample else "-", backend=sb.backend)
     try:
         if sample:
             sb.put(Path(sample).read_bytes(), REMOTE_PATH)
         if yara_rules:
             sb.put(Path(yara_rules).read_bytes(), "/work/rules.yar")
             tools.append(("yara", ["yara", "-s", "-w", "/work/rules.yar", REMOTE_PATH]))
-
-        for name, argv in tools:
-            t = time.monotonic()
-            code, out, err = sb.exec(argv)
-            report.results.append(ToolResult(name, code, out[:max_output], err[-5_000:], time.monotonic() - t))
-
-        raw = sb.get(GHIDRA_JSON) if any(n == "ghidra" for n, _ in tools) else None
-        if raw:
-            report.ghidra = json.loads(raw)
+        sb.run_tools(report, tools)
     finally:
-        sb.close()
-        report.seconds = time.monotonic() - start
-        if backend == "modal":
-            report.cost_usd = budget.record_sandbox("modal", report.seconds, CPUS, MEMORY_MB / 1024)
+        report.seconds = sb.close()
+        report.cost_usd = sb.cost_usd
     return report
 
 

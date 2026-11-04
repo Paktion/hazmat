@@ -1,0 +1,663 @@
+(internal) .NET file limitation
+(internal) .NET single file deployment limitation
+(internal) Visual Basic file limitation
+(internal) autohotkey file limitation
+(internal) autoit file limitation
+(internal) installer file limitation
+(internal) packer file limitation
+64-bit execution via heavens gate
+PEB access
+accept command line arguments
+access .NET resource
+access PE header
+access PEB ldr_data
+access firewall policy via INetFwPolicy2
+access firewall rule properties via INetFwRule
+access firewall settings via INetFwMgr
+access the Windows event log
+acquire credentials from Windows Credential Manager
+acquire debug privileges
+act as DHCP server callout DLL
+act as DNS server plugin DLL
+act as Excel XLL add-in
+act as Exchange transport agent
+act as Office COM add-in
+act as Security Support Provider DLL
+act as Share Provider DLL
+act as SubAuthentication Package DLL
+act as TCP client
+act as Time Provider DLL
+act as WinDbg extension
+act as Word WLL add-in
+act as credential manager DLL
+act as password filter DLL
+allocate memory
+allocate or change RW memory
+allocate or change RWX memory
+allocate thread local storage
+allocate user process RWX memory
+attach BPF to socket on Linux
+attach user process memory
+authenticate HMAC
+block operations on executable memory pages using Arbitrary Code Guard
+bundled with .NET single-file deployment
+bypass Mark of the Web
+bypass PowerShell Constrained Language Mode via GetSystemLockdownPolicy patch
+bypass UAC via AppInfo ALPC
+bypass UAC via ICMLuaUtil
+bypass UAC via RPC
+bypass UAC via token manipulation
+bypass Windows File Protection
+calculate modulo 256 via x86 assembly
+capture microphone audio
+capture network configuration via ipconfig
+capture packets using SharpPcap
+capture public ip
+capture screenshot
+capture screenshot via keybd event
+capture webcam image
+change file permission on Linux
+change memory protection
+change registry key timestamp
+change the wallpaper
+check HTTP status code
+check Internet connectivity in .NET
+check Internet connectivity via WinINet
+check OS version
+check ProcessDebugPort
+check for OutputDebugString error
+check for PEB BeingDebugged flag
+check for PEB NtGlobalFlag flag
+check for Windows sandbox via device
+check for Windows sandbox via dns suffix
+check for Windows sandbox via genuine state
+check for Windows sandbox via process name
+check for Windows sandbox via registry
+check for debugger via API
+check for foreground window switch
+check for hardware breakpoints
+check for kernel debugger via shared user data structure
+check for microsoft office emulation
+check for protected handle exception
+check for sandbox and av modules
+check for sandbox username or hostname
+check for software breakpoints
+check for time delay in .NET
+check for time delay via GetTickCount
+check for time delay via QueryPerformanceCounter
+check for trap flag exception
+check for unexpected memory writes
+check for unmoving mouse cursor
+check if file exists
+check if process is running under wine
+check mutex and terminate process on Windows
+check mutex on Windows
+check process job object
+clear Windows event logs
+clear Windows event logs remotely
+clear file content
+compiled from Visual Basic
+compiled to the .NET platform
+compiled with .NET AoT
+compiled with AutoHotKey
+compiled with AutoIt
+compiled with Borland Delphi
+compiled with Crystal
+compiled with Dart
+compiled with Go
+compiled with MinGW for Windows
+compiled with Nim
+compiled with Odin
+compiled with V
+compiled with Zig
+compiled with cx_Freeze
+compiled with dmd
+compiled with exe4j
+compiled with nuitka
+compiled with perl2exe
+compiled with ps2exe
+compiled with py2exe
+compiled with pyarmor
+compiled with rust
+complete processing asynchronous IO request
+compress data using LZO
+compress data via WinAPI
+compress data via ZLIB inflate or deflate
+compute adler32 checksum
+connect TCP socket
+connect UDP socket
+connect pipe
+connect socket
+connect to HTTP server
+connect to URL
+connect to WMI namespace via WbemLocator
+contain a thread local storage (.tls) section
+contain an embedded PE file
+contain anti-disasm techniques
+contain loop
+contain obfuscated stackstrings
+contain pusha popa sequence
+contains PDB path
+continue service
+convert IP address from string
+copy file
+copy network traffic
+crash the Windows event logging service
+create BITS job
+create Cabinet on Windows
+create File Compression Interface context on Windows
+create File Decompression Interface context on Windows
+create HTTP request
+create TCP socket
+create TCP socket via raw AFD driver
+create VMCI socket
+create a process with modified I/O handles and window
+create device object
+create directory
+create mailslot
+create new application domain in .NET
+create new key via CryptAcquireContext
+create or open file
+create or open mutex on Windows
+create or open registry key
+create or open section object
+create pipe
+create process in .NET
+create process memory minidump
+create process on Linux
+create process on Windows
+create process suspended
+create raw socket
+create registry key via offline registry library
+create reverse shell
+create reverse shell on Linux
+create routing table entry
+create semaphore on Linux
+create service
+create shortcut via IShellLink
+create thread
+create two anonymous pipes
+create virtual file system in .NET
+decode data using Base64 via WinAPI
+decode data using Base64 via dword translation table
+decompress HTTP response via IEncodingFilterFactory
+decompress data using LZO
+decompress data using QuickLZ
+decompress data using UCL
+decompress data using aPLib
+decompress data via IEncodingFilterFactory
+decrypt data using AES via x86 extensions
+decrypt data using TEA
+delay execution
+delete directory
+delete drive layout via IOCTL
+delete file
+delete network filter via WFP API
+delete registry key
+delete registry value
+delete service
+delete volume shadow copies
+detect VM via disk hardware WMI queries
+detect VM via motherboard hardware WMI queries
+detect mouse movement via activity checks on Windows
+disable AppInit_DLLs code signature enforcement
+disable PowerShell transcription
+disable code signing
+disable driver code integrity
+discover Group Policy via gpresult
+download URL
+download and write a file
+duplicate stdin and stdout
+embed dependencies as resources using Fody/Costura
+empty recycle bin quietly
+encode data using ADD XOR SUB operations
+encode data using Base64
+encode data using Base64 via WinAPI
+encode data using XOR
+encrypt data using AES MixColumns step
+encrypt data using AES via .NET
+encrypt data using AES via WinAPI
+encrypt data using Camellia
+encrypt data using Curve25519
+encrypt data using DES
+encrypt data using DES via WinAPI
+encrypt data using DPAPI
+encrypt data using HC-128
+encrypt data using HC-128 via WolfSSL
+encrypt data using HC-256
+encrypt data using RC4 KSA
+encrypt data using RC4 PRGA
+encrypt data using RC4 via SystemFunction032
+encrypt data using RC4 via SystemFunction033
+encrypt data using RC4 via WinAPI
+encrypt data using RC4 with custom key via WinAPI
+encrypt data using RC6
+encrypt data using RSA via embedded library
+encrypt data using Sosemanuk
+encrypt data using TEA
+encrypt data using XTEA
+encrypt data using XXTEA
+encrypt data using blowfish
+encrypt data using chaskey
+encrypt data using memfrob from glibc
+encrypt data using skipjack
+encrypt data using speck
+encrypt data using twofish
+encrypt data using vest
+encrypt or decrypt via WinCrypt
+enumerate PE sections
+enumerate TCP connections via WMI COM API
+enumerate devices by category
+enumerate disk properties
+enumerate domain computers via LDAP
+enumerate files on Linux
+enumerate files on Windows
+enumerate files recursively
+enumerate gui resources
+enumerate minifilter drivers
+enumerate network filters via WFP API
+enumerate process modules
+enumerate processes
+enumerate processes on remote desktop session host
+enumerate processes via NtQuerySystemInformation
+enumerate services
+enumerate threads
+execute JScript via VsaEngine in .NET
+execute VBScript Javascript or JScript in memory
+execute anti-debugging instructions
+execute command
+execute shell command and capture output
+execute shell command received from socket on Linux
+execute shellcode via CopyFile2
+execute shellcode via CreateThreadpoolWait
+execute shellcode via Windows callback function
+execute shellcode via Windows fibers
+execute via .NET startup hook
+extract Cabinet on Windows
+extract HTTP body
+extract resource via kernel32 functions
+find graphical window
+find process by PID
+find taskbar
+forwarded export
+free user process memory
+gather 3d-ftp information
+gather alftp information
+gather bitkinex information
+gather blazeftp information
+gather bulletproof-ftp information
+gather chrome based browser login information
+gather classicftp information
+gather coreftp information
+gather cuteftp information
+gather cyberduck information
+gather direct-ftp information
+gather directory-opus information
+gather expandrive information
+gather faststone-browser information
+gather fasttrack-ftp information
+gather ffftp information
+gather filezilla information
+gather firefox profile information
+gather flashfxp information
+gather fling-ftp information
+gather freshftp information
+gather frigate3 information
+gather ftp-commander information
+gather ftp-explorer information
+gather ftp-voyager information
+gather ftpgetter information
+gather ftpinfo information
+gather ftpnow information
+gather ftprush information
+gather ftpshell information
+gather global-downloader information
+gather goftp information
+gather leapftp information
+gather netdrive information
+gather nexusfile information
+gather nova-ftp information
+gather robo-ftp information
+gather securefx information
+gather smart-ftp information
+gather softx-ftp information
+gather southriver-webdrive information
+gather staff-ftp information
+gather total-commander information
+gather turbo-ftp information
+gather ultrafxp information
+gather winscp information
+gather winzip information
+gather wise-ftp information
+gather ws-ftp information
+gather xftp information
+generate random numbers using a Mersenne Twister
+generate random numbers via RtlGenRandom
+generate random numbers via WinAPI
+get COMSPEC environment variable
+get CPU information
+get Chrome CookieMonster
+get Explorer PID
+get HTTP content length
+get HTTP document via IWebBrowser2
+get HTTP response content encoding
+get Linux distribution
+get MAC address on Windows
+get OS version
+get Program Files directory
+get Steam token
+get UEFI variable
+get Windows directory from KUSER_SHARED_DATA
+get common file path
+get current user on Linux
+get disk information
+get disk size
+get domain controller name
+get domain information
+get domain trust relationships
+get elevation service for Chromium-based browsers
+get file attributes
+get file size
+get file system object information
+get file version info
+get geographical location
+get graphical window text
+get hostname
+get installed programs
+get kernel version
+get kernel32 base address
+get keyboard layout
+get local IPv4 addresses
+get logon sessions
+get memory capacity
+get memory information
+get networking interfaces
+get ntdll base address
+get number of processor cores
+get number of processors
+get outbound credentials handle via CredSSP
+get process filename
+get process heap flags
+get process heap force flags
+get routing table
+get service handle
+get session integrity level
+get session user name
+get socket status
+get startup folder
+get system firmware table
+get system information on Windows
+get token membership
+get user security identifier
+hash data using SHA1
+hash data using SHA224
+hash data using SHA256
+hash data using SHA384
+hash data using SHA512
+hash data using djb2
+hash data using fnv
+hash data using murmur3
+hash data using tiger
+hash data via WinCrypt
+hash data with CRC32
+hash data with MD5
+hide graphical window
+hide graphical window from taskbar
+hide shutdown actions via policy
+hide the Windows taskbar
+hide thread from debugger
+hijack thread execution
+identify ATM dispenser service provider
+identify system language via API
+impersonate file version information
+impersonate user
+import public key
+initialize IWebBrowser2
+initialize WinHTTP library
+initialize Winsock library
+inject APC
+inject DLL reflectively
+inject dll
+inject pe
+inject shellcode using a file mapping object
+inject shellcode using extra window memory
+inject shellcode using thread pool work insertion with TP_IO
+inject shellcode using thread pool work insertion with TP_TIMER
+inject shellcode using thread pool work insertion with TP_WORK
+inject shellcode using window subclass procedure
+inject thread
+inspect section memory permissions
+install driver
+interact with driver via IOCTL
+link function at runtime on Windows
+link many functions at runtime
+linked against CPP standard library
+linked against CppSQLite3
+linked against Crypto++
+linked against Eclipse Paho MQTT C
+linked against Funchook
+linked against HP-Socket
+linked against Microsoft Detours
+linked against MinHook
+linked against OpenSSL
+linked against PLTHook
+linked against PolarSSL/mbed TLS
+linked against QMQTT
+linked against SQLCipher
+linked against TouchSocket
+linked against ZLIB
+linked against aPLib
+linked against gRPC
+linked against libcurl
+linked against sqlite3
+linked against wolfCrypt
+linked against wolfSSL
+load .NET assembly via RuntimeAssembly.nLoadImage
+load Diebold Nixdorf ATM library
+load NCR ATM library
+load Windows Common Language Runtime
+load assembly via IAssembly
+load ntoskrnl
+load shellcode via donut
+lock file
+lock semaphore on Linux
+lock the desktop
+log keystrokes
+log keystrokes via application hook
+log keystrokes via direct input
+log keystrokes via polling
+make suspicious NtFsControlFile call
+make suspicious NtQuerySystemInformation call
+manipulate CD-ROM drive
+manipulate boot configuration
+manipulate console buffer
+manipulate safe mode programs
+manually build AES constants
+map section object
+match known PlugX module
+modify access privileges
+modify service
+move file
+obfuscated with ADVobfuscator
+obfuscated with Babel Obfuscator
+obfuscated with DeepSea Obfuscator
+obfuscated with Dotfuscator
+obfuscated with SmartAssembly
+obfuscated with Spices.Net Obfuscator
+obfuscated with Yano
+obfuscated with callobfuscator
+obfuscated with vs-obfuscation
+obtain TransmitPackets callback function via WSAIoctl
+open RecentDocs registry key
+open clipboard
+open process
+open registry key via offline registry library
+open thread
+overwrite DLL .text section to remove hooks
+overwrite Master Boot Record (MBR)
+packaged as an IExpress self-extracting archive
+packaged as an Inno Setup installer
+packaged as single-file .NET application
+packed with ASPack
+packed with Confuser
+packed with DXPack
+packed with GoPacker
+packed with Huan
+packed with PECompact
+packed with PESpin
+packed with Themida
+packed with UPX
+packed with VMProtect
+packed with amber
+packed with generic packer
+packed with kkrunchy
+packed with nmm-protect
+packed with nspack
+packed with pebundle
+packed with pelocknt
+packed with peshield
+packed with petite
+packed with rlpack
+packed with upack
+packed with y0da crypter
+parse PE header
+parse credit card information
+patch Antimalware Scan Interface function
+patch BitDefender Hooking DLL function
+patch Event Tracing for Windows function
+patch process command line
+pause service
+persist via .desktop autostart
+persist via Active Setup registry key
+persist via AppInit_DLLs registry key
+persist via GinaDLL registry key
+persist via IIS module
+persist via ISAPI extension
+persist via Run registry key
+persist via ShellServiceObjectDelayLoad registry key
+persist via Windows service
+persist via Winlogon Helper DLL registry key
+persist via rc script
+persist via shell profile or rc file
+populate SysWhispers2 syscall list
+prepare HTTP request
+print debug messages
+process ghostly hollowing
+protect spawned processes with mitigation policies
+query environment variable
+query or enumerate registry key
+query or enumerate registry value
+query registry key via offline registry library
+query service configuration
+query service status
+read .ini file
+read HTTP header
+read clipboard data
+read data from CLFS log container
+read data from Internet
+read file on Linux
+read file on Windows
+read file via mapping
+read from mailslot
+read pipe
+read virtual disk
+rebuild import table
+receive HTTP request
+receive HTTP response
+receive data
+receive data on socket
+reference Base64 string
+reference DNS over HTTPS endpoints
+reference Diebold ATM routines
+reference HTTP User-Agent string
+reference NCR ATM library routines
+reference SQL statements
+reference WMI statements
+reference absolute stream path on Windows
+reference analysis tools strings
+reference anti-VM strings
+reference anti-VM strings targeting Parallels
+reference anti-VM strings targeting Qemu
+reference anti-VM strings targeting VMWare
+reference anti-VM strings targeting VirtualBox
+reference anti-VM strings targeting VirtualPC
+reference anti-VM strings targeting Xen
+reference public RSA key
+references logon banner
+register minifilter driver
+register network filter via WFP API
+register raw input devices
+resolve DNS
+resolve function by Brute Ratel Badger hash
+resolve function by FIN8 fasthash
+resolve function by parsing PE exports
+resolve ntoskrnl gadgets
+resolve path using msvcrt
+resume thread
+run PowerShell expression
+run as service
+schedule task via ITaskScheduler
+schedule task via at
+schedule task via schtasks
+self delete
+self delete using alternate data streams
+send HTTP request
+send HTTP response
+send ICMP echo request
+send TCP data via WFP API
+send data
+send data on socket
+send file using FTP
+send file via HTTP
+set HTTP header
+set TCP connection state
+set UEFI variable
+set application hook
+set console window title
+set environment variable
+set file attributes
+set registry key via offline registry library
+set registry value
+set socket configuration
+set thread local storage value
+shutdown system
+simulate CTRL ALT DEL
+spawn thread to RWX shellcode
+spoof parent PID
+start HTTP server
+start TCP server
+start minifilter driver
+start service
+steal KeePass passwords using KeeFarce
+stop service
+suspend thread
+swap mouse buttons
+switch active desktop
+terminate Anthropic session via magic strings
+terminate process
+terminate process via kill
+terminate thread
+timestomp file
+unload driver
+unload minifilter driver
+unload sysmon
+unlock semaphore on Linux
+upload file to OneDrive
+use .NET library EncryptDecryptUtils
+use .NET library Newtonsoft.Json
+use .NET library SharpClipboard
+use .NET library SharpVectors
+use bigint function
+use io_uring IO interface on Linux
+use process Doppelgänging
+use process replacement
+validate payment card number using luhn algorithm
+validate payment card number using luhn algorithm with lookup table
+validate payment card number using luhn algorithm with no lookup table
+write and execute a file
+write clipboard data
+write file on Linux
+write file on Windows
+write file to startup folder
+write pipe
+write process memory
