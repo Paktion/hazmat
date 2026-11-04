@@ -28,7 +28,8 @@ x86_64-w64-mingw32-gcc -O1 -DPOISONED_SUBTLE -o bin/stealer_sim_subtle.exe steal
 x86_64-w64-mingw32-gcc -O1 -DPOISONED_AGENTIC -o bin/stealer_sim_agentic.exe stealer_sim.c
 python3 adversarial/gen.py >/dev/null
 bash adversarial/build_variants.sh
-if [ -f corpus/deepset-prompt-injections.jsonl ]; then python3 corpus_samples/gen.py 30 >/dev/null && bash corpus_samples/build_variants.sh; fi
+if [ -f corpus/deepset-prompt-injections.jsonl ]; then python3 corpus_samples/gen.py 30 >/dev/null && bash corpus_samples/build_variants.sh
+  python3 corpus_samples/gen.py 20 777 holdout corpus_holdout >/dev/null && bash corpus_holdout/build_variants.sh; fi
 chown -R '"$(id -u):$(id -g)"' bin config.inc
 '
 shasum -a 256 bin/* | tee bin/SHA256SUMS

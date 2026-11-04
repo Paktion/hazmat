@@ -186,7 +186,7 @@ def main(argv: list[str] | None = None) -> int:
     ev.add_argument("--baseline-only", action="store_true", help="score only the baseline")
     ev.add_argument("--only", help="only samples whose name contains this")
     ev.add_argument("--steps", type=int, default=12)
-    ev.add_argument("--set", dest="test_set", default="core", choices=["core", "adversarial", "corpus"],
+    ev.add_argument("--set", dest="test_set", default="core", choices=["core", "adversarial", "corpus", "holdout"],
                     help="core: testdata/expected.json; adversarial: testdata/adversarial/expected.json")
     ev.add_argument("--ablation", action="store_true",
                     help="same driver with and without the airlock on the poisoned samples")

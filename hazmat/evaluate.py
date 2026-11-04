@@ -29,7 +29,8 @@ ROOT = Path(__file__).resolve().parent.parent
 BIN = ROOT / "testdata" / "bin"
 EXPECTED = ROOT / "testdata" / "expected.json"
 SETS = {"core": EXPECTED, "adversarial": ROOT / "testdata" / "adversarial" / "expected.json",
-        "corpus": ROOT / "testdata" / "corpus_samples" / "expected.json"}
+        "corpus": ROOT / "testdata" / "corpus_samples" / "expected.json",
+        "holdout": ROOT / "testdata" / "corpus_holdout" / "expected.json"}
 BENIGN = {"1", "2", "3"}
 
 

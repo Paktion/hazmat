@@ -158,8 +158,10 @@ def _vote(text: str) -> tuple[bool | None, bool | None]:
 def readers(out: Path, n: int, jobs: int) -> list[str]:
     rows = corpus()
     rnd = random.Random(20261104)
-    inj = rnd.sample([r for r in rows if r["label"] == 1], n)
-    ben = rnd.sample([r for r in rows if r["label"] == 0], n)
+    pool_i = [r for r in rows if r["label"] == 1]
+    pool_b = [r for r in rows if r["label"] == 0]
+    inj = rnd.sample(pool_i, min(n, len(pool_i)))
+    ben = rnd.sample(pool_b, min(n, len(pool_b)))
     with ThreadPoolExecutor(max_workers=jobs) as pool:
         v_inj = list(pool.map(lambda r: _vote(r["text"]), inj))
         v_ben = list(pool.map(lambda r: _vote(r["text"]), ben))
@@ -170,7 +172,7 @@ def readers(out: Path, n: int, jobs: int) -> list[str]:
     either = lambda vs: sum(a or b for a, b in vs)
     agree = lambda vs: sum(a == b for a, b in vs)
     return ["## Stage 2: reader consensus on real prompts", "",
-            f"Random {n} injection and {n} benign prompts from deepset/prompt-injections (seed 20261104). Each text is "
+            f"{len(inj)} injection and {len(ben)} benign prompts from deepset/prompt-injections (seed 20261104). Each text is "
             "shown to both readers (Muse Spark Open on Baseten and on Fireworks) with Hazmat's prose question.", "",
             "| Rule | Recall on injections | False alarms on benign prompts |", "|---|---|---|",
             f"| Both readers say yes (Hazmat's rule) | {fmt(both(vi), len(vi))} | {fmt(both(vb), len(vb))} |",
