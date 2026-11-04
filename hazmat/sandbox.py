@@ -80,10 +80,11 @@ VERSION_TOOLS: list[tuple[str, list[str]]] = [
 class _Docker:
     name = "docker"
 
-    def __init__(self, timeout: int):
+    def __init__(self, timeout: int, volume: str | None = None):
         self.timeout = timeout
+        mount = ["-v", f"{volume}:/samples:ro"] if volume else []
         self.id = subprocess.run(
-            ["docker", "run", "-d", "--rm", "--platform", "linux/amd64", "--network", "none",
+            ["docker", "run", "-d", "--rm", "--platform", "linux/amd64", "--network", "none", *mount,
              "--cpus", str(CPUS), "--memory", f"{MEMORY_MB}m", "--pids-limit", "512",
              "--cap-drop", "ALL", "--security-opt", "no-new-privileges",
              IMAGE_TAG, "sleep", str(timeout)],
@@ -149,13 +150,16 @@ def build_local_image() -> None:
 class Session:
     """One open sandbox: copy a sample in, run tools, run more commands later, close."""
 
-    def __init__(self, backend: str | None = None, timeout: int = 1800):
+    def __init__(self, backend: str | None = None, timeout: int = 1800, volume: str | None = None):
         self.backend = backend or default_backend()
+        if volume and self.backend != "docker":
+            # Real malware lives in a local Docker volume and never goes to a cloud sandbox.
+            raise ValueError("volume samples (real malware) run only on the local docker backend")
         if self.backend == "modal":
             budget.check("modal")
             self._sb = _Modal(timeout)
         elif self.backend == "docker":
-            self._sb = _Docker(timeout)
+            self._sb = _Docker(timeout, volume)
         else:
             raise ValueError(f"unknown sandbox backend {self.backend!r} (modal | docker)")
         self._start = time.monotonic()
@@ -179,6 +183,18 @@ class Session:
         if raw:
             report.ghidra = json.loads(raw)
         return report
+
+    def stage_volume_sample(self, name: str) -> None:
+        """Copy a sample from the mounted volume into /work inside the sandbox. SOREL binaries are
+        disarmed (FileHeader.Machine zeroed); restore Machine from the optional-header magic on the
+        copy so Ghidra and capa can parse it. Nothing is executed."""
+        fix = ("import struct,sys; d=bytearray(open(sys.argv[1],'rb').read()); o=struct.unpack_from('<I',d,0x3c)[0]; "
+               "m=struct.unpack_from('<H',d,o+24)[0]; "
+               "struct.pack_into('<H',d,o+4,0x8664 if m==0x20b else 0x14c) if struct.unpack_from('<H',d,o+4)[0]==0 else None; "
+               "open(sys.argv[2],'wb').write(d)")
+        r = self.exec(["python3", "-c", fix, f"/samples/{name}", REMOTE_PATH], "stage")
+        if r.returncode != 0:
+            raise RuntimeError(f"could not stage {name}: {r.stderr[-300:]}")
 
     def close(self) -> float:
         """Tear the sandbox down; returns its run time in seconds (and records Modal cost)."""

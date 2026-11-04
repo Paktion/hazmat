@@ -1,0 +1,107 @@
+{
+  "_doc": "Real malware from SOREL-20M (disarmed), analyzed only in the local Docker sandbox. Samples live in the hazmat-real Docker volume, never in this repository. Every SOREL binary is malware.",
+  "sorel_9765f79099b1": {
+    "categories": [
+      "4B",
+      "4C",
+      "5"
+    ],
+    "injection": false,
+    "poisoned": false,
+    "malicious": true,
+    "volume": "hazmat-real/9765f79099b182fcb0c48a15e306ee19064d16cf3906a063d0cd8f9fbe91d0dc.bin",
+    "sha256": "9765f79099b182fcb0c48a15e306ee19064d16cf3906a063d0cd8f9fbe91d0dc",
+    "size": 74126
+  },
+  "sorel_ca084c3e6d4b": {
+    "categories": [
+      "4B",
+      "4C",
+      "5"
+    ],
+    "injection": false,
+    "poisoned": false,
+    "malicious": true,
+    "volume": "hazmat-real/ca084c3e6d4be8eabf8ae5c8f76d85d79bed5f18778f6a7e19d63b7cf2de671c.bin",
+    "sha256": "ca084c3e6d4be8eabf8ae5c8f76d85d79bed5f18778f6a7e19d63b7cf2de671c",
+    "size": 2110098
+  },
+  "sorel_c55cc8405fb9": {
+    "categories": [
+      "4B",
+      "4C",
+      "5"
+    ],
+    "injection": false,
+    "poisoned": false,
+    "malicious": true,
+    "volume": "hazmat-real/c55cc8405fb99b144c930d64d1f322c4f6beb83c7635d92ed466db980a98775f.bin",
+    "sha256": "c55cc8405fb99b144c930d64d1f322c4f6beb83c7635d92ed466db980a98775f",
+    "size": 1053256
+  },
+  "sorel_db2425f8a04e": {
+    "categories": [
+      "4B",
+      "4C",
+      "5"
+    ],
+    "injection": false,
+    "poisoned": false,
+    "malicious": true,
+    "volume": "hazmat-real/db2425f8a04ebfb4a49ee2536fb5fbc37560b0988bf18097a14f4932dc81b51e.bin",
+    "sha256": "db2425f8a04ebfb4a49ee2536fb5fbc37560b0988bf18097a14f4932dc81b51e",
+    "size": 149949
+  },
+  "sorel_e82b8c87292b": {
+    "categories": [
+      "4B",
+      "4C",
+      "5"
+    ],
+    "injection": false,
+    "poisoned": false,
+    "malicious": true,
+    "volume": "hazmat-real/e82b8c87292b1d6bd48824c36a8caa9308e3f5d12152ecb24e59e77b5581c430.bin",
+    "sha256": "e82b8c87292b1d6bd48824c36a8caa9308e3f5d12152ecb24e59e77b5581c430",
+    "size": 164841
+  },
+  "sorel_af7d462390d5": {
+    "categories": [
+      "4B",
+      "4C",
+      "5"
+    ],
+    "injection": false,
+    "poisoned": false,
+    "malicious": true,
+    "volume": "hazmat-real/af7d462390d54849b95ab6619c8b9892f66341000257dd779f3875235b7ecc59.bin",
+    "sha256": "af7d462390d54849b95ab6619c8b9892f66341000257dd779f3875235b7ecc59",
+    "size": 180224
+  },
+  "sorel_37d7ab0db5de": {
+    "categories": [
+      "4B",
+      "4C",
+      "5"
+    ],
+    "injection": false,
+    "poisoned": false,
+    "malicious": true,
+    "volume": "hazmat-real/37d7ab0db5deaa240a548ab7453126dcce0803bf60d66b89d276e60691481798.bin",
+    "sha256": "37d7ab0db5deaa240a548ab7453126dcce0803bf60d66b89d276e60691481798",
+    "size": 33334
+  },
+  "sorel_bc5e7eaa18ef": {
+    "categories": [
+      "4B",
+      "4C",
+      "5"
+    ],
+    "injection": false,
+    "poisoned": false,
+    "malicious": true,
+    "volume": "hazmat-real/bc5e7eaa18efc4c47fc10ae6b381e021698481cdd011844f4a565a707596c1ca.bin",
+    "sha256": "bc5e7eaa18efc4c47fc10ae6b381e021698481cdd011844f4a565a707596c1ca",
+    "size": 1789440
+  }
+}
