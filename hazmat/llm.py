@@ -29,11 +29,12 @@ def client_for(p: Provider) -> OpenAI:
 
 
 def _log_call(line: str) -> None:
-    print(line, file=sys.stderr, flush=True)
     path = os.environ.get("HAZMAT_CALL_LOG")
-    if path:
-        with open(path, "a") as f:
-            f.write(line + "\n")
+    if not path:
+        print(line, file=sys.stderr, flush=True)
+        return
+    with open(path, "a") as f:  # a run prints this file live, so don't also print here
+        f.write(line + "\n")
 
 
 def chat(p: Provider, messages: list[dict], role: str = "", **kwargs) -> str:

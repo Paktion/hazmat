@@ -4,6 +4,7 @@
     hazmat check --dry      show what's configured without calling anything
     hazmat sandbox FILE     run the analysis tools on FILE in an isolated sandbox
     hazmat selftest         check every tool on every test sample, in the sandbox
+    hazmat analyze FILE     full analysis: driver (Muse Spark) + airlock + reader cell -> verdict
     hazmat probe FILE       walk FILE through the airlock with a scripted driver
     hazmat spend            spend so far against each provider's cap (and Modal)
 """
@@ -115,6 +116,12 @@ def cmd_selftest(backend: str | None, build: bool) -> int:
     return selftest(backend=backend, build=build)
 
 
+def cmd_analyze(sample: str, backend: str | None, steps: int) -> int:
+    from .driver import main as analyze
+
+    return analyze(sample, backend, steps)
+
+
 def cmd_probe(sample: str, backend: str | None, reader: bool) -> int:
     from .probe import main as probe
 
@@ -133,6 +140,10 @@ def main(argv: list[str] | None = None) -> int:
     st = sub.add_parser("selftest", help="run every tool on every test sample and check the results")
     st.add_argument("--backend", choices=["modal", "docker"], help="default: $HAZMAT_SANDBOX or modal")
     st.add_argument("--build", action="store_true", help="rebuild the local image and test samples first")
+    an = sub.add_parser("analyze", help="analyze a sample: driver + airlock + reader cell -> verdict")
+    an.add_argument("sample")
+    an.add_argument("--backend", choices=["modal", "docker"], help="default: $HAZMAT_SANDBOX or modal")
+    an.add_argument("--steps", type=int, default=12, help="max driver steps (default 12)")
     pr = sub.add_parser("probe", help="walk a sample through the airlock with a scripted driver")
     pr.add_argument("sample")
     pr.add_argument("--backend", choices=["modal", "docker"], help="default: $HAZMAT_SANDBOX or modal")
@@ -146,6 +157,8 @@ def main(argv: list[str] | None = None) -> int:
         return cmd_spend(args.reset)
     if args.cmd == "sandbox":
         return cmd_sandbox(args.sample, args.rules, args.backend)
+    if args.cmd == "analyze":
+        return cmd_analyze(args.sample, args.backend, args.steps)
     if args.cmd == "probe":
         return cmd_probe(args.sample, args.backend, not args.no_reader)
     if args.cmd == "selftest":

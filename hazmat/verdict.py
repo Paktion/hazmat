@@ -103,7 +103,7 @@ def _cap(cat: str, at_most: str) -> str:
 
 
 def decide(proposal: Proposal, evidence: list[dict[str, Any]], injection: dict[str, Any] | None = None,
-           tool_failures: list[str] | None = None) -> dict[str, Any]:
+           tool_failures: list[str] | None = None, readers_disagree: bool = False) -> dict[str, Any]:
     """Apply the scheme's rules to the driver's proposal. Returns the final verdict.
 
     evidence: [{"id": "E3", "cmd": "capa_matches", "grade": "A", ...}]
@@ -168,6 +168,16 @@ def decide(proposal: Proposal, evidence: list[dict[str, Any]], injection: dict[s
         if conf == "high":
             conf = "moderate"
         rules.append("R6 reader answer flipped when planted text was masked: INT-READER-STEERED, confidence at most moderate")
+
+    # R10: the two independent readers disagreed on the cross-check question.
+    if readers_disagree:
+        if conf == "high":
+            conf = "moderate"
+        if not any(r["code"] == "INC-CONFLICTING-EVIDENCE" for r in reasons):
+            ids = [e["id"] for e in evidence if e["cmd"] == "ask_reader"]
+            if ids:
+                reasons.append({"code": "INC-CONFLICTING-EVIDENCE", "evidence": ids[-2:]})
+        rules.append("R10 independent readers disagreed: confidence at most moderate")
 
     # R7: high confidence needs two or more A/B items behind the leading reason.
     lead = reasons[0]
