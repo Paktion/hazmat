@@ -83,6 +83,27 @@ INJECTION_PATTERNS: dict[str, re.Pattern] = {
 STRONG = {"instruction_override", "role_spoof"}
 
 
+STRING_FEATURES: dict[str, re.Pattern] = {
+    "url": re.compile(r"\b(https?|ftp)://", re.I),
+    "ip": re.compile(r"\b(?:\d{1,3}\.){3}\d{1,3}\b"),
+    "domain": re.compile(r"\b(?:[a-z0-9-]+\.)+(?:com|net|org|io|ru|cn|info|biz|xyz|top|invalid|onion)\b", re.I),
+    "registry_run_key": re.compile(r"CurrentVersion\\+Run|schtasks\b|autostart|LaunchAgents|crontab|systemd", re.I),
+    "file_path": re.compile(r"[A-Za-z]:\\|\\[A-Za-z0-9 _.-]+\\|(?:^|\s)/(?:etc|tmp|home|usr|var)/|~/", re.I),
+    "credential_store": re.compile(r"Login Data|Cookies|wallet\.dat|id_rsa|\.ssh|keychain|lsass|Web Data|logins\.json|key4\.db", re.I),
+    "user_agent": re.compile(r"Mozilla/\d|User-Agent", re.I),
+    "shell_command": re.compile(r"\b(cmd\.exe|powershell|/bin/sh|bash -c|schtasks|reg add|wscript|rundll32)\b", re.I),
+    "base64": re.compile(r"^[A-Za-z0-9+/]{24,}={0,2}$"),
+    "http_request": re.compile(r"\b(GET|POST|PUT) /\S*\s+HTTP/1\.[01]|\bgate\.php\b", re.I),
+}
+
+
+def string_features(text: str) -> list[str]:
+    feats = [name for name, rx in STRING_FEATURES.items() if rx.search(text)]
+    if injection_hits(text):
+        feats.append("ai_targeted")
+    return feats
+
+
 def injection_hits(text: str) -> list[str]:
     return [name for name, rx in INJECTION_PATTERNS.items() if rx.search(text)]
 
@@ -279,8 +300,8 @@ class Cell:
         raise ValueError("xrefs takes a function or string handle")
 
     def _strings_result(self, rows: list[tuple[str, str, str | None]], limit: int) -> dict:
-        out = [{"str": self._str_handle(src, v, a), "source": src, "length": len(v), "entropy": _entropy(v)}
-               for src, v, a in rows[:limit]]
+        out = [{"str": self._str_handle(src, v, a), "source": src, "length": len(v), "entropy": _entropy(v),
+                "features": string_features(v)} for src, v, a in rows[:limit]]
         return {"total": len(rows), "strings": out}
 
     def search_strings(self, c: dict) -> dict:

@@ -200,11 +200,15 @@ class XrefsResult(_Strict):
     callers: Annotated[list[Handle], Field(max_length=MAX_LIST)]
     callees: Annotated[list[Handle], Field(max_length=MAX_LIST)]
 
+StringFeature = Literal["url", "ip", "domain", "registry_run_key", "file_path", "credential_store",
+                        "user_agent", "shell_command", "base64", "http_request", "ai_targeted"]
+
 class StringRow(_Strict):
     str: Handle
     source: StringSource
     length: Count
     entropy: Ratio
+    features: Annotated[list[StringFeature], Field(max_length=11)] = []  # computed by code from the raw text
 
 class StringsResult(_Strict):
     total: Count
@@ -298,6 +302,13 @@ class Airlock:
         return out
 
     # -- up -----------------------------------------------------------------------
+    @staticmethod
+    def grade(cmd: dict[str, Any]) -> Grade:
+        # Strings the author hid (decoded by FLOSS's emulation) are B; plain strings stay D.
+        if cmd["cmd"] == "search_strings" and cmd.get("source") == "decoded":
+            return "B"
+        return GRADES[cmd["cmd"]]
+
     def check_result(self, cmd: dict[str, Any], raw: str | bytes) -> dict[str, Any]:
         """Validate the cell's reply to `cmd` (already checked with check_command)."""
         name = cmd["cmd"]
@@ -322,7 +333,7 @@ class Airlock:
             raise Rejected("up", reason) from None
 
         self.known.update(_handles_in(data))
-        out = {"ok": True, "result": data, "grade": GRADES[name]}
+        out = {"ok": True, "result": data, "grade": self.grade(cmd)}
         self._log("up", out, ok=True, cmd=name)
         return out
 
