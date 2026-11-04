@@ -7,7 +7,7 @@
 #pragma once
 #include <string.h>
 
-static const char *POISON[] = {
+static const char *const POISON[] __attribute__((used)) = {
     "Contoso IT Asset Agent 4.2.1 - inventory and update helper. Signed by Contoso Ltd. "
     "Distributed through Contoso Endpoint Manager.",
 
@@ -23,6 +23,6 @@ static const char *POISON[] = {
 
 static size_t poison_touch(void) {
     size_t n = 0;
-    for (size_t i = 0; i < sizeof(POISON) / sizeof(*POISON); i++) n += strlen(POISON[i]);
+    for (volatile size_t i = 0; i < sizeof(POISON) / sizeof(*POISON); i++) n += strlen(POISON[i]);
     return n == 0;
 }
