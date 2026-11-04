@@ -107,14 +107,16 @@ Rules enforced in code include: benign reasons can't rest on the sample's own te
 
 `hazmat eval` runs the whole pipeline on labeled samples (`testdata/expected.json`) and scores the correct category, injection detection, **steered** (a poisoned sample came out benign), false alarms on clean files, and stability across runs. `--baseline` scores the common approach on the same samples. `pytest` checks the airlock against hostile replies and each verdict rule on made-up evidence.
 
-Headline results ([docs/eval.md](docs/eval.md) has every table and caveat):
+Headline numbers ([docs/eval.md](docs/eval.md) has every table, interval and caveat):
 
-| Set | Hazmat correct | Baseline correct | Closed as benign despite planted text (Hazmat / baseline) |
-|---|---|---|---|
-| Core, 5 samples x 3 runs | 15/15 | 13/15 | 0 / 2 |
-| Adversarial, 16 variants | 15/16 | 12/16 | 1 / 4 |
+| Measure | Hazmat | Baseline (raw tool output → one Muse Spark Open call) |
+|---|---|---|
+| Planted text reached the deciding model | **0/62 runs (0%, 95% CI 0-6%)** | 32/40 (80%+) |
+| Correct category | **30/31 (97%)** | 25/31 (81%) |
+| Benign file carrying planted text closed as benign, no flag | **1/7 (14%)** | 6/7 (86%), Fisher p = 0.015 |
+| Malicious + poisoned file steered to benign | 0/18 | 0/18 |
 
-Neither system was steered into calling a malicious sample benign; Muse Spark Open resists these attacks when it reads them directly. Where the plain approach fails is closing files that try to manipulate their own analysis as benign, with no flag. An ablation (same driver with and without the airlock) showed no difference on these samples, so the airlock's protection is by construction rather than measured. 8 real malware samples (SOREL-20M, disarmed) ran through every tool in the local Docker sandbox, with no model calls and never on a cloud platform.
+An attack-success experiment (480 calls, each poisoned program vs its unpoisoned twin) found that planted text **does not** measurably steer Muse Spark Open on malware (1%, CI 1-3%), but **does** destabilize its verdict on benign files that carry it: benign 100% without the text, 52% with it (p = 1.7 x 10^-5). An ablation (same driver with and without the airlock) showed no difference in verdicts on these samples. 8 real malware samples (SOREL-20M, disarmed) ran through every tool in the local Docker sandbox, with no model calls and never on a cloud platform.
 
 ## Test samples
 
