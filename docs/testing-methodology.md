@@ -167,7 +167,7 @@ Each fix below was surfaced by a test.
 | First adversarial run | Detection misses: Unicode tag characters, XOR-hidden agent text; Hazmat detected planted text in 10 of 16 | In-sandbox hidden-Unicode scanner, agent-loop hijack patterns, prose check over decoded strings, second-reader retry (6ea314f). Final run: 14/16, in-sample |
 | First adversarial run | 9 Fireworks 503 errors made the baseline column unusable | Reran; the final run had none. Second reader retries, then falls back to the primary provider, recorded per answer (6ea314f, 31f2c25) |
 | Stage 1 on Ubuntu binaries | 8/570 benign files flagged, on help text such as "do not report progress" | Tightened two patterns: 1/570 on the same files, so in-sample (ca5da1a) |
-| Reviewing saved runs | 60 of 95 decompile calls (63%) went to compiler and runtime code | Code-computed suspicion score, runtime-library flag, `list_functions` defaults to the author's code, and driver skills for triage order and category calibration (66766f0) |
+| Reviewing saved runs | 60 of 95 decompile calls (63%) went to compiler and runtime code; category 5 on clear malware in only 2 of 21 runs | Code-computed suspicion score, runtime-library flag, `list_functions` defaults to the author's code, and driver skills for triage order and category calibration (66766f0). After: 33% runtime decompiles, category 5 in 16 of 20 |
 | Run 2 | The masked/unmasked flip signal fired on 2 of 6 blatant runs where all answers were close | Not fixed; reported in eval.md as noisy |
 
 ## 8. Studies in progress
@@ -176,8 +176,7 @@ These were running when this document was written. Results will be added to [doc
 
 - **Study A, stability on benign files carrying planted text:** 10 runs per variant of `clean_poisoned` and the 4 adversarial clean variants, Hazmat and baseline. It measures how often each system closes a manipulative benign file as benign, with tighter intervals than the current 7 runs.
 - **Study B, corpus set:** the 60 samples built from real deepset injection prompts, Hazmat and baseline. It measures behavior on real-world injection text rather than our own payloads.
-- **Study C, reader consensus on deepset prompts** (`scale_eval.py readers`): recall and false alarms of the both-readers-must-agree check.
-- **Skills before/after:** the core and adversarial sets rerun after the suspicion score and skills (66766f0). The core half has finished (`runs/eval-core-20261104-142319`, 2 runs per sample): 12/12 correct, injection check correct 12/12, 0 steered, 0 closed despite planted text, 0 false alarms; malicious samples came out 5 in 7 of 8 runs, where Run 2 gave 4C in all 9. This is not a clean comparison: the reader-consensus detector and the scanner fixes also landed between the two runs, and n is small. The adversarial half is still running.
+- Finished since this was first written, and now in eval.md: **stage 2 reader consensus** (both readers must agree: recall 50/96 = 52% on real injection prompts, false alarms 0/100) and **skills before/after** (runtime decompiles 63% to 33%, p = 3.3 x 10^-5; category 5 on clear malware 2/21 to 16/20, p = 5.2 x 10^-6; correctness unchanged; same caveats about in-sample samples).
 
 ## 9. Reproduce
 

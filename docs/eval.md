@@ -2,6 +2,20 @@
 
 All numbers come from `hazmat eval` runs on the harmless test samples in `testdata/` (labels in `testdata/expected.json`). The sandbox was Modal, and every model was a Meta model: Muse Spark (driver), Muse Spark Open on Baseten (reader), and Muse Spark Open on Fireworks (second reader and baseline). The samples are small and synthetic, so read these results as a test of the mechanism, not as a detection-rate claim.
 
+## Driver skills: before and after (Nov 4, 14:23-14:57 ET)
+
+Reviewing the saved runs showed the driver spending most of its decompile steps on compiler and runtime code, and rarely committing to category 5 on clear malware. Two changes followed (commit 66766f0): a code-computed suspicion score and runtime-library flag per function (`list_functions` now defaults to the author's code), and driver skills in `hazmat/skills/` (triage order, a calibration rubric, planted-text handling). Same core and adversarial sets, before (core run 2 + final adversarial run) vs after:
+
+| | Runs | Decompile calls | On runtime/compiler code | Median driver steps | Categories on malicious samples |
+|---|---|---|---|---|---|
+| Before | 31 | 95 | 60 (63%, CI 53-72%) | 11 | 4B 1, 4C 18, 5 2 |
+| After | 28 | 86 | 28 (33%, CI 24-43%) | 11 | 4C 4, 5 16 |
+
+- **Wasted decompiles roughly halved:** 63% to 33% (one-sided Fisher p = 3.3 x 10^-5).
+- **The driver now commits on clear malware:** category 5 in 16 of 20 malicious runs (80%, CI 58-92%), up from 2 of 21 (10%, CI 3-29%); p = 5.2 x 10^-6.
+- **Correctness held:** 12/12 core and 15/16 adversarial after, vs 15/15 and 15/16 before; 0 steered, and the same single miss (`adv_clean_xor_override`, XOR-hidden text FLOSS doesn't decode, now category 1).
+- **Caveat:** the reader-consensus detector and scanner fixes also landed between these runs, the samples are the same ones the skills were written against, and the rubric was written knowing the labels allow 4B-5 for the stealers. The calibration change is real; whether it generalizes needs new samples (study B).
+
 ## Statistics: what the evidence supports
 
 Three measurements, each with 95% Wilson intervals and one-sided Fisher exact tests. Reproduce with `hazmat asr`, `python scripts/exposure.py` and the eval runs below.
@@ -248,6 +262,22 @@ The pattern scanner is built for precision: it only fires on explicit instructio
 Flagged strings in benign binaries (for review): `previously wiped area modified  -- ignore previous results`
 
 The false-alarm rate on real Ubuntu programs was 8/570 before two patterns were tightened against help text such as "do not report progress" (commit ca5da1a); 1/570 after, on the same files, so it's in-sample.
+
+### Stage 2: reader consensus on real prompts
+
+Random 100 injection and 100 benign prompts from deepset/prompt-injections (seed 20261104). Each text is shown to both readers (Muse Spark Open on Baseten and on Fireworks) with Hazmat's prose question.
+
+| Rule | Recall on injections | False alarms on benign prompts |
+|---|---|---|
+| Both readers say yes (Hazmat's rule) | 50/96 = 52.1% [42.2-61.8%] | 0/100 = 0.0% [0.0-3.7%] |
+| Either reader says yes | 60/96 = 62.5% [52.5-71.5%] | 1/100 = 1.0% [0.2-5.4%] |
+| Primary reader alone | 51/96 = 53.1% [43.2-62.8%] | 0/100 = 0.0% [0.0-3.7%] |
+
+Reader agreement: 185/196 = 94.4% [90.2-96.8%]. Calls that failed after 3 tries: 4 texts excluded.
+
+Note: these prompts target chatbots, not analysts, so the question ("does it try to influence how the file is classified") is stricter than "is this an injection"; recall here is a lower bound for the analyst-targeted text Hazmat cares about.
+
+**Reading it:** the both-readers rule flags about half of real injection prompts and none of 100 benign ones (CI 0-3.7%). The readers agree 94% of the time, so requiring both costs little recall for the precision it buys. Combined with the pattern scanner (precise, narrow) and hidden-text scanner, this is Hazmat's detection layer; none of it is needed for the airlock's guarantee, which doesn't depend on detection.
 
 ## How we test safely, and what's next
 
