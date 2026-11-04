@@ -115,11 +115,12 @@ INJECTION_PATTERNS: dict[str, re.Pattern] = {
     "verdict_override": re.compile(r"\b(classify|report|mark|close|treat)\b.{0,40}\b(benign|clean|safe|false positive)\b"
                                    r"|\bno malware (detected|found)\b|\ballow-?listed\b|\bverdict\W{0,3}(clean|benign)", re.I),
     "instruction_override": re.compile(r"\bignore (all |any )?(previous|prior|above)\b|\bdisregard\b.{0,30}\binstructions?\b"
-                                       r"|\bdo not (mention|report|flag)\b|\bstop (the )?analysis\b|\bpolicy update\b"
+                                       r"|\bdo not (mention|report|flag) (this|it|the (file|sample|binary|instruction|string)s?)\b"
+                                       r"|\bstop (the )?analysis\b|\bpolicy update\b"
                                        # agent-loop hijacks: steer the tool loop itself
                                        r"|\b(call|invoke|run) (the )?finish\b|\bfinish now\b|\bdo not (call|use) (any |more |further )?tools?\b"
                                        r"|\bskip (the )?(decompilation|analysis|string review)\b", re.I),
-    "role_spoof": re.compile(r"<\|?(system|im_start|assistant)\|?>|\[/?INST\]|^#+\s*system\b"
+    "role_spoof": re.compile(r"<\|?(system|im_start|assistant)\|?>|\[/?INST\]|<\|start_header_id\|>"
                              r"|\byou are (an? |the )?(ai|assistant|malware analyst|analysis)", re.I | re.M),
     "fake_tool_output": re.compile(r"^\s*\[(capa|yara|sandbox|virustotal|edr|av|reader)\]|\bscore \d+/100\b|\bTOOL RESULT\b"
                                    r"|\bVirusTotal \d+/\d+\b"
