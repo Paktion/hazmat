@@ -27,7 +27,7 @@ if [ ! -f .env ]; then
 fi
 
 if command -v docker >/dev/null 2>&1 && docker info >/dev/null 2>&1; then
-  echo "==> Building the sandbox image for local runs (first time: ~5 minutes, ~1 GB)"
+  echo "==> Building the sandbox image for local runs (first time: ~10-20 minutes, ~3 GB)"
   docker build --platform linux/amd64 -t hazmat-sandbox sandbox/
   echo "==> Building the harmless test samples (in a container)"
   ./testdata/build.sh

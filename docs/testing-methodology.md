@@ -193,7 +193,7 @@ hazmat eval --runs 3 --backend modal --jobs 5 --baseline      # core set, Hazmat
 hazmat eval --set adversarial --runs 1 --backend modal --baseline
 hazmat eval --set corpus --runs 1 --backend modal --baseline
 hazmat eval --ablation --runs 3 --backend modal               # same Muse Spark Open driver, with/without airlock
-hazmat asr --n 20 --backend modal                             # 440 calls
+hazmat asr --n 100 --backend modal                            # 2,200 calls (README headline)
 python scripts/exposure.py                                    # deterministic, no models
 python scripts/scale_eval.py fetch                            # deepset corpus (CC-BY-4.0)
 python scripts/scale_eval.py patterns                         # stage 1, no models
