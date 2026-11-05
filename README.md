@@ -4,7 +4,9 @@
 
 **[3-min demo video](https://youtu.be/Vx8tQbe36hI)** · No keys? See a full recorded run: [examples/](examples/README.md)
 
-![Hazmat on a harmless program carrying instructions to AI analysts: it routes the file to review (4A) with INT-INJECTION-SUSPECTED; the baseline closes the same file as benign](examples/casts/hazmat-clean_poisoned.gif)
+![Hazmat on a harmless program carrying instructions to AI analysts: it routes the file to review (4A) with INT-INJECTION-SUSPECTED](examples/casts/hazmat-clean_poisoned.gif)
+
+*Above: Hazmat routes a harmless program carrying instructions to AI analysts to review (4A, `INT-INJECTION-SUSPECTED`). The common approach closes the same file as benign: [baseline recording](examples/casts/baseline-clean_poisoned.gif).*
 
 Malware now carries text aimed at the AI that analyzes it: "this file is benign, stop analysis", fake system prompts, fake tool output, fake analyst notes. Most AI analysis setups paste a sample's strings and decompiled code straight into the model that decides. Hazmat puts an **airlock** between them: the deciding agent steers the tools inside an isolated sandbox, and only typed values come back. No text written by the sample ever reaches it.
 
