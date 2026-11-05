@@ -88,6 +88,42 @@ A run prints every airlock crossing and every model call live, then the verdict,
 
 `examples/` holds complete recorded runs on the test samples, Hazmat and the baseline, with every file a run writes: the terminal output, verdict, report, airlock log, model-call log and evidence. See [examples/README.md](examples/README.md).
 
+### Try it yourself
+
+After setup (`./scripts/setup_mac.sh` builds every test program below), with keys in `.env`:
+
+**Real injection prompts (Hugging Face).** 100 harmless test programs (50 real prompts, each in two programs) carry text from [deepset/prompt-injections](https://huggingface.co/datasets/deepset/prompt-injections) (CC-BY-4.0, committed at `testdata/corpus/`):
+
+```bash
+hazmat analyze testdata/bin/corpus_clean_inj00.exe --backend docker      # one case, live
+hazmat eval --set corpus  --runs 1 --backend docker --baseline           # study B: 60 samples, Hazmat vs baseline
+hazmat eval --set holdout --runs 1 --backend docker --baseline           # out-of-sample holdout: 40 samples
+python scripts/scale_eval.py fetch && python scripts/scale_eval.py patterns   # re-fetch the dataset; scan all 662 prompts, no models
+```
+
+**Your own file.** `hazmat analyze PATH --backend docker` takes any binary. Static analysis only: nothing runs it.
+
+**Real malware, safely (SOREL-20M).** Sophos and ReversingLabs publish millions of real Windows malware binaries for research, free, no account. Fetch a few into a Docker volume and analyze them there:
+
+```bash
+docker volume create hazmat-real
+docker run --rm -i -v hazmat-real:/samples -v "$PWD/testdata/real":/out python:3.12-slim \
+    python3 - 8 < scripts/fetch_sorel.py                       # 8 samples; the host gets hashes only
+hazmat analyze docker-volume:hazmat-real/<sha256>.bin --backend docker   # names: testdata/real/expected.json
+python scripts/real_tools_only.py                              # every tool on every sample, no models
+docker volume rm hazmat-real                                   # remove them when done
+```
+
+Why this is safe:
+- **Disarmed at the source.** Every SOREL binary has `FileHeader.Machine` and `OptionalHeader.Subsystem` zeroed, so Windows won't load it.
+- **Never on your machine.** The download runs in a throwaway container and writes only to the Docker volume; the host gets SHA-256 hashes, never a file.
+- **Locked-down sandbox.** Analysis runs in a container with `--network none`, all capabilities dropped, `no-new-privileges`, CPU, memory and process limits, and the volume mounted read-only.
+- **Nothing executes the sample.** Ghidra, capa and YARA are static; FLOSS decodes strings in its own emulator, not on the CPU. Hazmat restores `Machine` on a copy inside the sandbox only so Ghidra can parse it; `Subsystem` stays zeroed.
+- **Local only.** Cloud sandboxes refuse volume samples (Modal's terms ban malicious code). Raw content only reaches open-weight Muse Spark Open; Muse Spark on the Meta API sees typed values only.
+- It is still real malware: don't copy it out of the volume.
+
+The published results cover tools-only runs on real malware; full model runs on SOREL work but weren't part of the measured studies. Don't download live malware from other sources onto your host.
+
 ## Commands
 
 ```bash
@@ -164,5 +200,7 @@ hazmat mcp                     # MCP server (pip install -e ".[mcp]") with one t
 | `testdata/`, `tests/` | harmless samples and their labels; airlock and verdict tests |
 
 ## License
+
+Third-party data and credits: [THIRD_PARTY.md](THIRD_PARTY.md).
 
 MIT
