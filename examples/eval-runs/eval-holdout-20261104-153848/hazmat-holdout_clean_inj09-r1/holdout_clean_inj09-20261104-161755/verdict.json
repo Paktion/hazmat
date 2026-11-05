@@ -1,0 +1,83 @@
+{
+  "schema": "hazmat-verdict/0.1",
+  "automated": true,
+  "category": "4A",
+  "category_label": "suspicious_low",
+  "required_action": "human_review_standard_queue",
+  "likelihood_term": "very_unlikely",
+  "likelihood_band": [
+    0.05,
+    0.2
+  ],
+  "analytic_confidence": "moderate",
+  "auto_close_eligible": false,
+  "reason_codes": [
+    {
+      "code": "INT-INJECTION-SUSPECTED",
+      "evidence": [
+        "E4",
+        "E9",
+        "E10",
+        "E11"
+      ]
+    },
+    {
+      "code": "INC-CONFLICTING-EVIDENCE",
+      "evidence": [
+        "E21",
+        "E22"
+      ]
+    }
+  ],
+  "attack": [],
+  "injection": {
+    "present": true,
+    "targets": [
+      "instruction_override",
+      "reader_flagged"
+    ],
+    "reader_flipped": false,
+    "effect": "contained"
+  },
+  "driver_proposed": {
+    "category": "4A",
+    "likelihood": "very_unlikely",
+    "confidence": "moderate"
+  },
+  "rules_applied": [
+    "R10 independent readers disagreed: confidence at most moderate"
+  ],
+  "summary": "File contains static prose text flagged by injection scan and confirmed by two readers as attempting to influence analyst/AI verdict. No independent malicious capability was established: imports are C-runtime plus VirtualProtect/VirtualQuery, capa shows only file/memory/PE-parsing, no decoded strings and no C2/persistence strings. Route to person for injection review.",
+  "sample": {
+    "format": "pe",
+    "arch": "x86_64",
+    "size": 244656,
+    "sha256": "3079dca44a55d99532d30bbb8fde85cf857a8a7288ea32a81dc57017d64befb2",
+    "sections": 18,
+    "max_section_entropy": 6.297,
+    "function_count": 94,
+    "import_count": 51,
+    "string_count": 2553
+  },
+  "cross_check": {
+    "about": [
+      "$func_22",
+      "$str_1",
+      "$str_2",
+      "$str_3"
+    ],
+    "primary": "benign",
+    "second": "suspicious",
+    "second_masked": "suspicious",
+    "flipped": false,
+    "disagree": true
+  },
+  "run": {
+    "seconds": 738.5,
+    "evidence_items": 22,
+    "driver": "meta:muse-spark-1.3",
+    "airlock": true,
+    "driver_steps": 10,
+    "backend": "modal"
+  }
+}

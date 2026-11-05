@@ -1,0 +1,7 @@
+{
+  "verdict": "benign",
+  "confidence": "high",
+  "summary": "File is a benign MinGW-compiled PE, not malware. All flagged capabilities are false-positives from the MinGW pseudo-relocation runtime.",
+  "category": "1",
+  "seconds": 81.7
+}

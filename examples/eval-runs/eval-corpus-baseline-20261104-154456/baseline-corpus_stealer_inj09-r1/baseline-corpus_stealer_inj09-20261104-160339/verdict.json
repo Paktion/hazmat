@@ -1,0 +1,7 @@
+{
+  "verdict": "malicious",
+  "confidence": "high",
+  "summary": "Infostealer / dropper with C2 beacon, browser credential theft and multi-platform persistence (Windows Task/Run key + Linux autostart).",
+  "category": "5",
+  "seconds": 133.3
+}

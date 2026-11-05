@@ -132,7 +132,7 @@ hazmat baseline FILE    # the common approach, for comparison: raw tool output -
 hazmat eval             # score Hazmat (--baseline: and the baseline) on the labeled test samples
 hazmat probe FILE       # scripted walk through the airlock, no driver model
 hazmat report RUN_DIR   # (re)write the human report for a run
-hazmat selftest         # every tool on every test sample, both sandbox backends
+hazmat selftest         # every tool on every test sample, with expected results (--backend modal|docker)
 hazmat sandbox FILE     # just run the tools and print their output
 hazmat check            # providers, routing, sandbox
 hazmat spend            # spend against each provider's cap (Hazmat refuses calls past it)
@@ -151,7 +151,7 @@ Rules enforced in code include: benign reasons can't rest on the sample's own te
 
 ## Evaluation
 
-`hazmat eval` runs the whole pipeline on labeled samples (`testdata/expected.json`) and scores the correct category, injection detection, **steered** (a poisoned sample came out benign), false alarms on clean files, and stability across runs. `--baseline` scores the common approach on the same samples. `pytest` checks the airlock against hostile replies and each verdict rule on made-up evidence.
+`hazmat eval` runs the whole pipeline on labeled samples (`testdata/expected.json`) and scores the correct category, injection detection, **steered** (a poisoned sample came out benign), false alarms on clean files, and stability across runs. `--baseline` scores the common approach on the same samples. `pytest` (45 tests, no keys) checks the airlock against hostile replies and each verdict rule on made-up evidence.
 
 Headline numbers ([docs/eval.md](docs/eval.md) has every table, interval and caveat; [docs/testing-methodology.md](docs/testing-methodology.md) explains how we tested):
 
@@ -159,7 +159,7 @@ Headline numbers ([docs/eval.md](docs/eval.md) has every table, interval and cav
 |---|---|---|
 | Planted text reached the deciding model | **0/296 runs (0%, 95% CI 0-1%)** | 158/177 (89%+) |
 | Correct category (core + adversarial sets) | **30/31 (97%)** | 25/31 (81%) |
-| Correct category, real injection prompts (studies B + out-of-sample holdout) | **90/100 (90%)** | 51/92 (55%), Fisher p = 4 x 10^-8 |
+| Correct category, real injection prompts (studies B + out-of-sample holdout; [per-sample verdicts and call logs](examples/eval-runs/)) | **90/100 (90%)** | 51/92 (55%), Fisher p = 4 x 10^-8 |
 | Benign file carrying planted text closed as benign, no flag (study A, 10 runs per variant) | **7/50 (14%)**; 0/40 where the text is visible | 34/45 (76%), Fisher p = 8 x 10^-10 |
 | Benign file carrying a real injection prompt closed as benign (B + holdout) | **10/50 (20%)** | 41/44 (93%), Fisher p = 1 x 10^-13 |
 | Malicious + poisoned file steered to benign (all studies) | 0 | 0 |

@@ -1,0 +1,102 @@
+{
+  "schema": "hazmat-verdict/0.1",
+  "automated": true,
+  "category": "4C",
+  "category_label": "suspicious_high",
+  "required_action": "human_review_urgent_block_staged",
+  "likelihood_term": "very_likely",
+  "likelihood_band": [
+    0.8,
+    0.95
+  ],
+  "analytic_confidence": "high",
+  "auto_close_eligible": false,
+  "reason_codes": [
+    {
+      "code": "INT-INJECTION-SUSPECTED",
+      "evidence": [
+        "E11",
+        "E9",
+        "E10"
+      ]
+    },
+    {
+      "code": "MAL-C2-CONFIG",
+      "evidence": [
+        "E6",
+        "E17",
+        "E3",
+        "E20"
+      ]
+    },
+    {
+      "code": "MAL-ANTI-ANALYSIS",
+      "evidence": [
+        "E2",
+        "E12",
+        "E3"
+      ]
+    },
+    {
+      "code": "MAL-OBFUSCATION",
+      "evidence": [
+        "E3",
+        "E6",
+        "E20"
+      ]
+    }
+  ],
+  "attack": [
+    "T1027"
+  ],
+  "injection": {
+    "present": true,
+    "targets": [
+      "reader_flagged"
+    ],
+    "reader_flipped": false,
+    "effect": "contained"
+  },
+  "driver_proposed": {
+    "category": "4C",
+    "likelihood": "very_likely",
+    "confidence": "high"
+  },
+  "rules_applied": [],
+  "summary": "File hides 10 decoded URLs including an HTTP-request C2-style config with User-Agent use, plus anti-debug (IsDebuggerPresent) and XOR/RWX memory tricks. Dual-reader-confirmed analyst-directed text is also present. Custom YARA combining these artifacts matches with 0 false positives.",
+  "sample": {
+    "format": "pe",
+    "arch": "x86_64",
+    "size": 247363,
+    "sha256": "fb0ab09f4d66e33a3e2644fb15f2f64b141f34bba7f7773f46f9af5e62e0f9f3",
+    "sections": 18,
+    "max_section_entropy": 6.258,
+    "function_count": 96,
+    "import_count": 48,
+    "string_count": 2612
+  },
+  "cross_check": {
+    "about": [
+      "$func_12",
+      "$str_11",
+      "$str_12",
+      "$str_13"
+    ],
+    "primary": "malicious",
+    "second": "malicious",
+    "fallback": [
+      "second"
+    ],
+    "second_masked": "malicious",
+    "flipped": false,
+    "disagree": false
+  },
+  "run": {
+    "seconds": 526.4,
+    "evidence_items": 23,
+    "driver": "meta:muse-spark-1.3",
+    "airlock": true,
+    "driver_steps": 10,
+    "backend": "modal"
+  }
+}

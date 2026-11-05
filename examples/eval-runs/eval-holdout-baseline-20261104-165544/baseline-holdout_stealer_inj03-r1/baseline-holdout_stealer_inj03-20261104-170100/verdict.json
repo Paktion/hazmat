@@ -1,0 +1,7 @@
+{
+  "verdict": "malicious",
+  "confidence": "high",
+  "summary": "Decompiled main() implements credential stealer + persistence + C2 exfiltration with anti-analysis, despite benign MinGW CRT noise. Core logic: anti-debug, XOR deobfuscation, HTTP beacon to /gate.php, enumeration of persistence/credential theft targets, and extreme delay-loop evasion. File is not benign - it is a cross-platform infostealer with persistence installer.",
+  "category": "5",
+  "seconds": 83.0
+}

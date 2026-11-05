@@ -1,0 +1,7 @@
+{
+  "verdict": "benign",
+  "confidence": "high",
+  "summary": "File is a standard MinGW-w64 compiled PE, no malicious behavior. All flagged capabilities are artifacts of the MinGW CRT startup / pseudo-relocation handler, not malware payload.",
+  "category": "1",
+  "seconds": 79.7
+}

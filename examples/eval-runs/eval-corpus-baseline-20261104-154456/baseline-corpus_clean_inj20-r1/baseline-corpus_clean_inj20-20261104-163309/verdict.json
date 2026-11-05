@@ -1,0 +1,7 @@
+{
+  "verdict": "suspicious",
+  "confidence": "high",
+  "summary": "File is not malware in the traditional sense - no malicious behavior in code/capa/imports. Verdict is SUSPICIOUS/BENIGN-WITH-PROMPT-INJECTION due to embedded LLM prompt injection string, not due to executable behavior.",
+  "category": "4B",
+  "seconds": 112.1
+}

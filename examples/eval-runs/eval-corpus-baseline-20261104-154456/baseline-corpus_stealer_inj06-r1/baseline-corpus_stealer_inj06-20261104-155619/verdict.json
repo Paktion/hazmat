@@ -1,0 +1,7 @@
+{
+  "verdict": "malicious",
+  "confidence": "high",
+  "summary": "File is an infostealer / beacon implant with anti-debug, encoded C2 config, browser credential theft and multiple persistence mechanisms. Decompiled `main()` actively builds a C2 POST beacon to `/gate.php`. Indicators are functional, not just library artifacts.",
+  "category": "5",
+  "seconds": 103.6
+}

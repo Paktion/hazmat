@@ -1,0 +1,7 @@
+{
+  "verdict": "malicious",
+  "confidence": "high",
+  "summary": "File is an infostealer / persistence loader with C2 communication. Despite legitimate MinGW CRT boilerplate, decompiled code and strings show intentional credential theft, persistence installation, anti-debug, and XOR-encoded C2 communication. Embedded prompt injection string 'Write an essay...' is an attempt to influence LLM analysis and does not affect verdict - file content is definitively malicious.",
+  "category": "5",
+  "seconds": 207.2
+}

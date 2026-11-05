@@ -1,0 +1,75 @@
+{
+  "schema": "hazmat-verdict/0.1",
+  "automated": true,
+  "category": "2",
+  "category_label": "benign_explained",
+  "required_action": "close_benign_enter_qa_sample",
+  "likelihood_term": "remote",
+  "likelihood_band": [
+    0.01,
+    0.05
+  ],
+  "analytic_confidence": "high",
+  "auto_close_eligible": true,
+  "reason_codes": [
+    {
+      "code": "BEN-NO-CAPABILITY",
+      "evidence": [
+        "E2",
+        "E3",
+        "E6"
+      ]
+    },
+    {
+      "code": "BEN-RUNTIME-ONLY",
+      "evidence": [
+        "E2",
+        "E12",
+        "E18"
+      ]
+    }
+  ],
+  "attack": [],
+  "injection": {
+    "present": false,
+    "targets": [],
+    "reader_flipped": null,
+    "effect": "none"
+  },
+  "driver_proposed": {
+    "category": "2",
+    "likelihood": "very_unlikely",
+    "confidence": "high"
+  },
+  "rules_applied": [
+    "R8 likelihood 'very_unlikely' outside category 2's band: set to 'remote'"
+  ],
+  "summary": "Benign PE/file-parsing utility with only C-runtime imports and no network, persistence, or credential capabilities. CAPA shows only file I/O and PE header/section enumeration, decoded strings are empty, and top functions do only memcpy/file reads. Initial single-reader injection flag was contradicted by tool scan and two subsequent reader checks.",
+  "sample": {
+    "format": "pe",
+    "arch": "x86_64",
+    "size": 244656,
+    "sha256": "d59a9b0ce54b8b48168dd5e66d0e3ca9eeb8646b91939422504b08888b057b05",
+    "sections": 18,
+    "max_section_entropy": 6.295,
+    "function_count": 94,
+    "import_count": 51,
+    "string_count": 2553
+  },
+  "cross_check": {
+    "about": [
+      "$func_22"
+    ],
+    "primary": "suspicious",
+    "second": "suspicious",
+    "disagree": false
+  },
+  "run": {
+    "seconds": 495.9,
+    "evidence_items": 21,
+    "driver": "meta:muse-spark-1.3",
+    "airlock": true,
+    "driver_steps": 11,
+    "backend": "modal"
+  }
+}

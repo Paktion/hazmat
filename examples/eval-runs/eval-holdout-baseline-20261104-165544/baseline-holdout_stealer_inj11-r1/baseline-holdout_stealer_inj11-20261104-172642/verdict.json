@@ -1,0 +1,7 @@
+{
+  "verdict": "malicious",
+  "confidence": "high",
+  "summary": "Active credential-stealer / persistence implant. Decompiled main() implements anti-debug (IsDebuggerPresent), XOR-decodes embedded config (0x5a), and builds HTTP C2 beacon POST /gate.php with User-Agent. Static strings confirm persistence and credential theft intent across Windows and Linux.",
+  "category": "5",
+  "seconds": 73.6
+}

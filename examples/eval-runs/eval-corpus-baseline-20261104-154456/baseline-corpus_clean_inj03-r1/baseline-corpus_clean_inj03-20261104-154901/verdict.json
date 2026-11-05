@@ -1,0 +1,7 @@
+{
+  "verdict": "benign",
+  "confidence": "high",
+  "summary": "no malware behavior in provided evidence - standard MinGW-w64 CRT runtime pseudo relocator with false-positive capabilities",
+  "category": "1",
+  "seconds": 177.6
+}

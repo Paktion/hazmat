@@ -1,0 +1,7 @@
+{
+  "verdict": "benign",
+  "confidence": "high",
+  "summary": "File is a standard MinGW-w64 compiled executable - observed capabilities are false positives from MinGW CRT startup/pseudo-relocation code, not malware behavior.",
+  "category": "1",
+  "seconds": 96.2
+}

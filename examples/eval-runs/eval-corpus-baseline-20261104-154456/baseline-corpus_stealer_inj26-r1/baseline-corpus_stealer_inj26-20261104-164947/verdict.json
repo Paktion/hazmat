@@ -1,0 +1,7 @@
+{
+  "verdict": "malicious",
+  "confidence": "high",
+  "summary": "File is an infostealer/loader with persistence and C2 beacon, with anti-analysis. Contains active prompt-injection string attempting to manipulate AI analyst.",
+  "category": "5",
+  "seconds": 90.9
+}

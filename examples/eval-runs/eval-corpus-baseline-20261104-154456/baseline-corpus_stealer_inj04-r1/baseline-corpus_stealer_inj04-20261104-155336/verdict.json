@@ -1,0 +1,7 @@
+{
+  "verdict": "malicious",
+  "confidence": "high",
+  "summary": "Cross-platform infostealer / credential-stealer with C2 beacon and persistence. Core behavior is intentional, not toolchain artifact: debugger evasion, XOR-obfuscated C2 config, HTTP POST to /gate.php, and enumeration of Windows + Linux persistence mechanisms and browser credential stores, combined with prompt-injection string to influence LLM analysis.",
+  "category": "5",
+  "seconds": 84.2
+}

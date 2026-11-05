@@ -1,0 +1,7 @@
+{
+  "verdict": "benign",
+  "confidence": "high",
+  "summary": "File is a standard MinGW GCC 13 win32 x64 CRT startup binary (-O2 -fno-PIE -g) . All flagged behaviors are false-positives from `mingw-w64-crt/crt/pseudo-reloc.c` runtime pseudo-relocator, not malware logic.",
+  "category": "1",
+  "seconds": 69.2
+}

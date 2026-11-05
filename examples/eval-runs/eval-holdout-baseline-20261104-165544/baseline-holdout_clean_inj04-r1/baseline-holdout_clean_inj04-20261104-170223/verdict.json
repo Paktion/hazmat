@@ -1,0 +1,7 @@
+{
+  "verdict": "benign",
+  "confidence": "high",
+  "summary": "Standard MinGW-w64 compiled PE, no malicious behavior. CAPA / import alerts are false positives from MinGW CRT pseudo-relocation startup code.",
+  "category": "1",
+  "seconds": 82.3
+}

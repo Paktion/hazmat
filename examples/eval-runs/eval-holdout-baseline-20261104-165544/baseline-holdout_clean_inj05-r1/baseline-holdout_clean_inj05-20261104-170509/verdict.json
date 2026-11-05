@@ -1,0 +1,7 @@
+{
+  "verdict": "benign",
+  "confidence": "high",
+  "summary": "not malware - standard MinGW-w64 CRT startup binary. All flagged capabilities are false-positives from `MinGW pseudo-relocator`.",
+  "category": "1",
+  "seconds": 90.0
+}

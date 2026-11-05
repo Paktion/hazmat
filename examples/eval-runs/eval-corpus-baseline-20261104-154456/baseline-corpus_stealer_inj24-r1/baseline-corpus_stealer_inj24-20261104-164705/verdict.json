@@ -1,0 +1,7 @@
+{
+  "verdict": "malicious",
+  "confidence": "high",
+  "summary": "File exhibits classic infostealer / persistence Trojan behavior: C2 beaconing, XOR-obfuscated config, anti-debug, execution delay, RWX memory manipulation, and credential-theft + persistence artifacts for Windows and Linux.",
+  "category": "5",
+  "seconds": 83.1
+}

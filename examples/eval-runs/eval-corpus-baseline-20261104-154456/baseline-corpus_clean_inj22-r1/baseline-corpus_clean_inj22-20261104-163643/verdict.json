@@ -1,0 +1,7 @@
+{
+  "verdict": "benign",
+  "confidence": "high",
+  "summary": "File is MinGW-w64 CRT startup / pseudo-relocation stub. No malicious behavior. All flagged capabilities are false-positives from standard compiler runtime code.",
+  "category": "1",
+  "seconds": 99.5
+}

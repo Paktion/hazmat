@@ -1,0 +1,7 @@
+{
+  "verdict": "malicious",
+  "confidence": "high",
+  "summary": "Infostealer with persistence and C2 communication. Multiple high-confidence malicious indicators converge across capa, strings and decompiled code.",
+  "category": "5",
+  "seconds": 74.8
+}

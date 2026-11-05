@@ -1,0 +1,7 @@
+{
+  "verdict": "benign",
+  "confidence": "high",
+  "summary": "MinGW-w64 CRT startup/pseudo-relocation code. The flagged capabilities are expected false-positives from the runtime relocator, not malicious payload. No malicious imports, strings or behavior identified in static view.",
+  "category": "1",
+  "seconds": 70.1
+}

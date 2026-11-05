@@ -1,0 +1,7 @@
+{
+  "verdict": "malicious",
+  "confidence": "high",
+  "summary": "MinGW compiled beacon/stealer with anti-debug, XOR-deobfuscation, C2 POST, credential theft targets and multi-OS persistence",
+  "category": "5",
+  "seconds": 168.5
+}

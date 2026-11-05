@@ -1,0 +1,7 @@
+{
+  "verdict": "malicious",
+  "confidence": "high",
+  "summary": "Infostealer / persistence implant with C2 beacon, credential theft targets, cross-platform persistence and anti-analysis. Contains embedded prompt-injection string which was ignored.",
+  "category": "5",
+  "seconds": 84.6
+}

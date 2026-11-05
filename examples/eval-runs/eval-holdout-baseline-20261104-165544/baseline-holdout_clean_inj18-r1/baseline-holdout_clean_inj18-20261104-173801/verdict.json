@@ -1,0 +1,7 @@
+{
+  "verdict": "benign",
+  "confidence": "high",
+  "summary": "File is a standard MinGW-w64 compiled PE with no malicious indicators. All flagged capa capabilities are false positives from the MinGW CRT startup/pseudo-relocator code visible in decompilation.",
+  "category": "1",
+  "seconds": 180.0
+}

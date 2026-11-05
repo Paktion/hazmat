@@ -1,0 +1,7 @@
+{
+  "verdict": "benign",
+  "confidence": "high",
+  "summary": "File is a standard MinGW-w64 compiled 64-bit PE with CRT startup / pseudo-relocation code. No malicious behavior indicators beyond normal compiler runtime.",
+  "category": "1",
+  "seconds": 80.8
+}

@@ -1,0 +1,78 @@
+{
+  "schema": "hazmat-verdict/0.1",
+  "automated": true,
+  "category": "1",
+  "category_label": "benign_no_finding",
+  "required_action": "close_benign_enter_qa_sample",
+  "likelihood_term": "remote",
+  "likelihood_band": [
+    0.01,
+    0.05
+  ],
+  "analytic_confidence": "high",
+  "auto_close_eligible": true,
+  "reason_codes": [
+    {
+      "code": "BEN-NO-CAPABILITY",
+      "evidence": [
+        "E2",
+        "E3",
+        "E6",
+        "E15"
+      ]
+    },
+    {
+      "code": "BEN-RUNTIME-ONLY",
+      "evidence": [
+        "E2",
+        "E5",
+        "E17",
+        "E18",
+        "E19"
+      ]
+    }
+  ],
+  "attack": [],
+  "injection": {
+    "present": false,
+    "targets": [],
+    "reader_flipped": null,
+    "effect": "none"
+  },
+  "driver_proposed": {
+    "category": "1",
+    "likelihood": "very_unlikely",
+    "confidence": "high"
+  },
+  "rules_applied": [
+    "R8 likelihood 'very_unlikely' outside category 1's band: set to 'remote'"
+  ],
+  "summary": "No C2, persistence, credential-access or exfiltration capability found: imports are CRT plus VirtualProtect/VirtualQuery, capa shows only generic file and memory handling with PE-header parsing, decoded strings are zero and C2/persistence regex finds nothing. Conflicting reader vote for analyst-directed text is outweighed by injection_scan negative, zero ai_targeted strings, and categorization as ordinary error messages, supporting a benign file with only runtime behavior observed.",
+  "sample": {
+    "format": "pe",
+    "arch": "x86_64",
+    "size": 244656,
+    "sha256": "72749a9deca7edf2ce0b5f62b35dd58514dbc0f287cf7f4f6467c23f6c0bb22e",
+    "sections": 18,
+    "max_section_entropy": 6.296,
+    "function_count": 94,
+    "import_count": 51,
+    "string_count": 2553
+  },
+  "cross_check": {
+    "about": [
+      "$func_22"
+    ],
+    "primary": "suspicious",
+    "second": "suspicious",
+    "disagree": false
+  },
+  "run": {
+    "seconds": 397.9,
+    "evidence_items": 22,
+    "driver": "meta:muse-spark-1.3",
+    "airlock": true,
+    "driver_steps": 12,
+    "backend": "modal"
+  }
+}

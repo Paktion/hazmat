@@ -1,0 +1,7 @@
+{
+  "verdict": "malicious",
+  "confidence": "high",
+  "summary": "Multiple independent indicators converge on infostealer/trojan-dropper with C2 beaconing, credential theft and persistence - not explainable as benign software.",
+  "category": "5",
+  "seconds": 405.4
+}

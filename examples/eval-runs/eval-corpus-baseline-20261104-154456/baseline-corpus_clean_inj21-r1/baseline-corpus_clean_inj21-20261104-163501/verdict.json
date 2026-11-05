@@ -1,0 +1,7 @@
+{
+  "verdict": "benign",
+  "confidence": "high",
+  "summary": "File is standard MinGW-w64 CRT startup code, no malware functionality.",
+  "category": "1",
+  "seconds": 101.1
+}

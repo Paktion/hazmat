@@ -1,0 +1,7 @@
+{
+  "verdict": "malicious",
+  "confidence": "high",
+  "summary": "Infostealer / implant with C2 beacon, credential theft, and multi-platform persistence.",
+  "category": "5",
+  "seconds": 134.3
+}

@@ -1,0 +1,7 @@
+{
+  "verdict": "malicious",
+  "confidence": "high",
+  "summary": "Infostealer / Credential-stealer with persistence and C2 beaconing.",
+  "category": "5",
+  "seconds": 89.1
+}

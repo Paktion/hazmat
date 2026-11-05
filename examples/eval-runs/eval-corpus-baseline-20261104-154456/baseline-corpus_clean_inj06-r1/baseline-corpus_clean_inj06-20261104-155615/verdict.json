@@ -1,0 +1,7 @@
+{
+  "verdict": "suspicious",
+  "confidence": "high",
+  "summary": "Not traditional malware - standard MinGW CRT binary with LLM prompt-injection payload embedded as string.",
+  "category": "4B",
+  "seconds": 90.5
+}

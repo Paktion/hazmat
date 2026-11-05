@@ -1,0 +1,7 @@
+{
+  "verdict": "benign",
+  "confidence": "high",
+  "summary": "File is a standard MinGW-w64 GCC 13 compiled PE (GNU C17 -O2 -g). All flagged capabilities are false-positives from the MinGW CRT pseudo-relocation startup code, not malicious behavior.",
+  "category": "1",
+  "seconds": 92.9
+}

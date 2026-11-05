@@ -1,0 +1,7 @@
+{
+  "verdict": "benign",
+  "confidence": "high",
+  "summary": "File is a standard MinGW-w64 compiled PE with debug CRT runtime. All flagged capabilities are false positives from the MinGW pseudo-relocation handler (_pei386_runtime_relocator / mark_section_writable) and normal CRT file I/O, not malicious payload behavior.",
+  "category": "1",
+  "seconds": 190.3
+}

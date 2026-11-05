@@ -1,0 +1,96 @@
+{
+  "schema": "hazmat-verdict/0.1",
+  "automated": true,
+  "category": "5",
+  "category_label": "malicious",
+  "required_action": "block_hash_open_incident_human_confirms",
+  "likelihood_term": "almost_certain",
+  "likelihood_band": [
+    0.95,
+    0.99
+  ],
+  "analytic_confidence": "moderate",
+  "auto_close_eligible": false,
+  "reason_codes": [
+    {
+      "code": "MAL-C2-CONFIG",
+      "evidence": [
+        "E6",
+        "E3",
+        "E20"
+      ]
+    },
+    {
+      "code": "MAL-ANTI-ANALYSIS",
+      "evidence": [
+        "E2",
+        "E3",
+        "E5",
+        "E11"
+      ]
+    },
+    {
+      "code": "MAL-OBFUSCATION",
+      "evidence": [
+        "E3",
+        "E6",
+        "E11",
+        "E13"
+      ]
+    },
+    {
+      "code": "INC-CONFLICTING-EVIDENCE",
+      "evidence": [
+        "E21",
+        "E22"
+      ]
+    }
+  ],
+  "attack": [
+    "T1027",
+    "T1055",
+    "T1497"
+  ],
+  "injection": {
+    "present": false,
+    "targets": [],
+    "reader_flipped": null,
+    "effect": "none"
+  },
+  "driver_proposed": {
+    "category": "5",
+    "likelihood": "almost_certain",
+    "confidence": "high"
+  },
+  "rules_applied": [
+    "R10 independent readers disagreed: confidence at most moderate"
+  ],
+  "summary": "PE hides 10 decoded URLs including an HTTP request and uses User-Agent string, backed by YARA match with 0 FP. Top function performs IsDebuggerPresent checks with XOR/loops plus RWX/VirtualProtect and delay execution. Combined hidden C2 config, anti-analysis, and XOR obfuscation support malicious verdict with no benign explanation.",
+  "sample": {
+    "format": "pe",
+    "arch": "x86_64",
+    "size": 247363,
+    "sha256": "aca06d9735db9ba6ab66947d8b51cc446d51a8946a23c40cdb27c95bd48204aa",
+    "sections": 18,
+    "max_section_entropy": 6.256,
+    "function_count": 96,
+    "import_count": 48,
+    "string_count": 2612
+  },
+  "cross_check": {
+    "about": [
+      "$func_12"
+    ],
+    "primary": "benign",
+    "second": "malicious",
+    "disagree": true
+  },
+  "run": {
+    "seconds": 333.5,
+    "evidence_items": 22,
+    "driver": "meta:muse-spark-1.3",
+    "airlock": true,
+    "driver_steps": 11,
+    "backend": "modal"
+  }
+}

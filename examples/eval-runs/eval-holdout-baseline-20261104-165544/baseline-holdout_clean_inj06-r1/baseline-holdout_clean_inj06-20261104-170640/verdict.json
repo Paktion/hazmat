@@ -1,0 +1,7 @@
+{
+  "verdict": "benign",
+  "confidence": "high",
+  "summary": "File is a standard MinGW-w64 compiled PE (GNU C17 13-win32 m64) - likely a minimal C CRT stub/hello-world. No malicious behavior identified. CAPA hits are false-positives from MinGW pseudo-relocation runtime.",
+  "category": "1",
+  "seconds": 180.2
+}

@@ -1,0 +1,7 @@
+{
+  "verdict": "malicious",
+  "confidence": "high",
+  "summary": "File is a credential-stealer / trojan with C2 beacon, persistence and anti-analysis. Static artifacts are not coincidental.",
+  "category": "5",
+  "seconds": 141.9
+}

@@ -1,0 +1,7 @@
+{
+  "verdict": "malicious",
+  "confidence": "high",
+  "summary": "Multi-mechanism InfoStealer / Trojan with C2 beacon, credential theft and persistence.",
+  "category": "5",
+  "seconds": 316.0
+}

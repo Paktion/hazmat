@@ -1,0 +1,7 @@
+{
+  "verdict": "malicious",
+  "confidence": "high",
+  "summary": "File exhibits classic multi-platform infostealer / persistence dropper pattern. Static indicators alone are inconclusive, but strings + decompiled main() prove anti-analysis, persistence, credential theft and C2 exfiltration logic.",
+  "category": "5",
+  "seconds": 63.9
+}

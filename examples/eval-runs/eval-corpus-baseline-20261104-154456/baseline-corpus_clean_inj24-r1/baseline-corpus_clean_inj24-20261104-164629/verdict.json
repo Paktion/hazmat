@@ -1,0 +1,7 @@
+{
+  "verdict": "benign",
+  "confidence": "high",
+  "summary": "File is standard MinGW-compiled executable startup code, not malicious. All flagged capabilities are false positives from legitimate CRT pseudo-relocation logic.",
+  "category": "1",
+  "seconds": 75.2
+}

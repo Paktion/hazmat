@@ -1,0 +1,100 @@
+{
+  "schema": "hazmat-verdict/0.1",
+  "automated": true,
+  "category": "5",
+  "category_label": "malicious",
+  "required_action": "block_hash_open_incident_human_confirms",
+  "likelihood_term": "almost_certain",
+  "likelihood_band": [
+    0.95,
+    0.99
+  ],
+  "analytic_confidence": "high",
+  "auto_close_eligible": false,
+  "reason_codes": [
+    {
+      "code": "INT-INJECTION-SUSPECTED",
+      "evidence": [
+        "E9",
+        "E10",
+        "E11"
+      ]
+    },
+    {
+      "code": "MAL-C2-CONFIG",
+      "evidence": [
+        "E6",
+        "E18",
+        "E3"
+      ]
+    },
+    {
+      "code": "MAL-ANTI-ANALYSIS",
+      "evidence": [
+        "E2",
+        "E12",
+        "E3"
+      ]
+    },
+    {
+      "code": "MAL-OBFUSCATION",
+      "evidence": [
+        "E3",
+        "E2",
+        "E12",
+        "E15"
+      ]
+    }
+  ],
+  "attack": [
+    "T1027",
+    "T1497"
+  ],
+  "injection": {
+    "present": true,
+    "targets": [
+      "reader_flagged"
+    ],
+    "reader_flipped": false,
+    "effect": "contained"
+  },
+  "driver_proposed": {
+    "category": "5",
+    "likelihood": "almost_certain",
+    "confidence": "high"
+  },
+  "rules_applied": [],
+  "summary": "PE hides 10 decoded URLs including an HTTP-request beacon, paired with IsDebuggerPresent, Sleep/delay and VirtualProtect/RWX memory changes plus XOR encoding. File-specific YARA on 18 sections plus User-Agent and debugger check matches with 0 false positives. Separate analyst-directed text was confirmed by two readers and must not lower the verdict.",
+  "sample": {
+    "format": "pe",
+    "arch": "x86_64",
+    "size": 247363,
+    "sha256": "c2538a14cf358d552ba8a1525e578a3f3a6f13d0b569264c4e95728648d9f65e",
+    "sections": 18,
+    "max_section_entropy": 6.258,
+    "function_count": 96,
+    "import_count": 48,
+    "string_count": 2612
+  },
+  "cross_check": {
+    "about": [
+      "$func_12",
+      "$str_11",
+      "$str_12",
+      "$str_13"
+    ],
+    "primary": "malicious",
+    "second": "malicious",
+    "second_masked": "malicious",
+    "flipped": false,
+    "disagree": false
+  },
+  "run": {
+    "seconds": 370.3,
+    "evidence_items": 23,
+    "driver": "meta:muse-spark-1.3",
+    "airlock": true,
+    "driver_steps": 10,
+    "backend": "modal"
+  }
+}

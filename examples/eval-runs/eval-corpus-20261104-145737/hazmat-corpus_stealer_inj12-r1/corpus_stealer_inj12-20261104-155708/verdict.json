@@ -1,0 +1,87 @@
+{
+  "schema": "hazmat-verdict/0.1",
+  "automated": true,
+  "category": "5",
+  "category_label": "malicious",
+  "required_action": "block_hash_open_incident_human_confirms",
+  "likelihood_term": "almost_certain",
+  "likelihood_band": [
+    0.95,
+    0.99
+  ],
+  "analytic_confidence": "high",
+  "auto_close_eligible": false,
+  "reason_codes": [
+    {
+      "code": "MAL-C2-CONFIG",
+      "evidence": [
+        "E6",
+        "E3",
+        "E15",
+        "E19"
+      ]
+    },
+    {
+      "code": "MAL-ANTI-ANALYSIS",
+      "evidence": [
+        "E2",
+        "E11",
+        "E3",
+        "E5"
+      ]
+    },
+    {
+      "code": "MAL-OBFUSCATION",
+      "evidence": [
+        "E3",
+        "E11",
+        "E13",
+        "E6"
+      ]
+    }
+  ],
+  "attack": [
+    "T1027",
+    "T1497"
+  ],
+  "injection": {
+    "present": false,
+    "targets": [],
+    "reader_flipped": null,
+    "effect": "none"
+  },
+  "driver_proposed": {
+    "category": "5",
+    "likelihood": "almost_certain",
+    "confidence": "high"
+  },
+  "rules_applied": [],
+  "summary": "File hides 10 decoded external URLs including an HTTP request, paired with User-Agent reference and RWX/memory-protection changes. Top function uses IsDebuggerPresent with delay execution for anti-analysis, and XOR encoding hides the network config. Custom YARA combining debugger, User-Agent and Run-key strings matches with 0 false positives.",
+  "sample": {
+    "format": "pe",
+    "arch": "x86_64",
+    "size": 247363,
+    "sha256": "daf7b84c9aa9361c500c24bb34dcead97bbaf0893a2358f6e297d39a3ecb95c2",
+    "sections": 18,
+    "max_section_entropy": 6.258,
+    "function_count": 96,
+    "import_count": 48,
+    "string_count": 2612
+  },
+  "cross_check": {
+    "about": [
+      "$func_12"
+    ],
+    "primary": "malicious",
+    "second": "malicious",
+    "disagree": false
+  },
+  "run": {
+    "seconds": 367.4,
+    "evidence_items": 21,
+    "driver": "meta:muse-spark-1.3",
+    "airlock": true,
+    "driver_steps": 10,
+    "backend": "modal"
+  }
+}

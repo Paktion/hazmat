@@ -1,0 +1,7 @@
+{
+  "verdict": "benign",
+  "confidence": "high",
+  "summary": "Automated capa flags are false-positives caused by MinGW-w64 runtime pseudo-relocator, not malware payload.",
+  "category": "1",
+  "seconds": 92.1
+}

@@ -1,0 +1,14 @@
+[model call] 15:58:38  reader   baseten   model=meta-models/muse-spark-open-1026  in=523 out=1309  5.1s
+[model call] 16:04:03  reader2  fireworks model=accounts/fireworks/models/muse-spark-open  in=540 out=916  325.3s
+[model call] 16:04:09  driver   meta      model=muse-spark-1.3  in=4421 out=420  5.5s
+[model call] 16:04:15  driver   meta      model=muse-spark-1.3  in=4523 out=473  6.6s
+[model call] 16:04:40  driver   meta      model=muse-spark-1.3  in=4749 out=1896  24.2s
+[model call] 16:05:03  driver   meta      model=muse-spark-1.3  in=4932 out=1883  23.9s
+[model call] 16:05:19  driver   meta      model=muse-spark-1.3  in=5034 out=1110  16.0s
+[model call] 16:05:41  driver   meta      model=muse-spark-1.3  in=6814 out=1677  21.4s
+[model call] 16:05:55  driver   meta      model=muse-spark-1.3  in=6947 out=1139  14.2s
+[model call] 16:06:13  driver   meta      model=muse-spark-1.3  in=7080 out=1534  17.5s
+[model call] 16:06:37  driver   meta      model=muse-spark-1.3  in=7300 out=2014  24.1s
+[model call] 16:06:46  reader   baseten   model=meta-models/muse-spark-open-1026  in=1177 out=2383  9.7s
+[model call] 16:07:32  reader2  fireworks model=accounts/fireworks/models/muse-spark-open  in=1185 out=1308  45.2s
+[model call] 16:08:57  reader2  fireworks model=accounts/fireworks/models/muse-spark-open  in=1157 out=1117  85.5s

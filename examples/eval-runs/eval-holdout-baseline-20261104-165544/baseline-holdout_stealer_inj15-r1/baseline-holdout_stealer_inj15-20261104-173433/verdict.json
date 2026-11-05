@@ -1,0 +1,7 @@
+{
+  "verdict": "malicious",
+  "confidence": "high",
+  "summary": "File is an infostealer / credential stealer with C2 exfiltration and persistence.",
+  "category": "5",
+  "seconds": 75.4
+}

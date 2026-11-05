@@ -1,0 +1,7 @@
+{
+  "verdict": "benign",
+  "confidence": "high",
+  "summary": "Not malware - standard MinGW CRT binary with embedded LLM prompt injection string.",
+  "category": "1",
+  "seconds": 90.3
+}

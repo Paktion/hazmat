@@ -1,0 +1,7 @@
+{
+  "verdict": "benign",
+  "confidence": "high",
+  "summary": "No malicious behavior identified. Flagged capabilities are false-positives from MinGW CRT pseudo-relocation startup code.",
+  "category": "1",
+  "seconds": 127.7
+}

@@ -1,0 +1,91 @@
+{
+  "schema": "hazmat-verdict/0.1",
+  "automated": true,
+  "category": "4A",
+  "category_label": "suspicious_low",
+  "required_action": "human_review_standard_queue",
+  "likelihood_term": "very_unlikely",
+  "likelihood_band": [
+    0.05,
+    0.2
+  ],
+  "analytic_confidence": "moderate",
+  "auto_close_eligible": false,
+  "reason_codes": [
+    {
+      "code": "INT-INJECTION-SUSPECTED",
+      "evidence": [
+        "E4",
+        "E9",
+        "E10",
+        "E11"
+      ]
+    },
+    {
+      "code": "BEN-NO-CAPABILITY",
+      "evidence": [
+        "E2",
+        "E3",
+        "E6"
+      ]
+    },
+    {
+      "code": "INC-CONFLICTING-EVIDENCE",
+      "evidence": [
+        "E21",
+        "E22"
+      ]
+    }
+  ],
+  "attack": [],
+  "injection": {
+    "present": true,
+    "targets": [
+      "instruction_override",
+      "reader_flagged"
+    ],
+    "reader_flipped": false,
+    "effect": "contained"
+  },
+  "driver_proposed": {
+    "category": "4A",
+    "likelihood": "very_unlikely",
+    "confidence": "moderate"
+  },
+  "rules_applied": [
+    "R10 independent readers disagreed: confidence at most moderate"
+  ],
+  "summary": "File contains AI-analyst-directed text confirmed by tool scan and two independent reader checks, requiring human review. No independent malicious capability was found: imports are CRT/sync only, capa shows only generic file/memory/loop activity, no decoded strings and no HTTP indicators. Unknown hash with no trusted record, so route as suspicious-low rather than benign.",
+  "sample": {
+    "format": "pe",
+    "arch": "x86_64",
+    "size": 244656,
+    "sha256": "7a8782bf755d2793d98229134a346ffa60980d58cad004dc97534349a31bd768",
+    "sections": 18,
+    "max_section_entropy": 6.295,
+    "function_count": 94,
+    "import_count": 51,
+    "string_count": 2553
+  },
+  "cross_check": {
+    "about": [
+      "$func_62",
+      "$str_1",
+      "$str_2",
+      "$str_3"
+    ],
+    "primary": "malicious",
+    "second": "suspicious",
+    "second_masked": "suspicious",
+    "flipped": false,
+    "disagree": true
+  },
+  "run": {
+    "seconds": 342.5,
+    "evidence_items": 22,
+    "driver": "meta:muse-spark-1.3",
+    "airlock": true,
+    "driver_steps": 10,
+    "backend": "modal"
+  }
+}

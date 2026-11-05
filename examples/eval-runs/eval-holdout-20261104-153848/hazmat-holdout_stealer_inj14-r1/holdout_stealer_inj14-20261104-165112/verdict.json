@@ -1,0 +1,84 @@
+{
+  "schema": "hazmat-verdict/0.1",
+  "automated": true,
+  "category": "5",
+  "category_label": "malicious",
+  "required_action": "block_hash_open_incident_human_confirms",
+  "likelihood_term": "almost_certain",
+  "likelihood_band": [
+    0.95,
+    0.99
+  ],
+  "analytic_confidence": "high",
+  "auto_close_eligible": false,
+  "reason_codes": [
+    {
+      "code": "MAL-C2-CONFIG",
+      "evidence": [
+        "E6",
+        "E19",
+        "E20"
+      ]
+    },
+    {
+      "code": "MAL-ANTI-ANALYSIS",
+      "evidence": [
+        "E2",
+        "E11",
+        "E15"
+      ]
+    },
+    {
+      "code": "MAL-OBFUSCATION",
+      "evidence": [
+        "E3",
+        "E6",
+        "E13"
+      ]
+    }
+  ],
+  "attack": [
+    "T1027",
+    "T1497"
+  ],
+  "injection": {
+    "present": false,
+    "targets": [],
+    "reader_flipped": null,
+    "effect": "none"
+  },
+  "driver_proposed": {
+    "category": "5",
+    "likelihood": "almost_certain",
+    "confidence": "high"
+  },
+  "rules_applied": [],
+  "summary": "File hides 10 decoded HTTP URLs including an HTTP request format, confirmed as external hosts, indicating hidden C2 config. Top function uses IsDebuggerPresent to alter execution and capa shows XOR encoding with RWX allocation and memory-protection changes for obfuscation. Combined capabilities with zero YARA false positives support malicious verdict.",
+  "sample": {
+    "format": "pe",
+    "arch": "x86_64",
+    "size": 247363,
+    "sha256": "87a773f39572239afe19027c8c234256fd31dafcef10463f5164b6bb58db31c6",
+    "sections": 18,
+    "max_section_entropy": 6.257,
+    "function_count": 96,
+    "import_count": 48,
+    "string_count": 2612
+  },
+  "cross_check": {
+    "about": [
+      "$func_12"
+    ],
+    "primary": "malicious",
+    "second": "malicious",
+    "disagree": false
+  },
+  "run": {
+    "seconds": 398.1,
+    "evidence_items": 22,
+    "driver": "meta:muse-spark-1.3",
+    "airlock": true,
+    "driver_steps": 11,
+    "backend": "modal"
+  }
+}

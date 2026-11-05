@@ -1,0 +1,7 @@
+{
+  "verdict": "malicious",
+  "confidence": "high",
+  "summary": "Binary is a staged infostealer / credential stealer with C2 beaconing and persistence, using obfuscation, anti-debug and anti-forensics to hide intent. Static capa alerts are largely false-positives from MinGW pseudo-relocator, but decompiled logic + strings confirm malicious behavior beyond benign thresholds.",
+  "category": "5",
+  "seconds": 204.3
+}

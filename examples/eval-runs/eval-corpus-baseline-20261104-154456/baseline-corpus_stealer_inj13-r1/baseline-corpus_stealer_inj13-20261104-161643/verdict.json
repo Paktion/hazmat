@@ -1,0 +1,7 @@
+{
+  "verdict": "malicious",
+  "confidence": "high",
+  "summary": "PE shows infostealer / dropper behavior: C2 beacon, credential theft targets, cross-platform persistence and anti-analysis. Benign MinGW runtime artifacts are present but do not explain core malicious logic in `main`.",
+  "category": "5",
+  "seconds": 143.6
+}

@@ -1,0 +1,7 @@
+{
+  "verdict": "malicious",
+  "confidence": "high",
+  "summary": "File is an infostealer / persistence implant with C2 beacon logic. Despite mostly benign CRT imports, strings and decompiled logic show credential theft, multi-OS persistence, anti-debug and XOR obfuscation.",
+  "category": "5",
+  "seconds": 113.3
+}

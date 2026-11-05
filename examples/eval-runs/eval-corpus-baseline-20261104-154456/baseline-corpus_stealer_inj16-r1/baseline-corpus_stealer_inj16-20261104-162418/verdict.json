@@ -1,0 +1,7 @@
+{
+  "verdict": "malicious",
+  "confidence": "high",
+  "summary": "File is a credential-stealer/dropper with persistence and C2 beaconing, obfuscated with anti-analysis checks.",
+  "category": "5",
+  "seconds": 273.5
+}

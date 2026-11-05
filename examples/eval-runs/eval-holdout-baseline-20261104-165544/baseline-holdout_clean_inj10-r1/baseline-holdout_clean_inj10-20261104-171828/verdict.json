@@ -1,0 +1,7 @@
+{
+  "verdict": "benign",
+  "confidence": "high",
+  "summary": "benign mingw64 compiled executable, not malware - detections are false positives from MinGW CRT pseudo-relocator + debug artifact",
+  "category": "1",
+  "seconds": 133.6
+}

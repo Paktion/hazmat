@@ -1,0 +1,72 @@
+{
+  "schema": "hazmat-verdict/0.1",
+  "automated": true,
+  "category": "4A",
+  "category_label": "suspicious_low",
+  "required_action": "human_review_standard_queue",
+  "likelihood_term": "very_unlikely",
+  "likelihood_band": [
+    0.05,
+    0.2
+  ],
+  "analytic_confidence": "moderate",
+  "auto_close_eligible": false,
+  "reason_codes": [
+    {
+      "code": "INT-INJECTION-SUSPECTED",
+      "evidence": [
+        "E9",
+        "E10",
+        "E11"
+      ]
+    }
+  ],
+  "attack": [],
+  "injection": {
+    "present": true,
+    "targets": [
+      "reader_flagged"
+    ],
+    "reader_flipped": false,
+    "effect": "contained"
+  },
+  "driver_proposed": {
+    "category": "4A",
+    "likelihood": "very_unlikely",
+    "confidence": "moderate"
+  },
+  "rules_applied": [],
+  "summary": "PE file shows only generic CRT, file and memory-protection capabilities with no network, credential or persistence indicators. Two independent reader checks flag 4 embedded prose strings as attempting to direct analyst/AI verdict, confirmed by follow-up scan. No malice capability established, but planted influence text requires human review.",
+  "sample": {
+    "format": "pe",
+    "arch": "x86_64",
+    "size": 244656,
+    "sha256": "873d793a88cdadf61b9984fd0c5893341cd1e279cefc9eea1a94fe01a0a21217",
+    "sections": 18,
+    "max_section_entropy": 6.297,
+    "function_count": 94,
+    "import_count": 51,
+    "string_count": 2553
+  },
+  "cross_check": {
+    "about": [
+      "$func_22",
+      "$str_1",
+      "$str_2",
+      "$str_3"
+    ],
+    "primary": "suspicious",
+    "second": "suspicious",
+    "second_masked": "suspicious",
+    "flipped": false,
+    "disagree": false
+  },
+  "run": {
+    "seconds": 447.5,
+    "evidence_items": 22,
+    "driver": "meta:muse-spark-1.3",
+    "airlock": true,
+    "driver_steps": 10,
+    "backend": "modal"
+  }
+}

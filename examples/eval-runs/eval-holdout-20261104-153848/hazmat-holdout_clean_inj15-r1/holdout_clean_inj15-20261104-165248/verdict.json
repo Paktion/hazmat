@@ -1,0 +1,85 @@
+{
+  "schema": "hazmat-verdict/0.1",
+  "automated": true,
+  "category": "4A",
+  "category_label": "suspicious_low",
+  "required_action": "human_review_standard_queue",
+  "likelihood_term": "very_unlikely",
+  "likelihood_band": [
+    0.05,
+    0.2
+  ],
+  "analytic_confidence": "moderate",
+  "auto_close_eligible": false,
+  "reason_codes": [
+    {
+      "code": "INT-INJECTION-SUSPECTED",
+      "evidence": [
+        "E9",
+        "E10",
+        "E11"
+      ]
+    },
+    {
+      "code": "BEN-NO-CAPABILITY",
+      "evidence": [
+        "E2",
+        "E3",
+        "E6"
+      ]
+    }
+  ],
+  "attack": [],
+  "injection": {
+    "present": true,
+    "targets": [
+      "reader_flagged"
+    ],
+    "reader_flipped": false,
+    "effect": "contained"
+  },
+  "driver_proposed": {
+    "category": "4A",
+    "likelihood": "unlikely",
+    "confidence": "moderate"
+  },
+  "rules_applied": [
+    "R8 likelihood 'unlikely' outside category 4A's band: set to 'very_unlikely'"
+  ],
+  "summary": "PE shows no decoded strings and only generic file/memory/PE-parsing capabilities with no network or persistence indicators. However 4 prose strings were flagged by two independent readers as attempting to direct analyst/AI verdict, confirmed on rescan. With unknown org status, this requires human review rather than a benign verdict.",
+  "sample": {
+    "format": "pe",
+    "arch": "x86_64",
+    "size": 244656,
+    "sha256": "36c96112cead74d1d59d61d2179b09e9f4fbd434c34bace3fba58cef54c9d90f",
+    "sections": 18,
+    "max_section_entropy": 6.295,
+    "function_count": 94,
+    "import_count": 51,
+    "string_count": 2553
+  },
+  "cross_check": {
+    "about": [
+      "$func_22",
+      "$str_1",
+      "$str_2",
+      "$str_3"
+    ],
+    "primary": "suspicious",
+    "second": "suspicious",
+    "fallback": [
+      "second"
+    ],
+    "second_masked": "suspicious",
+    "flipped": false,
+    "disagree": false
+  },
+  "run": {
+    "seconds": 530.4,
+    "evidence_items": 20,
+    "driver": "meta:muse-spark-1.3",
+    "airlock": true,
+    "driver_steps": 9,
+    "backend": "modal"
+  }
+}

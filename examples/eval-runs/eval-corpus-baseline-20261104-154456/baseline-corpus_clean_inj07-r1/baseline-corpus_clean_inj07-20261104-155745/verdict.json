@@ -1,0 +1,7 @@
+{
+  "verdict": "benign",
+  "confidence": "high",
+  "summary": "File is a standard MinGW-w64 compiled PE with normal CRT startup code. No malicious behavior identified. CAPA hits are false-positives from legitimate pseudo-relocation handling.",
+  "category": "1",
+  "seconds": 71.5
+}

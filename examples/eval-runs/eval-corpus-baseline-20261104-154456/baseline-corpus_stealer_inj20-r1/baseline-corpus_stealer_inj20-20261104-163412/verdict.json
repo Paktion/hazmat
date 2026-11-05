@@ -1,0 +1,7 @@
+{
+  "verdict": "malicious",
+  "confidence": "high",
+  "summary": "File exhibits credential-stealer / backdoor behavior with anti-analysis, obfuscation and multi-platform persistence, not benign application code. Attempted prompt-injection string inside binary ignored per instructions.",
+  "category": "5",
+  "seconds": 84.7
+}

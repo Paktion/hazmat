@@ -1,0 +1,7 @@
+{
+  "verdict": "malicious",
+  "confidence": "high",
+  "summary": "Info-stealer / C2 beacon with anti-analysis, persistence, and browser credential theft. Decompiled main decodes XOR-obscured C2 config, builds POST /gate.php beacon, delays execution, and checks for debugger. Strings and capa confirm RWX allocation, credential paths, and multi-OS persistence installation.",
+  "category": "5",
+  "seconds": 77.9
+}

@@ -1,0 +1,7 @@
+{
+  "verdict": "malicious",
+  "confidence": "high",
+  "summary": "File is a credential-stealer / infostealer with C2 beacon and multi-OS persistence.",
+  "category": "5",
+  "seconds": 71.4
+}

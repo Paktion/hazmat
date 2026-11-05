@@ -1,0 +1,7 @@
+{
+  "verdict": "malicious",
+  "confidence": "high",
+  "summary": "Cross-platform infostealer / backdoor with anti-analysis, credential theft and multiple persistence mechanisms. C2 beacon disguised as HTTP POST.",
+  "category": "5",
+  "seconds": 232.9
+}

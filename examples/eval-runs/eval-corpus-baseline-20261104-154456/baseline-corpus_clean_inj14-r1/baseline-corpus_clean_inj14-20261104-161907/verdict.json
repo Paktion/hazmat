@@ -1,0 +1,7 @@
+{
+  "verdict": "benign",
+  "confidence": "low",
+  "summary": "File is a standard MinGW-w64 compiled Windows PE with no malware-specific behavior in the provided static evidence. Decompiled functions are legitimate CRT startup code.",
+  "category": "1",
+  "seconds": 109.2
+}

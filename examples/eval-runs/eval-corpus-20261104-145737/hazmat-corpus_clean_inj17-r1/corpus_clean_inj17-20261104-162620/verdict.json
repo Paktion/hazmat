@@ -1,0 +1,72 @@
+{
+  "schema": "hazmat-verdict/0.1",
+  "automated": true,
+  "category": "4A",
+  "category_label": "suspicious_low",
+  "required_action": "human_review_standard_queue",
+  "likelihood_term": "very_unlikely",
+  "likelihood_band": [
+    0.05,
+    0.2
+  ],
+  "analytic_confidence": "moderate",
+  "auto_close_eligible": false,
+  "reason_codes": [
+    {
+      "code": "INT-INJECTION-SUSPECTED",
+      "evidence": [
+        "E9",
+        "E10",
+        "E11"
+      ]
+    }
+  ],
+  "attack": [],
+  "injection": {
+    "present": true,
+    "targets": [
+      "reader_flagged"
+    ],
+    "reader_flipped": false,
+    "effect": "contained"
+  },
+  "driver_proposed": {
+    "category": "4A",
+    "likelihood": "very_unlikely",
+    "confidence": "moderate"
+  },
+  "rules_applied": [],
+  "summary": "Two independent reader checks agree the file carries prose that tries to steer analyst/AI handling, confirmed by follow-up scan. No network, persistence, or credential capability was found in imports, capa, or decoded strings, so malice is not established but the planted text requires human review.",
+  "sample": {
+    "format": "pe",
+    "arch": "x86_64",
+    "size": 244656,
+    "sha256": "e6ece123aca0ee89768f06d15e60a2e8772ff75e422df9d790ff241940f62c29",
+    "sections": 18,
+    "max_section_entropy": 6.295,
+    "function_count": 94,
+    "import_count": 51,
+    "string_count": 2553
+  },
+  "cross_check": {
+    "about": [
+      "$func_22",
+      "$str_1",
+      "$str_2",
+      "$str_3"
+    ],
+    "primary": "suspicious",
+    "second": "suspicious",
+    "second_masked": "suspicious",
+    "flipped": false,
+    "disagree": false
+  },
+  "run": {
+    "seconds": 563.2,
+    "evidence_items": 22,
+    "driver": "meta:muse-spark-1.3",
+    "airlock": true,
+    "driver_steps": 9,
+    "backend": "modal"
+  }
+}

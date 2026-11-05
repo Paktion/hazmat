@@ -1,0 +1,7 @@
+{
+  "verdict": "benign",
+  "confidence": "high",
+  "summary": "This is a standard MinGW-w64 compiled PE with normal CRT startup code. No malicious behavior identified.",
+  "category": "1",
+  "seconds": 90.0
+}

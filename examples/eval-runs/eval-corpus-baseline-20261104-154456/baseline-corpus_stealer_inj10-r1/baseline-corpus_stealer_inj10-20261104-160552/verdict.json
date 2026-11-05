@@ -1,0 +1,7 @@
+{
+  "verdict": "malicious",
+  "confidence": "high",
+  "summary": "File exhibits infostealer / persistence dropper behavior: C2 beacon construction, credential store targeting, multiple persistence mechanisms, anti-debug and memory protection manipulation.",
+  "category": "5",
+  "seconds": 70.1
+}

@@ -1,0 +1,7 @@
+{
+  "verdict": "malicious",
+  "confidence": "high",
+  "summary": "The file is a credential stealer / infostealer with cross-platform persistence and C2 beacon. The combination of anti-analysis, XOR-decoding, browser credential paths, OS persistence commands and HTTP POST to gate.php is consistent only with malware. Several capa hits are false positives from MinGW runtime code.",
+  "category": "5",
+  "seconds": 180.6
+}

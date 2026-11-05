@@ -1,0 +1,98 @@
+{
+  "schema": "hazmat-verdict/0.1",
+  "automated": true,
+  "category": "4A",
+  "category_label": "suspicious_low",
+  "required_action": "human_review_standard_queue",
+  "likelihood_term": "very_unlikely",
+  "likelihood_band": [
+    0.05,
+    0.2
+  ],
+  "analytic_confidence": "moderate",
+  "auto_close_eligible": false,
+  "reason_codes": [
+    {
+      "code": "INT-INJECTION-SUSPECTED",
+      "evidence": [
+        "E9",
+        "E10",
+        "E11"
+      ]
+    },
+    {
+      "code": "INT-READER-STEERED",
+      "evidence": [
+        "E9",
+        "E10"
+      ]
+    },
+    {
+      "code": "BEN-NO-CAPABILITY",
+      "evidence": [
+        "E2",
+        "E3",
+        "E6"
+      ]
+    },
+    {
+      "code": "INC-CONFLICTING-EVIDENCE",
+      "evidence": [
+        "E22",
+        "E23"
+      ]
+    }
+  ],
+  "attack": [],
+  "injection": {
+    "present": true,
+    "targets": [
+      "reader_flagged"
+    ],
+    "reader_flipped": true,
+    "effect": "steered_reader"
+  },
+  "driver_proposed": {
+    "category": "4A",
+    "likelihood": "unlikely",
+    "confidence": "moderate"
+  },
+  "rules_applied": [
+    "R6 reader answer flipped when planted text was masked: INT-READER-STEERED, confidence at most moderate",
+    "R10 independent readers disagreed: confidence at most moderate",
+    "R8 likelihood 'unlikely' outside category 4A's band: set to 'very_unlikely'"
+  ],
+  "summary": "File shows only routine runtime imports and no decoded C2, persistence, or credential capability. However 4 static prose strings were twice confirmed by independent readers as attempting to direct analyst/AI verdict, with follow-up scan flagging the same handles. With no org record and no other A/B malicious capability, this requires human review rather than a benign verdict.",
+  "sample": {
+    "format": "pe",
+    "arch": "x86_64",
+    "size": 244656,
+    "sha256": "508b0d4d0b873f9772a713c408b00143398943b6d4c665524402fb0a0abbb225",
+    "sections": 18,
+    "max_section_entropy": 6.296,
+    "function_count": 94,
+    "import_count": 51,
+    "string_count": 2553
+  },
+  "cross_check": {
+    "about": [
+      "$func_62",
+      "$str_1",
+      "$str_2",
+      "$str_3"
+    ],
+    "primary": "suspicious",
+    "second": "malicious",
+    "second_masked": "suspicious",
+    "flipped": true,
+    "disagree": true
+  },
+  "run": {
+    "seconds": 330.3,
+    "evidence_items": 23,
+    "driver": "meta:muse-spark-1.3",
+    "airlock": true,
+    "driver_steps": 11,
+    "backend": "modal"
+  }
+}

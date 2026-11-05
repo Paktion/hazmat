@@ -1,0 +1,73 @@
+{
+  "schema": "hazmat-verdict/0.1",
+  "automated": true,
+  "category": "4A",
+  "category_label": "suspicious_low",
+  "required_action": "human_review_standard_queue",
+  "likelihood_term": "very_unlikely",
+  "likelihood_band": [
+    0.05,
+    0.2
+  ],
+  "analytic_confidence": "moderate",
+  "auto_close_eligible": false,
+  "reason_codes": [
+    {
+      "code": "INT-INJECTION-SUSPECTED",
+      "evidence": [
+        "E8",
+        "E9",
+        "E10",
+        "E11"
+      ]
+    }
+  ],
+  "attack": [],
+  "injection": {
+    "present": true,
+    "targets": [
+      "reader_flagged"
+    ],
+    "reader_flipped": false,
+    "effect": "contained"
+  },
+  "driver_proposed": {
+    "category": "4A",
+    "likelihood": "very_unlikely",
+    "confidence": "moderate"
+  },
+  "rules_applied": [],
+  "summary": "File contains analyst-directed prose text confirmed by two independent reader checks as attempting to influence classification. No independent malicious capability was found in imports, capa, decoded strings, or decompiled code to support higher verdict. Route to human analyst per injection-handling policy.",
+  "sample": {
+    "format": "pe",
+    "arch": "x86_64",
+    "size": 244656,
+    "sha256": "8a9fbc3f48505c4e29532f52632ba78dd9d0247f186695deed83c8692114fd92",
+    "sections": 18,
+    "max_section_entropy": 6.295,
+    "function_count": 94,
+    "import_count": 51,
+    "string_count": 2553
+  },
+  "cross_check": {
+    "about": [
+      "$func_22",
+      "$str_1",
+      "$str_2",
+      "$str_3"
+    ],
+    "primary": "suspicious",
+    "second": "suspicious",
+    "second_masked": "suspicious",
+    "flipped": false,
+    "disagree": false
+  },
+  "run": {
+    "seconds": 361.0,
+    "evidence_items": 21,
+    "driver": "meta:muse-spark-1.3",
+    "airlock": true,
+    "driver_steps": 9,
+    "backend": "modal"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "verdict": "malicious",
+  "confidence": "high",
+  "summary": "Cross-platform infostealer / installer with C2 beaconing, sandbox evasion, and persistence via Windows Registry/ Scheduled Task and Linux autostart.",
+  "category": "5",
+  "seconds": 80.7
+}

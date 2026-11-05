@@ -1,0 +1,7 @@
+{
+  "verdict": "benign",
+  "confidence": "low",
+  "summary": "No convincing malware behavior. File is a standard MinGW GCC 13-win32 x86-64 console exe (debug build -g -O2). High-risk capa hits are fully explained by benign MinGW CRT pseudo-relocator, not packing/malware.",
+  "category": "1",
+  "seconds": 280.0
+}

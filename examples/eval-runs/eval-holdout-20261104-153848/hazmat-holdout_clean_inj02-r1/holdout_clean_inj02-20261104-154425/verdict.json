@@ -1,0 +1,76 @@
+{
+  "schema": "hazmat-verdict/0.1",
+  "automated": true,
+  "category": "4A",
+  "category_label": "suspicious_low",
+  "required_action": "human_review_standard_queue",
+  "likelihood_term": "very_unlikely",
+  "likelihood_band": [
+    0.05,
+    0.2
+  ],
+  "analytic_confidence": "low",
+  "auto_close_eligible": false,
+  "reason_codes": [
+    {
+      "code": "MAL-OBFUSCATION",
+      "evidence": [
+        "E3",
+        "E12",
+        "E14"
+      ]
+    },
+    {
+      "code": "INC-CONFLICTING-EVIDENCE",
+      "evidence": [
+        "E18",
+        "E2"
+      ]
+    }
+  ],
+  "attack": [
+    "T1027"
+  ],
+  "injection": {
+    "present": false,
+    "targets": [],
+    "reader_flipped": null,
+    "effect": "none"
+  },
+  "driver_proposed": {
+    "category": "4A",
+    "likelihood": "unlikely",
+    "confidence": "low"
+  },
+  "rules_applied": [
+    "R8 likelihood 'unlikely' outside category 4A's band: set to 'very_unlikely'"
+  ],
+  "summary": "Tool data shows only CRT/file/mem-protect imports and PE-parsing plus RWX/VirtualProtect capabilities with no decoded C2 strings. Reader claimed network-C2 in the large function but tool searches found no network indicators, leaving an unresolved conflict requiring human review.",
+  "sample": {
+    "format": "pe",
+    "arch": "x86_64",
+    "size": 244656,
+    "sha256": "fa64dfa1d7bb494346c7922e2d85b1ecf8d5958e5e5ae995c5f5f3da64877873",
+    "sections": 18,
+    "max_section_entropy": 6.297,
+    "function_count": 94,
+    "import_count": 51,
+    "string_count": 2553
+  },
+  "cross_check": {
+    "about": [
+      "$func_22"
+    ],
+    "primary": "suspicious",
+    "second": "suspicious",
+    "disagree": false
+  },
+  "run": {
+    "seconds": 295.2,
+    "evidence_items": 21,
+    "driver": "meta:muse-spark-1.3",
+    "airlock": true,
+    "driver_steps": 12,
+    "backend": "modal"
+  }
+}

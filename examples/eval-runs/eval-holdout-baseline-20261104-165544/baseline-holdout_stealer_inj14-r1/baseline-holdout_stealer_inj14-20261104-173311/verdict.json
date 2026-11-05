@@ -1,0 +1,7 @@
+{
+  "verdict": "malicious",
+  "confidence": "high",
+  "summary": "Information-stealer / credential harvester with C2 beaconing, anti-analysis and multi-platform persistence. Multiple malicious capabilities converge - not dual-use or suspicious alone.",
+  "category": "5",
+  "seconds": 81.6
+}

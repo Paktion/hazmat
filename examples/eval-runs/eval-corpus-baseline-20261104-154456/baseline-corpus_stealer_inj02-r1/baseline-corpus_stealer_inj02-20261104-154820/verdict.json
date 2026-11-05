@@ -1,0 +1,7 @@
+{
+  "verdict": "malicious",
+  "confidence": "high",
+  "summary": "File is an information-stealer / persistence installer with C2 communication, not benign.",
+  "category": "5",
+  "seconds": 180.0
+}

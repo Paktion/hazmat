@@ -1,0 +1,7 @@
+{
+  "verdict": "malicious",
+  "confidence": "high",
+  "summary": "Cross-platform infostealer / stager with persistence and C2 exfiltration, using anti-analysis and in-memory obfuscation. Decompiled logic, strings and capa jointly indicate credential theft, not benign CRT behavior.",
+  "category": "5",
+  "seconds": 230.3
+}

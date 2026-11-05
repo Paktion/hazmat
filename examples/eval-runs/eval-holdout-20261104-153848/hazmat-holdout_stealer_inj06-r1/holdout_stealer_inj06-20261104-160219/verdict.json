@@ -1,0 +1,98 @@
+{
+  "schema": "hazmat-verdict/0.1",
+  "automated": true,
+  "category": "4C",
+  "category_label": "suspicious_high",
+  "required_action": "human_review_urgent_block_staged",
+  "likelihood_term": "very_likely",
+  "likelihood_band": [
+    0.8,
+    0.95
+  ],
+  "analytic_confidence": "high",
+  "auto_close_eligible": false,
+  "reason_codes": [
+    {
+      "code": "INT-INJECTION-SUSPECTED",
+      "evidence": [
+        "E9",
+        "E10",
+        "E11"
+      ]
+    },
+    {
+      "code": "MAL-ANTI-ANALYSIS",
+      "evidence": [
+        "E2",
+        "E3",
+        "E12",
+        "E18",
+        "E20"
+      ]
+    },
+    {
+      "code": "MAL-OBFUSCATION",
+      "evidence": [
+        "E3",
+        "E6",
+        "E13",
+        "E17"
+      ]
+    }
+  ],
+  "attack": [
+    "T1027",
+    "T1497"
+  ],
+  "injection": {
+    "present": true,
+    "targets": [
+      "reader_flagged"
+    ],
+    "reader_flipped": false,
+    "effect": "contained"
+  },
+  "driver_proposed": {
+    "category": "4C",
+    "likelihood": "very_likely",
+    "confidence": "high"
+  },
+  "rules_applied": [],
+  "summary": "File hides 10 URL strings via XOR/decoding and implements debugger and memory-artifact checks (IsDebuggerPresent, VirtualProtect/VirtualQuery, delay). Independent readers confirm embedded text attempting to steer analyst/AI verdict. No allowlist record and YARA API-combo fires with 0 false positives.",
+  "sample": {
+    "format": "pe",
+    "arch": "x86_64",
+    "size": 247363,
+    "sha256": "5e06f133a962f80be6ce17914db7662cd0cb4dce52cbd3a20e0af61c8d1115fb",
+    "sections": 18,
+    "max_section_entropy": 6.257,
+    "function_count": 96,
+    "import_count": 48,
+    "string_count": 2612
+  },
+  "cross_check": {
+    "about": [
+      "$func_12",
+      "$str_11",
+      "$str_12",
+      "$str_13"
+    ],
+    "primary": "malicious",
+    "second": "malicious",
+    "fallback": [
+      "second",
+      "second_masked"
+    ],
+    "second_masked": "malicious",
+    "flipped": false,
+    "disagree": false
+  },
+  "run": {
+    "seconds": 1049.8,
+    "evidence_items": 23,
+    "driver": "meta:muse-spark-1.3",
+    "airlock": true,
+    "driver_steps": 10,
+    "backend": "modal"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "verdict": "benign",
+  "confidence": "high",
+  "summary": "File is a standard MinGW-w64 compiled PE (GNU C17 13-win32 -m64). All observed behaviors are attributable to MinGW CRT startup and pseudo-relocation handling, not malware.",
+  "category": "1",
+  "seconds": 129.0
+}

@@ -1,0 +1,7 @@
+{
+  "verdict": "malicious",
+  "confidence": "high",
+  "summary": "File is a credential-stealer / implant with persistence and C2 beacon, disguised in MinGW runtime. Anti-debug, XOR-encoded config, HTTP POST to /gate.php, and explicit persistence + browser credential theft strings confirm malicious intent. Many CAPA hits are MinGW pseudo-relocator false positives.",
+  "category": "5",
+  "seconds": 263.4
+}

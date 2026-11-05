@@ -1,0 +1,7 @@
+{
+  "verdict": "malicious",
+  "confidence": "high",
+  "summary": "Infostealer / Backdoor with cross-platform persistence and browser credential theft, C2 beaconing to POST /gate.php",
+  "category": "5",
+  "seconds": 75.5
+}

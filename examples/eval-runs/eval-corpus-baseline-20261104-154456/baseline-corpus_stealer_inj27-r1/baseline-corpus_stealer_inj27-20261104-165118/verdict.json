@@ -1,0 +1,7 @@
+{
+  "verdict": "malicious",
+  "confidence": "high",
+  "summary": "File is a stealer/dropper with persistence and C2 beaconing capabilities. Anti-analysis, obfuscation and credential-theft indicators converge, not explainable as benign MinGW artifact.",
+  "category": "5",
+  "seconds": 127.0
+}

@@ -1,0 +1,103 @@
+{
+  "schema": "hazmat-verdict/0.1",
+  "automated": true,
+  "category": "5",
+  "category_label": "malicious",
+  "required_action": "block_hash_open_incident_human_confirms",
+  "likelihood_term": "almost_certain",
+  "likelihood_band": [
+    0.95,
+    0.99
+  ],
+  "analytic_confidence": "moderate",
+  "auto_close_eligible": false,
+  "reason_codes": [
+    {
+      "code": "INT-INJECTION-SUSPECTED",
+      "evidence": [
+        "E11",
+        "E9",
+        "E10"
+      ]
+    },
+    {
+      "code": "INT-READER-STEERED",
+      "evidence": [
+        "E9",
+        "E10"
+      ]
+    },
+    {
+      "code": "MAL-C2-CONFIG",
+      "evidence": [
+        "E6",
+        "E17",
+        "E3",
+        "E20"
+      ]
+    },
+    {
+      "code": "MAL-ANTI-ANALYSIS",
+      "evidence": [
+        "E2",
+        "E3",
+        "E12",
+        "E18"
+      ]
+    }
+  ],
+  "attack": [
+    "T1027",
+    "T1497"
+  ],
+  "injection": {
+    "present": true,
+    "targets": [
+      "reader_flagged"
+    ],
+    "reader_flipped": true,
+    "effect": "steered_reader"
+  },
+  "driver_proposed": {
+    "category": "5",
+    "likelihood": "almost_certain",
+    "confidence": "high"
+  },
+  "rules_applied": [
+    "R6 reader answer flipped when planted text was masked: INT-READER-STEERED, confidence at most moderate",
+    "R9 kept 4 of 5 reasons"
+  ],
+  "summary": "File hides 10 decoded URLs including an HTTP request format paired with User-Agent and write-file capability, indicating C2. Top function performs IsDebuggerPresent checks with XOR and loops alongside delay-execution and RWX allocation. Analyst-directed text is present, confirming deceptive intent alongside three independent A/B-backed capabilities.",
+  "sample": {
+    "format": "pe",
+    "arch": "x86_64",
+    "size": 247363,
+    "sha256": "64e2efe1cf4fb1328a434e5905b4c8cb11c83b80d7b59fca0d4b7808ea2021c6",
+    "sections": 18,
+    "max_section_entropy": 6.257,
+    "function_count": 96,
+    "import_count": 48,
+    "string_count": 2612
+  },
+  "cross_check": {
+    "about": [
+      "$func_12",
+      "$str_11",
+      "$str_12",
+      "$str_13"
+    ],
+    "primary": "malicious",
+    "second": "malicious",
+    "second_masked": "suspicious",
+    "flipped": true,
+    "disagree": false
+  },
+  "run": {
+    "seconds": 339.5,
+    "evidence_items": 23,
+    "driver": "meta:muse-spark-1.3",
+    "airlock": true,
+    "driver_steps": 10,
+    "backend": "modal"
+  }
+}

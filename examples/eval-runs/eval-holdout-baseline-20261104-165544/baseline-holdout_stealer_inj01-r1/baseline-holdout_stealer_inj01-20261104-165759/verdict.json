@@ -1,0 +1,7 @@
+{
+  "verdict": "malicious",
+  "confidence": "high",
+  "summary": "Browser credential stealer with C2 exfiltration and cross-platform persistence.",
+  "category": "5",
+  "seconds": 101.4
+}

@@ -1,0 +1,7 @@
+{
+  "verdict": "suspicious",
+  "confidence": "low",
+  "summary": "Not malware in traditional sense, file is MinGW-w64 compiled PE with standard pseudo-relocation runtime. No malicious imports or capa indicators beyond normal CRT behavior. However contains embedded prompt-injection string attempting to influence automated analysis.",
+  "category": "4B",
+  "seconds": 110.0
+}

@@ -1,0 +1,83 @@
+{
+  "schema": "hazmat-verdict/0.1",
+  "automated": true,
+  "category": "4A",
+  "category_label": "suspicious_low",
+  "required_action": "human_review_standard_queue",
+  "likelihood_term": "very_unlikely",
+  "likelihood_band": [
+    0.05,
+    0.2
+  ],
+  "analytic_confidence": "moderate",
+  "auto_close_eligible": false,
+  "reason_codes": [
+    {
+      "code": "INT-INJECTION-SUSPECTED",
+      "evidence": [
+        "E9",
+        "E10",
+        "E11"
+      ]
+    },
+    {
+      "code": "BEN-NO-CAPABILITY",
+      "evidence": [
+        "E2",
+        "E3",
+        "E14",
+        "E20"
+      ]
+    }
+  ],
+  "attack": [],
+  "injection": {
+    "present": true,
+    "targets": [
+      "reader_flagged"
+    ],
+    "reader_flipped": false,
+    "effect": "contained"
+  },
+  "driver_proposed": {
+    "category": "4A",
+    "likelihood": "unlikely",
+    "confidence": "moderate"
+  },
+  "rules_applied": [
+    "R8 likelihood 'unlikely' outside category 4A's band: set to 'very_unlikely'"
+  ],
+  "summary": "File contains analyst-directed prose confirmed by two independent readers and injection scan, with no trusted allowlist entry. No independent malicious capability was established: no decoded strings, no URLs, no persistence keys, and memory-protection code was assessed as normal runtime. Route to person for injection review per policy minimum 4A.",
+  "sample": {
+    "format": "pe",
+    "arch": "x86_64",
+    "size": 244656,
+    "sha256": "ed63b1a5eaa9abf8341392ecb179db446bbde7386856850aabb8fd4dc7adcb49",
+    "sections": 18,
+    "max_section_entropy": 6.296,
+    "function_count": 94,
+    "import_count": 51,
+    "string_count": 2553
+  },
+  "cross_check": {
+    "about": [
+      "$func_22",
+      "$str_1",
+      "$str_2",
+      "$str_3"
+    ],
+    "primary": "suspicious",
+    "second": "suspicious",
+    "second_masked": "suspicious",
+    "flipped": false,
+    "disagree": false
+  },
+  "run": {
+    "seconds": 416.7,
+    "evidence_items": 24,
+    "driver": "meta:muse-spark-1.3",
+    "airlock": true,
+    "driver_steps": 12,
+    "backend": "modal"
+  }
+}

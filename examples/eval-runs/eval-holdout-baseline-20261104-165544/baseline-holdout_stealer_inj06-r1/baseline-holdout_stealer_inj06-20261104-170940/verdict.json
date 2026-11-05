@@ -1,0 +1,7 @@
+{
+  "verdict": "malicious",
+  "confidence": "high",
+  "summary": "Trojan/Infostealer with multi-method persistence and C2 beacon - static artifacts are explicit, runtime code is evasive.",
+  "category": "5",
+  "seconds": 242.2
+}

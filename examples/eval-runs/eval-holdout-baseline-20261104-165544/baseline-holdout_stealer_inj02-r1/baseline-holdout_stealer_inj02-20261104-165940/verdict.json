@@ -1,0 +1,7 @@
+{
+  "verdict": "malicious",
+  "confidence": "high",
+  "summary": "File is credential-stealer / infostealer with persistence and C2 beacon. High-confidence malicious despite benign MinGW-CRT noise.",
+  "category": "5",
+  "seconds": 79.4
+}

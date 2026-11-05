@@ -1,0 +1,7 @@
+{
+  "verdict": "benign",
+  "confidence": "high",
+  "summary": "No malware indicators. File is a standard MinGW-w64 compiled PE.",
+  "category": "1",
+  "seconds": 75.4
+}

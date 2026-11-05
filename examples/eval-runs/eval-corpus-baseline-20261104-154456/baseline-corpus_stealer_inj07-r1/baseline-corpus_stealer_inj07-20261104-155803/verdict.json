@@ -1,0 +1,7 @@
+{
+  "verdict": "malicious",
+  "confidence": "high",
+  "summary": "Infostealer / credential stealer with multiple persistence mechanisms and anti-analysis.",
+  "category": "5",
+  "seconds": 127.9
+}

@@ -1,0 +1,78 @@
+{
+  "schema": "hazmat-verdict/0.1",
+  "automated": true,
+  "category": "3",
+  "category_label": "probably_benign",
+  "required_action": "close_with_watch_sample_at_3x",
+  "likelihood_term": "remote",
+  "likelihood_band": [
+    0.01,
+    0.05
+  ],
+  "analytic_confidence": "moderate",
+  "auto_close_eligible": false,
+  "reason_codes": [
+    {
+      "code": "BEN-NO-CAPABILITY",
+      "evidence": [
+        "E2",
+        "E3",
+        "E6"
+      ]
+    },
+    {
+      "code": "BEN-RUNTIME-ONLY",
+      "evidence": [
+        "E2",
+        "E3",
+        "E4"
+      ]
+    }
+  ],
+  "attack": [],
+  "injection": {
+    "present": false,
+    "targets": [],
+    "reader_flipped": null,
+    "effect": "none"
+  },
+  "driver_proposed": {
+    "category": "3",
+    "likelihood": "very_unlikely",
+    "confidence": "moderate"
+  },
+  "rules_applied": [
+    "R8 likelihood 'very_unlikely' outside category 3's band: set to 'remote'"
+  ],
+  "summary": "PE x86_64 with only C-runtime file I/O and memory-protection imports; capa shows no network, persistence, credential or C2 capabilities and FLOSS found no hidden strings. Injection scan negative and section entropy not packed. One generic file-write/RWX allocation remains but no independent malicious capability was established.",
+  "sample": {
+    "format": "pe",
+    "arch": "x86_64",
+    "size": 244656,
+    "sha256": "8fad2b53aa60739c141d45e365451d72380cd49ca252ca33087e1da542312d29",
+    "sections": 18,
+    "max_section_entropy": 6.296,
+    "function_count": 94,
+    "import_count": 51,
+    "string_count": 2553
+  },
+  "cross_check": {
+    "about": [
+      "$func_22"
+    ],
+    "primary": "suspicious",
+    "second": "suspicious",
+    "fallback": [
+      "second"
+    ],
+    "disagree": false
+  },
+  "run": {
+    "seconds": 721.5,
+    "evidence_items": 22,
+    "driver": "meta:muse-spark-1.3",
+    "airlock": true,
+    "driver_steps": 12,
+    "backend": "modal"
+  }
+}

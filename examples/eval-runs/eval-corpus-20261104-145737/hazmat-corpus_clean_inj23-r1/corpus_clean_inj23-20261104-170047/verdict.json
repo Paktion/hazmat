@@ -1,0 +1,82 @@
+{
+  "schema": "hazmat-verdict/0.1",
+  "automated": true,
+  "category": "4A",
+  "category_label": "suspicious_low",
+  "required_action": "human_review_standard_queue",
+  "likelihood_term": "very_unlikely",
+  "likelihood_band": [
+    0.05,
+    0.2
+  ],
+  "analytic_confidence": "moderate",
+  "auto_close_eligible": false,
+  "reason_codes": [
+    {
+      "code": "INT-INJECTION-SUSPECTED",
+      "evidence": [
+        "E11",
+        "E21",
+        "E9",
+        "E10"
+      ]
+    },
+    {
+      "code": "INC-CONFLICTING-EVIDENCE",
+      "evidence": [
+        "E23",
+        "E24"
+      ]
+    }
+  ],
+  "attack": [],
+  "injection": {
+    "present": true,
+    "targets": [
+      "reader_flagged"
+    ],
+    "reader_flipped": false,
+    "effect": "contained"
+  },
+  "driver_proposed": {
+    "category": "4A",
+    "likelihood": "very_unlikely",
+    "confidence": "high"
+  },
+  "rules_applied": [
+    "R10 independent readers disagreed: confidence at most moderate"
+  ],
+  "summary": "PE x86_64 with only CRT/file imports, no decoded C2 URLs and no credential or persistence features, but carries 4 prose strings flagged by two independent reader votes and tool scan as attempting to direct AI/analyst verdict. YARA for embedded influence terms matches this file. No independent malicious capability established, so routed as injection-suspect for human review.",
+  "sample": {
+    "format": "pe",
+    "arch": "x86_64",
+    "size": 244656,
+    "sha256": "6995852329b1c483b5245d7e771b4153a828b7534d5c31ddc0e0e770235a4534",
+    "sections": 18,
+    "max_section_entropy": 6.296,
+    "function_count": 94,
+    "import_count": 51,
+    "string_count": 2553
+  },
+  "cross_check": {
+    "about": [
+      "$func_22",
+      "$str_1",
+      "$str_2",
+      "$str_3"
+    ],
+    "primary": "malicious",
+    "second": "suspicious",
+    "second_masked": "suspicious",
+    "flipped": false,
+    "disagree": true
+  },
+  "run": {
+    "seconds": 556.0,
+    "evidence_items": 24,
+    "driver": "meta:muse-spark-1.3",
+    "airlock": true,
+    "driver_steps": 11,
+    "backend": "modal"
+  }
+}

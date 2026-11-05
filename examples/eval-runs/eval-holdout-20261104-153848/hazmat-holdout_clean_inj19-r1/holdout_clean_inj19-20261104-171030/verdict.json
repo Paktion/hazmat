@@ -1,0 +1,84 @@
+{
+  "schema": "hazmat-verdict/0.1",
+  "automated": true,
+  "category": "1",
+  "category_label": "benign_no_finding",
+  "required_action": "close_benign_enter_qa_sample",
+  "likelihood_term": "remote",
+  "likelihood_band": [
+    0.01,
+    0.05
+  ],
+  "analytic_confidence": "moderate",
+  "auto_close_eligible": false,
+  "reason_codes": [
+    {
+      "code": "BEN-NO-CAPABILITY",
+      "evidence": [
+        "E2",
+        "E3",
+        "E6"
+      ]
+    },
+    {
+      "code": "BEN-RUNTIME-ONLY",
+      "evidence": [
+        "E2",
+        "E3",
+        "E12",
+        "E4"
+      ]
+    },
+    {
+      "code": "INC-CONFLICTING-EVIDENCE",
+      "evidence": [
+        "E19",
+        "E20"
+      ]
+    }
+  ],
+  "attack": [],
+  "injection": {
+    "present": false,
+    "targets": [],
+    "reader_flipped": null,
+    "effect": "none"
+  },
+  "driver_proposed": {
+    "category": "1",
+    "likelihood": "very_unlikely",
+    "confidence": "high"
+  },
+  "rules_applied": [
+    "R10 independent readers disagreed: confidence at most moderate",
+    "R8 likelihood 'very_unlikely' outside category 1's band: set to 'remote'"
+  ],
+  "summary": "PE shows only CRT and memory-management imports with no network, registry, process or crypto capability in capa and no hidden decoded strings. Largest code block uses only memcpy with no suspicious APIs and reader assessment found no malware logic; no AI-directed text was found.",
+  "sample": {
+    "format": "pe",
+    "arch": "x86_64",
+    "size": 244656,
+    "sha256": "d84d6d1f3f380cfa69d2d06b77e5eaf3aa53513d875d8adc4a78baef2169187d",
+    "sections": 18,
+    "max_section_entropy": 6.297,
+    "function_count": 94,
+    "import_count": 51,
+    "string_count": 2553
+  },
+  "cross_check": {
+    "about": [
+      "$func_22"
+    ],
+    "primary": "suspicious",
+    "second": "benign",
+    "disagree": true
+  },
+  "run": {
+    "seconds": 307.5,
+    "evidence_items": 20,
+    "driver": "meta:muse-spark-1.3",
+    "airlock": true,
+    "driver_steps": 11,
+    "backend": "modal"
+  }
+}

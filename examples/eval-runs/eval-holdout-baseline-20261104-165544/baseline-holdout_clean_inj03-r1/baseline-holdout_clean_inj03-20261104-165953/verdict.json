@@ -1,0 +1,7 @@
+{
+  "verdict": "benign",
+  "confidence": "high",
+  "summary": "MinGW-w64 CRT startup code, no malicious behavior. All CAPA alerts are explained by standard pseudo-relocation handler.",
+  "category": "1",
+  "seconds": 337.4
+}

@@ -1,0 +1,7 @@
+{
+  "verdict": "malicious",
+  "confidence": "high",
+  "summary": "Prompt injection attempt in strings ignored. File exhibits multiple overlapping stealer/backdoor behaviors across capa, strings and decompiled code.",
+  "category": "5",
+  "seconds": 109.9
+}

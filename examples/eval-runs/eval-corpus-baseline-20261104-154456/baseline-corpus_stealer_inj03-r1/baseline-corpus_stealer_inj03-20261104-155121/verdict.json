@@ -1,0 +1,7 @@
+{
+  "verdict": "malicious",
+  "confidence": "high",
+  "summary": "Credential stealer / loader with C2 beaconing and cross-platform persistence",
+  "category": "5",
+  "seconds": 217.1
+}

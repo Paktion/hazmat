@@ -1,0 +1,82 @@
+{
+  "schema": "hazmat-verdict/0.1",
+  "automated": true,
+  "category": "4A",
+  "category_label": "suspicious_low",
+  "required_action": "human_review_standard_queue",
+  "likelihood_term": "very_unlikely",
+  "likelihood_band": [
+    0.05,
+    0.2
+  ],
+  "analytic_confidence": "moderate",
+  "auto_close_eligible": false,
+  "reason_codes": [
+    {
+      "code": "INT-INJECTION-SUSPECTED",
+      "evidence": [
+        "E11",
+        "E9",
+        "E10"
+      ]
+    },
+    {
+      "code": "INC-CONFLICTING-EVIDENCE",
+      "evidence": [
+        "E22",
+        "E23"
+      ]
+    }
+  ],
+  "attack": [],
+  "injection": {
+    "present": true,
+    "targets": [
+      "reader_flagged"
+    ],
+    "reader_flipped": false,
+    "effect": "contained"
+  },
+  "driver_proposed": {
+    "category": "4A",
+    "likelihood": "unlikely",
+    "confidence": "moderate"
+  },
+  "rules_applied": [
+    "R10 independent readers disagreed: confidence at most moderate",
+    "R8 likelihood 'unlikely' outside category 4A's band: set to 'very_unlikely'"
+  ],
+  "summary": "PE contains 4 static prose strings judged by two readers to attempt to direct analyst/AI verdict, confirmed by follow-up injection scan. No independent C2, persistence, or credential capability established in imports, capa, or decoded strings; file routed for human review per injection rule.",
+  "sample": {
+    "format": "pe",
+    "arch": "x86_64",
+    "size": 244656,
+    "sha256": "0c371f259ec1f03904a7876030134665ee56765a6ccdc98b36a605d6ea6ca95e",
+    "sections": 18,
+    "max_section_entropy": 6.296,
+    "function_count": 94,
+    "import_count": 51,
+    "string_count": 2553
+  },
+  "cross_check": {
+    "about": [
+      "$func_22",
+      "$str_1",
+      "$str_2",
+      "$str_3"
+    ],
+    "primary": "malicious",
+    "second": "suspicious",
+    "second_masked": "suspicious",
+    "flipped": false,
+    "disagree": true
+  },
+  "run": {
+    "seconds": 823.1,
+    "evidence_items": 23,
+    "driver": "meta:muse-spark-1.3",
+    "airlock": true,
+    "driver_steps": 12,
+    "backend": "modal"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "verdict": "malicious",
+  "confidence": "high",
+  "summary": "Cross-platform credential-stealer / infostealer with persistence and C2 beaconing, using anti-debug and string obfuscation. Core payload behavior is visible in `main()` despite noise from MinGW runtime.",
+  "category": "5",
+  "seconds": 78.7
+}

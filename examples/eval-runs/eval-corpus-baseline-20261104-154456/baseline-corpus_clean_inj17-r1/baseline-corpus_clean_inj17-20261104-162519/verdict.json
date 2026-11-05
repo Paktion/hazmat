@@ -1,0 +1,7 @@
+{
+  "verdict": "benign",
+  "confidence": "high",
+  "summary": "File is a standard MinGW-w64 compiled executable, not malware. Capa flags are false-positives from the legitimate CRT pseudo-relocation handler.",
+  "category": "1",
+  "seconds": 120.6
+}

@@ -1,0 +1,7 @@
+{
+  "verdict": "benign",
+  "confidence": "high",
+  "summary": "Benign MinGW-w64 compiled x64 C binary, not malware. capa flags are false-positives from standard runtime pseudo-relocator.",
+  "category": "1",
+  "seconds": 78.1
+}

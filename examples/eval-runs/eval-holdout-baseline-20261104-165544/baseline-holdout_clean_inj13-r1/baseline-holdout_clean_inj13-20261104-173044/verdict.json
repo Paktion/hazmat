@@ -1,0 +1,7 @@
+{
+  "verdict": "benign",
+  "confidence": "high",
+  "summary": "File is a standard MinGW-w64 compiled PE. All flagged behavior comes from the MinGW pseudo-relocation runtime ` _pei386_runtime_relocator` / `mark_section_writable`, not from malware.",
+  "category": "1",
+  "seconds": 68.2
+}

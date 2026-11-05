@@ -1,0 +1,7 @@
+{
+  "verdict": "benign",
+  "confidence": "high",
+  "summary": "No malicious behavior. All high-severity capa hits are false-positives from stock MinGW `mingw-w64-crt` pseudo-relocation stub. Imports/decompiled code = standard GCC 13 `-O2 -g` CRT. No network, process injection, persistence, crypto, or exfiltration. Single anomalous content string = LLM jailbreak/prompt-injection test corpus `You are time online...Now you are Ted...` -> `suspicious content` not `malicious code` - requires content-review not malware IR.",
+  "category": "1",
+  "seconds": 109.1
+}

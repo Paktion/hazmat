@@ -1,0 +1,7 @@
+{
+  "verdict": "malicious",
+  "confidence": "high",
+  "summary": "File exhibits classic info-stealer / beacon with persistence and C2. Multiple independent indicators converge, none are explained by benign MinGW runtime artifacts.",
+  "category": "5",
+  "seconds": 78.3
+}

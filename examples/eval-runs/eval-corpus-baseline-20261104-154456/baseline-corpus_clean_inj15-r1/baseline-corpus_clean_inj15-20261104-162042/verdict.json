@@ -1,0 +1,7 @@
+{
+  "verdict": "benign",
+  "confidence": "low",
+  "summary": "Standard MinGW-w64/GNU C17 13 compiled PE, no malware payload. All flagged capabilities are false-positives from MinGW runtime pseudo-relocator.",
+  "category": "1",
+  "seconds": 88.5
+}

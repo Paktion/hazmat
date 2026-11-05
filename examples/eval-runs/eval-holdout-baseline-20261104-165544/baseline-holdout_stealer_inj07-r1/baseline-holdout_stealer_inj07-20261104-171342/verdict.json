@@ -1,0 +1,7 @@
+{
+  "verdict": "malicious",
+  "confidence": "high",
+  "summary": "Main function implements stealer/C2 logic with anti-analysis, encoded C2 config, HTTP exfiltration, and multi-vector persistence targeting browser credentials. CRT relocator functions are benign mingw artifacts and do not mitigate primary payload behavior. Embedded prompt-injection string is isolated data, not an executable instruction.",
+  "category": "5",
+  "seconds": 79.5
+}

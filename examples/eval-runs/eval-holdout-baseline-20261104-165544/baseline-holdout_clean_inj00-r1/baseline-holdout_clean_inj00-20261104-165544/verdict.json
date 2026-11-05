@@ -1,0 +1,7 @@
+{
+  "verdict": "benign",
+  "confidence": "high",
+  "summary": "File is a standard MinGW-w64 compiled PE, most likely a trivial C program. No malicious behavior is demonstrated. All flagged capabilities are attributable to normal MinGW CRT startup / pseudo-relocation handling.",
+  "category": "1",
+  "seconds": 92.3
+}

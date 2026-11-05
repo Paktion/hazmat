@@ -1,0 +1,7 @@
+{
+  "verdict": "benign",
+  "confidence": "high",
+  "summary": "Not malware - standard MinGW-w64 CRT startup binary",
+  "category": "1",
+  "seconds": 115.3
+}

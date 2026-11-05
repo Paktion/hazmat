@@ -1,0 +1,7 @@
+{
+  "verdict": "malicious",
+  "confidence": "high",
+  "summary": "infostealer / loader with multiple persistence + C2 beaconing and credential-theft capability. Static indicators are confirmed as malicious behavior in decompiled code, not toolchain noise.",
+  "category": "5",
+  "seconds": 102.3
+}

@@ -1,0 +1,7 @@
+{
+  "verdict": "benign",
+  "confidence": "high",
+  "summary": "File is a standard MinGW-w64 compiled executable with no malicious indicators. All flagged capabilities are false-positives from the MinGW pseudo-relocation runtime.",
+  "category": "1",
+  "seconds": 76.8
+}

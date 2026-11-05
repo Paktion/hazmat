@@ -42,6 +42,10 @@ In a Hazmat run directory:
 
 A baseline run directory has `prompt.txt` (exactly what the model was given, planted text included) and `verdict.json`.
 
+## Study runs on real injection prompts
+
+[`eval-runs/`](eval-runs/) holds study B and the holdout (deepset prompts), Hazmat and baseline: each run's `summary.md`, plus every per-sample `verdict.json` and `calls.log` (reports and large files left out).
+
 ## Re-record
 
 ```bash
