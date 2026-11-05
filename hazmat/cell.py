@@ -190,13 +190,28 @@ class Store:
         return self.items[h]
 
 
+VOLUME_PREFIX = "docker-volume:"  # docker-volume:<volume>/<file>, local Docker backend only
+
+
 class Cell:
     def __init__(self, sample: Path, backend: str | None):
         self.sample = sample
-        self.data = sample.read_bytes()
         self.store = Store()
-        self.sb = Session(backend)
-        self.sb.put(self.data, REMOTE_PATH)
+        if str(sample).startswith(VOLUME_PREFIX):
+            # Real (disarmed) malware: it stays in a local Docker volume and is staged inside the
+            # no-network sandbox. It never touches the host, and Session refuses any cloud backend.
+            vol, name = str(sample)[len(VOLUME_PREFIX):].split("/", 1)
+            self.sb = Session(backend or "docker", volume=vol)
+            self.sb.stage_volume_sample(name)
+            r = self.sb.exec(["python3", "-c", "import hashlib,sys; d=open(sys.argv[1],'rb').read(); "
+                              "print(len(d), hashlib.sha256(d).hexdigest())", f"/samples/{name}"], "hash")
+            size, digest = r.stdout.split()
+            self.size, self.sha256 = int(size), digest
+        else:
+            data = sample.read_bytes()
+            self.size, self.sha256 = len(data), hashlib.sha256(data).hexdigest()
+            self.sb = Session(backend)
+            self.sb.put(data, REMOTE_PATH)
         # Known-clean reference files, so yara_test can report false positives.
         self.refs = []
         for i, ref in enumerate(sorted(REFERENCE_DIR.glob("clean.*")) if REFERENCE_DIR.exists() else []):
@@ -283,8 +298,8 @@ class Cell:
             "format": "pe" if "portable" in fmt else "elf" if "elf" in fmt else "macho" if "mac" in fmt else "other",
             "arch": "x86_64" if lang.startswith("x86:le:64") else "x86" if lang.startswith("x86") else
                     "arm64" if lang.startswith("aarch64") else "arm" if lang.startswith("arm") else "other",
-            "size": len(self.data),
-            "sha256": hashlib.sha256(self.data).hexdigest(),
+            "size": self.size,
+            "sha256": self.sha256,
             "sections": len(self.section_entropy),
             "max_section_entropy": round(float(max(self.section_entropy, default=0.0)), 3),
             "function_count": self.function_count,
