@@ -19,7 +19,7 @@ from . import budget
 from .config import Provider, raw_provider, second_provider, summary_provider
 
 # Every model Hazmat may call at runtime is a Meta model. Refuse anything else.
-META_MODEL_PREFIXES = ("muse-", "meta-models/muse-", "accounts/fireworks/models/muse-", "llama", "meta-llama/")
+META_MODEL_PREFIXES = ("muse-", "meta-models/muse-", "accounts/fireworks/models/muse-")
 
 
 def client_for(p: Provider) -> OpenAI:
