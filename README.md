@@ -48,6 +48,8 @@ Anything that fails validation is dropped and logged, never repaired. The airloc
 | **Muse Spark Open** (`meta-models/muse-spark-open-1026`) | Baseten | Reader: reads decompiled code and strings, answers in a fixed type | Yes |
 | **Muse Spark Open** (`accounts/fireworks/models/muse-spark-open`) | Fireworks | Second, independent reader for the cross-check; also the comparison baseline | Yes |
 
+Both readers use the same weights on different hosts, so the cross-check catches host- and sampling-level divergence and text steering of one reader, not model-level blind spots (the two agreed on 94% of real prompts in stage 2).
+
 Raw sample content only ever goes to open-weight Muse Spark Open; the hosted Meta API sees typed values. This is enforced in code (`hazmat/config.py`, `hazmat/llm.py`), along with a guard that refuses any non-Meta model or `-contributor` model ID. Every call is logged as one line naming the model **as returned by the API**:
 
 ```
@@ -117,6 +119,8 @@ Headline numbers ([docs/eval.md](docs/eval.md) has every table, interval and cav
 | Benign file carrying planted text closed as benign, no flag (study A, 10 runs per variant) | **7/50 (14%)**; 0/40 where the text is visible | 34/45 (76%), Fisher p = 8 x 10^-10 |
 | Benign file carrying a real injection prompt closed as benign (B + holdout) | **10/50 (20%)** | 41/44 (93%), Fisher p = 1 x 10^-13 |
 | Malicious + poisoned file steered to benign (all studies) | 0 | 0 |
+
+The 0/296 exposure result follows from the design: every reply to the driver is a strict, frozen pydantic schema whose strings can only be handles or words from fixed lists, with no free-text field. The 0/296 count measures that guarantee by matching strings over every saved run, so it is a lower bound on what reached the baseline and a check, not the source, of Hazmat's 0. In the ablation, the no-airlock arm counts as 100% exposed by construction (raw tool output goes straight into the driver's messages), not by measurement. `tests/test_exposure.py` reruns the count on the recorded runs, and `tests/test_routing.py` checks that non-Meta and `-contributor` models are refused before any network call.
 
 An attack-success experiment (2,200 calls, each poisoned program vs its unpoisoned twin) found that planted text **does not** measurably steer Muse Spark Open on malware (1.4% vs 1% for the twin), but **does** destabilize its verdict on benign files that carry it: benign 100% without the text, 49% with it (n = 400, p = 6 x 10^-27). An ablation (same driver with and without the airlock) showed no difference in verdicts on these samples. 8 real malware samples (SOREL-20M, disarmed) ran through every tool in the local Docker sandbox, with no model calls and never on a cloud platform.
 

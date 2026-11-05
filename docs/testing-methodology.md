@@ -187,7 +187,7 @@ All now in [docs/eval.md](eval.md):
 ## 9. Reproduce
 
 ```bash
-pytest                                                        # 37 unit tests, no keys
+pytest                                                        # 45 unit tests, no keys
 hazmat selftest --backend docker                              # also --backend modal
 hazmat eval --runs 3 --backend modal --jobs 5 --baseline      # core set, Hazmat + baseline
 hazmat eval --set adversarial --runs 1 --backend modal --baseline
